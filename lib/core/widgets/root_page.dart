@@ -14,7 +14,7 @@ class RootPage extends StatefulWidget {
 }
 
 class _RootPageState extends State<RootPage> {
-  int _selectedIndex = 2;
+  int _selectedIndex = 0;
 
   final List<Widget> _pages = [
     const InventoryPage(),
@@ -119,7 +119,7 @@ class _RootPageState extends State<RootPage> {
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 36, 36, 36),
+                    color: AppColors.primary,
                     shape: BoxShape.circle,
                     border: Border.all(
                       color: const Color.fromARGB(255, 24, 24, 24),
