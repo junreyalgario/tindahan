@@ -3,5 +3,5 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color PAGE_BACKGROUND = Colors.white;
+  static const Color page_background = Colors.white;
 }

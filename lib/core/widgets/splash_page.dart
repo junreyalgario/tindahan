@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
+import 'package:tienda_pos/core/widgets/root_page.dart';
 import 'package:tienda_pos/core/widgets/tienda_logo.dart';
-import 'package:tienda_pos/feature/inventory/presentation/pages/inventory_page.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -20,7 +20,7 @@ class _SplashPageState extends State<SplashPage> {
     Future.delayed(const Duration(seconds: 2), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const InventoryPage()),
+        MaterialPageRoute(builder: (context) => const RootPage()),
       );
     });
   }
@@ -28,7 +28,7 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      backgroundColor: AppColors.PAGE_BACKGROUND,
+      backgroundColor: AppColors.page_background,
       body: SafeArea(
         child: Center(
           child: TiendaLogo(),

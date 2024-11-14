@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
+import 'package:tienda_pos/feature/analytics_report/presentation/pages/analytics_page.dart';
+import 'package:tienda_pos/feature/inventory/presentation/pages/inventory_page.dart';
+import 'package:tienda_pos/feature/pos/presentation/pages/pos_page.dart';
+import 'package:tienda_pos/feature/settings/presentation/pages/settings_page.dart';
+import 'package:tienda_pos/feature/user/presentation/pages/profile_page.dart';
 
 class RootPage extends StatefulWidget {
-  const RootPage({super.key, required this.child});
-
-  final Widget child;
+  const RootPage({super.key});
 
   @override
   State<RootPage> createState() => _RootPageState();
 }
 
 class _RootPageState extends State<RootPage> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 2;
+
+  final List<Widget> _pages = [
+    const InventoryPage(),
+    const AnalyticsPage(),
+    const PosPage(),
+    const SettingsPage(),
+    const ProfilePage(),
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -22,23 +33,79 @@ class _RootPageState extends State<RootPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.PAGE_BACKGROUND,
-      body: SafeArea(child: widget.child),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex, // Current selected index
-        onTap: _onItemTapped, // Function to call when an item is tapped
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+      backgroundColor: AppColors.page_background,
+      body: SafeArea(
+        child: _pages[_selectedIndex],
+      ),
+      bottomNavigationBar: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: Colors.black,
+            selectedItemColor: Colors.white,
+            unselectedItemColor: Colors.grey,
+            unselectedFontSize: 12,
+            selectedFontSize: 12,
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.inventory),
+                label: 'Inventory',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.analytics),
+                label: 'Analytics',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.store),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.settings),
+                label: 'Settings',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.account_box),
+                label: 'Profile',
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            label: 'Profile',
+          // POS button
+          Positioned(
+            bottom: 5,
+            left: MediaQuery.of(context).size.width * 0.5 - 40,
+            child: Material(
+              color: Colors.transparent,
+              shape: const CircleBorder(),
+              elevation: 0.0,
+              shadowColor: Colors.transparent,
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _selectedIndex = 2;
+                  });
+                },
+                child: Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 36, 36, 36),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: const Color.fromARGB(255, 24, 24, 24),
+                      width: 3,
+                    ),
+                  ),
+                  child: const Icon(
+                    Icons.store,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),
