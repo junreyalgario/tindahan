@@ -24,6 +24,22 @@ class _RootPageState extends State<RootPage> {
     const ProfilePage(),
   ];
 
+  final List<String> _titles = [
+    'Inventory',
+    'Analytics',
+    'POS',
+    'Settings',
+    'Profile',
+  ];
+
+  final List<IconData> _icons = [
+    Icons.inventory,
+    Icons.analytics,
+    Icons.store,
+    Icons.settings,
+    Icons.account_box,
+  ];
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -34,6 +50,18 @@ class _RootPageState extends State<RootPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.page_background,
+      appBar: AppBar(
+        title: Text(
+          _titles[_selectedIndex],
+          style: const TextStyle(color: Colors.white),
+        ),
+        leading: IconButton(
+          color: Colors.white,
+          icon: Icon(_icons[_selectedIndex]),
+          onPressed: () {},
+        ),
+        backgroundColor: Colors.black,
+      ),
       body: SafeArea(
         child: _pages[_selectedIndex],
       ),
