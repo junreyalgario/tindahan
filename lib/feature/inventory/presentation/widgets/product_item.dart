@@ -15,8 +15,8 @@ class _ProductItemState extends State<ProductItem> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 3.0,
-      color: Colors.white,
+      elevation: 0.0,
+      color: AppColors.card_background,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5.0),
       ),

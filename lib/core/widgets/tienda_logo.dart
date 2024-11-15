@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class TiendaLogo extends StatefulWidget {
@@ -64,13 +66,13 @@ class _TiendaLogoState extends State<TiendaLogo> with TickerProviderStateMixin {
       scale: _zoomAnimation,
       child: FadeTransition(
         opacity: _blinkAnimation,
-        child: const Text(
+        child: Text(
           'TINDAHAN',
           style: TextStyle(
             fontSize: 60.0,
             fontWeight: FontWeight.w900,
             color: Colors.black,
-            letterSpacing: -5,
+            letterSpacing: Platform.isIOS ? -8 : -5,
           ),
         ),
       ),

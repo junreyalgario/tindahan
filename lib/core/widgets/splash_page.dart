@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
-import 'package:tienda_pos/core/widgets/root_page.dart';
 import 'package:tienda_pos/core/widgets/tienda_logo.dart';
+import 'package:tienda_pos/feature/pos/presentation/pages/pos_page.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -20,7 +20,7 @@ class _SplashPageState extends State<SplashPage> {
     Future.delayed(const Duration(seconds: 2), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const RootPage()),
+        MaterialPageRoute(builder: (context) => const PosPage()),
       );
     });
   }

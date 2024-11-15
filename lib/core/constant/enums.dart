@@ -1,0 +1,4 @@
+enum ProductFilter {
+  all,
+  archived,
+}

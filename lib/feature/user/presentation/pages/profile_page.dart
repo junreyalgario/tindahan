@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tienda_pos/core/widgets/tienda_app.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});
@@ -11,10 +12,12 @@ class ProfilePage extends ConsumerStatefulWidget {
 class _ProfilePageState extends ConsumerState<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text('Profile'),
-      ],
+    return const TiendaApp(
+      child: Column(
+        children: [
+          Text('Profile'),
+        ],
+      ),
     );
   }
 }

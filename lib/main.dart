@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tienda_pos/core/widgets/splash_page.dart';
+import 'package:tienda_pos/core/router/router_navigator.dart';
+import 'package:tienda_pos/core/router/routes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +18,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
         useMaterial3: true,
       ),
-      home: const SplashPage(),
+      initialRoute: OtherRoutes.splash,
+      onGenerateRoute: RouteNavigator.onGenerateRoute,
       debugShowCheckedModeBanner: false,
     );
   }

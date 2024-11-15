@@ -1,27 +1,29 @@
+// ignore_for_file: non_constant_identifier_names
+
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
-import 'package:tienda_pos/feature/analytics_report/presentation/pages/analytics_page.dart';
-import 'package:tienda_pos/feature/inventory/presentation/pages/inventory_page.dart';
-import 'package:tienda_pos/feature/pos/presentation/pages/pos_page.dart';
-import 'package:tienda_pos/feature/settings/presentation/pages/settings_page.dart';
-import 'package:tienda_pos/feature/user/presentation/pages/profile_page.dart';
+import 'package:tienda_pos/core/router/routes.dart';
 
-class RootPage extends StatefulWidget {
-  const RootPage({super.key});
+class TiendaApp extends StatefulWidget {
+  const TiendaApp({super.key, required this.child});
+
+  final Widget child;
+
+  static int bottom_nav_index = 2;
 
   @override
-  State<RootPage> createState() => _RootPageState();
+  State<TiendaApp> createState() => _TiendaAppState();
 }
 
-class _RootPageState extends State<RootPage> {
-  int _selectedIndex = 0;
-
-  final List<Widget> _pages = [
-    const InventoryPage(),
-    const AnalyticsPage(),
-    const PosPage(),
-    const SettingsPage(),
-    const ProfilePage(),
+class _TiendaAppState extends State<TiendaApp> {
+  final List<String> _pages = [
+    InventoryRoutes.home,
+    AnalyticsRoutes.home,
+    PosRoutes.home,
+    SettingsRoutes.home,
+    ProfileRoutes.home,
   ];
 
   final List<String> _titles = [
@@ -40,10 +42,10 @@ class _RootPageState extends State<RootPage> {
     Icons.account_box,
   ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  void _onBottomNavItemTapped(int index) {
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(_pages[index], (route) => false);
+    TiendaApp.bottom_nav_index = index;
   }
 
   @override
@@ -52,18 +54,18 @@ class _RootPageState extends State<RootPage> {
       backgroundColor: AppColors.page_background,
       appBar: AppBar(
         title: Text(
-          _titles[_selectedIndex],
+          _titles[TiendaApp.bottom_nav_index],
           style: const TextStyle(color: Colors.white),
         ),
         leading: IconButton(
           color: Colors.white,
-          icon: Icon(_icons[_selectedIndex]),
+          icon: Icon(_icons[TiendaApp.bottom_nav_index]),
           onPressed: () {},
         ),
         backgroundColor: Colors.black,
       ),
       body: SafeArea(
-        child: _pages[_selectedIndex],
+        child: widget.child,
       ),
       bottomNavigationBar: Stack(
         clipBehavior: Clip.none,
@@ -75,8 +77,8 @@ class _RootPageState extends State<RootPage> {
             unselectedItemColor: Colors.grey,
             unselectedFontSize: 12,
             selectedFontSize: 12,
-            currentIndex: _selectedIndex,
-            onTap: _onItemTapped,
+            currentIndex: TiendaApp.bottom_nav_index,
+            onTap: _onBottomNavItemTapped,
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(Icons.inventory),
@@ -102,7 +104,7 @@ class _RootPageState extends State<RootPage> {
           ),
           // POS button
           Positioned(
-            bottom: 5,
+            bottom: Platform.isIOS ? 30 : 5,
             left: MediaQuery.of(context).size.width * 0.5 - 40,
             child: Material(
               color: Colors.transparent,
@@ -111,9 +113,7 @@ class _RootPageState extends State<RootPage> {
               shadowColor: Colors.transparent,
               child: GestureDetector(
                 onTap: () {
-                  setState(() {
-                    _selectedIndex = 2;
-                  });
+                  _onBottomNavItemTapped(2);
                 },
                 child: Container(
                   width: 80,
