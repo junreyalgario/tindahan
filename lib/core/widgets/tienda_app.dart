@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -7,8 +8,11 @@ import 'package:tienda_pos/core/constant/app_colors.dart';
 import 'package:tienda_pos/core/router/routes.dart';
 
 class TiendaApp extends StatefulWidget {
-  const TiendaApp({super.key, required this.child});
+  const TiendaApp(
+      {super.key, required this.child, this.isRootPage = false, this.title});
 
+  final bool isRootPage;
+  final String? title;
   final Widget child;
 
   static int bottom_nav_index = 2;
@@ -42,6 +46,12 @@ class _TiendaAppState extends State<TiendaApp> {
     Icons.account_box,
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    log('initState');
+  }
+
   void _onBottomNavItemTapped(int index) {
     Navigator.of(context)
         .pushNamedAndRemoveUntil(_pages[index], (route) => false);
@@ -54,13 +64,20 @@ class _TiendaAppState extends State<TiendaApp> {
       backgroundColor: AppColors.page_background,
       appBar: AppBar(
         title: Text(
-          _titles[TiendaApp.bottom_nav_index],
+          widget.title ?? _titles[TiendaApp.bottom_nav_index],
           style: const TextStyle(color: Colors.white),
         ),
         leading: IconButton(
           color: Colors.white,
-          icon: Icon(_icons[TiendaApp.bottom_nav_index]),
-          onPressed: () {},
+          highlightColor: widget.isRootPage ? Colors.transparent : null,
+          icon: Icon(widget.isRootPage
+              ? _icons[TiendaApp.bottom_nav_index]
+              : Icons.arrow_back),
+          onPressed: () {
+            if (!widget.isRootPage) {
+              Navigator.pop(context);
+            }
+          },
         ),
         backgroundColor: Colors.black,
       ),

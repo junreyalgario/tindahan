@@ -18,7 +18,7 @@ class RouteNavigator {
       case InventoryRoutes.home:
         return FlatMaterialPageRoute(
             builder: (context) => const InventoryPage());
-      case InventoryRoutes.entry:
+      case InventoryRoutes.product_details:
         return FlatMaterialPageRoute(
             builder: (context) => const ProductEntry());
       // Analytics pages

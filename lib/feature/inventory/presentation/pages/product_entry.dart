@@ -13,6 +13,7 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
   @override
   Widget build(BuildContext context) {
     return TiendaApp(
+      title: 'Product Details',
       child: Container(
         child: Text('PRODUCT ENTRY'),
       ),

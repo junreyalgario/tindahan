@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 class OtherRoutes {
   static const splash = '/splash';
 }
@@ -8,7 +10,7 @@ class PosRoutes {
 
 class InventoryRoutes {
   static const home = '/inventory';
-  static const entry = '/inventory-entry';
+  static const product_details = '/inventory-product-details';
 }
 
 class AnalyticsRoutes {

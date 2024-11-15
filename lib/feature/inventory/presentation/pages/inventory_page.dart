@@ -68,6 +68,7 @@ class _InventoryPageState extends ConsumerState<InventoryPage> {
     // ),
 
     return TiendaApp(
+      isRootPage: true,
       child: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -108,7 +109,8 @@ class _InventoryPageState extends ConsumerState<InventoryPage> {
                   IconButton(
                     icon: const Icon(Icons.add),
                     onPressed: () {
-                      Navigator.of(context).pushNamed(InventoryRoutes.entry);
+                      Navigator.of(context)
+                          .pushNamed(InventoryRoutes.product_details);
                     },
                   ),
                   PopupMenuButton<ProductFilter>(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
+import 'package:tienda_pos/core/router/routes.dart';
 import 'package:tienda_pos/core/styles/button_custom_styles.dart';
 
 class ProductItem extends StatefulWidget {
@@ -29,7 +30,7 @@ class _ProductItemState extends State<ProductItem> {
               child: Image.network(
                 'https://fastly.picsum.photos/id/217/200/200.jpg?hmac=LoNAUhfCfURrqYjw6WECEWybn4B8y37k5G2odewlZ_Y',
                 width: 120,
-                height: 120,
+                height: 100,
                 fit: BoxFit.cover,
               ),
             ),
@@ -45,7 +46,14 @@ class _ProductItemState extends State<ProductItem> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const Row(
+                    children: [
+                      Text('Cost Price:'),
+                      SizedBox(width: 5),
+                      Text('₱12.00',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ],
+                  ),
                   const Row(
                     children: [
                       Text('Stock:'),
@@ -54,20 +62,45 @@ class _ProductItemState extends State<ProductItem> {
                           style: TextStyle(fontWeight: FontWeight.bold)),
                     ],
                   ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    height: 35.0,
-                    child: ElevatedButton(
-                      style: ButtonCustomStyles.elevatedStyle(
-                        backgroundColor: const Color.fromARGB(255, 62, 61, 61),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      SizedBox(
+                        height: 35.0,
+                        child: ElevatedButton(
+                          style: ButtonCustomStyles.elevatedStyle(
+                            backgroundColor:
+                                const Color.fromARGB(255, 62, 61, 61),
+                          ),
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, InventoryRoutes.product_details);
+                          },
+                          child: const Text(
+                            'Details',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
                       ),
-                      onPressed: () {},
-                      child: const Text(
-                        'See More',
-                        style: TextStyle(color: Colors.white),
+                      const SizedBox(width: 10),
+                      SizedBox(
+                        height: 35.0,
+                        child: ElevatedButton(
+                          style: ButtonCustomStyles.elevatedStyle(
+                            backgroundColor:
+                                const Color.fromARGB(255, 6, 122, 22),
+                          ),
+                          onPressed: () {
+                            //
+                          },
+                          child: const Text(
+                            'Re-stock',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
+                    ],
+                  )
                 ],
               ),
             ),
