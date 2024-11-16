@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
 import 'package:tienda_pos/core/constant/ui.dart';
 import 'package:tienda_pos/core/styles/text_field_styles.dart';
 import 'package:tienda_pos/core/widgets/tienda_app.dart';
+import 'package:tienda_pos/feature/inventory/presentation/notifiers/product_entry_notifier.dart';
 
 class ProductEntry extends ConsumerStatefulWidget {
   const ProductEntry({super.key});
@@ -77,8 +80,11 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
             iconSize: 40,
             color: AppColors.secondary,
             icon: const Icon(Icons.photo),
-            onPressed: () {
+            onPressed: () async {
               //
+              final res =
+                  await ref.read(productEntryProvider.notifier).saveCategory();
+              log('RESULT ->> ${res.data}');
             },
           ),
           IconButton(
