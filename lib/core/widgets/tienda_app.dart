@@ -49,7 +49,6 @@ class _TiendaAppState extends State<TiendaApp> {
   @override
   void initState() {
     super.initState();
-    log('initState');
   }
 
   void _onBottomNavItemTapped(int index) {

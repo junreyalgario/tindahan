@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tienda_pos/core/constant/app_colors.dart';
 import 'package:tienda_pos/core/router/router_navigator.dart';
 import 'package:tienda_pos/core/router/routes.dart';
 
@@ -15,7 +16,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'TiendaPOS',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.white,
+          primary: AppColors.secondary,
+          error: AppColors.error,
+        ),
         useMaterial3: true,
       ),
       initialRoute: OtherRoutes.splash,
