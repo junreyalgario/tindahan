@@ -10,8 +10,9 @@ _$ProductEntityImpl _$$ProductEntityImplFromJson(Map<String, dynamic> json) =>
     _$ProductEntityImpl(
       id: (json['id'] as num?)?.toInt() ?? null,
       category: json['category'] == null
-          ? null
+          ? const CategoryEntity()
           : CategoryEntity.fromJson(json['category'] as Map<String, dynamic>),
+      photo: json['photo'] as String? ?? null,
       name: json['name'] as String? ?? null,
       price: (json['price'] as num?)?.toDouble() ?? null,
       cost: (json['cost'] as num?)?.toDouble() ?? null,
@@ -27,6 +28,7 @@ Map<String, dynamic> _$$ProductEntityImplToJson(_$ProductEntityImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'category': instance.category,
+      'photo': instance.photo,
       'name': instance.name,
       'price': instance.price,
       'cost': instance.cost,

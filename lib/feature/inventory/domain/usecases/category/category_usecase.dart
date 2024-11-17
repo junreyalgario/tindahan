@@ -9,7 +9,11 @@ class CategoryUsecase {
 
   final CategoryRepository _categoryRepository;
 
-  Future<DataState<bool>> save({required CategoryEntity categoryEntity}) {
+  Future<DataState<bool>> save(CategoryEntity categoryEntity) {
     return _categoryRepository.saveCategory(categoryEntity: categoryEntity);
+  }
+
+  Future<DataState<List<CategoryEntity>>> getCategories() async {
+    return _categoryRepository.getCategories();
   }
 }

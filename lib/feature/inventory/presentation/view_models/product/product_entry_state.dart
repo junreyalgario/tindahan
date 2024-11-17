@@ -1,0 +1,15 @@
+// ignore_for_file: invalid_annotation_target
+
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:tienda_pos/feature/inventory/domain/entities/category/category_entity.dart';
+import 'package:tienda_pos/feature/inventory/domain/entities/product/product_entity.dart';
+
+part 'product_entry_state.freezed.dart';
+
+@freezed
+class ProductEntryState with _$ProductEntryState {
+  const factory ProductEntryState({
+    @Default(ProductEntity()) ProductEntity product,
+    @Default([]) List<CategoryEntity> categories,
+  }) = _ProductEntryState;
+}

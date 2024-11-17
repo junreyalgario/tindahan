@@ -8,7 +8,7 @@ part 'category_entity.g.dart';
 @freezed
 class CategoryEntity with _$CategoryEntity {
   const factory CategoryEntity({
-    @Default(null) String? id,
+    @Default(null) int? id,
     @Default(null) String? name,
     @Default(null) DateTime? createdAt,
     @Default(null) DateTime? updatedAt,

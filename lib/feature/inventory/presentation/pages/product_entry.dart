@@ -6,7 +6,8 @@ import 'package:tienda_pos/core/constant/app_colors.dart';
 import 'package:tienda_pos/core/constant/ui.dart';
 import 'package:tienda_pos/core/styles/text_field_styles.dart';
 import 'package:tienda_pos/core/widgets/tienda_app.dart';
-import 'package:tienda_pos/feature/inventory/presentation/notifiers/product_entry_notifier.dart';
+import 'package:tienda_pos/feature/inventory/domain/entities/category/category_entity.dart';
+import 'package:tienda_pos/feature/inventory/presentation/view_models/product/product_entry_notifier.dart';
 
 class ProductEntry extends ConsumerStatefulWidget {
   const ProductEntry({super.key});
@@ -18,6 +19,8 @@ class ProductEntry extends ConsumerStatefulWidget {
 class _ProductEntryState extends ConsumerState<ProductEntry> {
   @override
   Widget build(BuildContext context) {
+    final productEntryState = ref.watch(productEntryProvider);
+
     return TiendaApp(
       title: 'Product Details',
       child: SingleChildScrollView(
@@ -82,9 +85,6 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
             icon: const Icon(Icons.photo),
             onPressed: () async {
               //
-              final res =
-                  await ref.read(productEntryProvider.notifier).saveCategory();
-              log('RESULT ->> ${res.data}');
             },
           ),
           IconButton(
@@ -101,75 +101,30 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
   }
 
   _buildDetailSection() {
+    final productEntryState = ref.watch(productEntryProvider);
+    final productEntryNotifier = ref.read(productEntryProvider.notifier);
+
     return [
-      // Row(
-      //   children: [
-      //     Expanded(
-      //       child: DropdownButtonFormField<String>(
-      //         decoration: InputDecoration(
-      //           border: OutlineInputBorder(),
-      //           suffixIcon: IconButton(
-      //             icon: const Icon(Icons.add),
-      //             onPressed: () {
-      //               // Search
-      //             },
-      //           ),
-      //         ),
-      //         hint: const Text('Category'),
-      //         items: ['Grains', 'Dairy', 'Condiments'].map((String item) {
-      //           return DropdownMenuItem<String>(
-      //             value: item,
-      //             child: Text(item),
-      //           );
-      //         }).toList(),
-      //         onChanged: (String? value) {
-      //           setState(() {
-      //             // Handle selection
-      //           });
-      //         },
-      //       ),
-      //     ),
-      //     const SizedBox(width: 20),
-      //     Expanded(
-      //       child: DropdownButtonFormField<String>(
-      //         decoration: const InputDecoration(
-      //           border: OutlineInputBorder(),
-      //         ),
-      //         hint: const Text('Unit of Measure'),
-      //         items: ['Grains', 'Dairy', 'Condiments'].map((String item) {
-      //           return DropdownMenuItem<String>(
-      //             value: item,
-      //             child: Text(item),
-      //           );
-      //         }).toList(),
-      //         onChanged: (String? value) {
-      //           setState(() {
-      //             // Handle selection
-      //           });
-      //         },
-      //       ),
-      //     ),
-      //   ],
-      // ),
-      DropdownButtonFormField<String>(
+      DropdownButtonFormField<CategoryEntity>(
         decoration: InputDecoration(
           border: const OutlineInputBorder(),
           suffixIcon: IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              // Search
+              //
+              ref.read(productEntryProvider.notifier).saveCategory();
             },
           ),
         ),
         hint: const Text('Category'),
-        items: ['Grains', 'Dairy', 'Condiments'].map((String item) {
-          return DropdownMenuItem<String>(
+        items: productEntryState.categories.map((CategoryEntity item) {
+          return DropdownMenuItem<CategoryEntity>(
             value: item,
-            child: Text(item),
+            child: Text(item.name!),
           );
         }).toList(),
-        onChanged: (String? value) {
-          //
+        onChanged: (CategoryEntity? value) {
+          productEntryNotifier.setProductCategory(value!);
         },
       ),
       const SizedBox(height: 20),

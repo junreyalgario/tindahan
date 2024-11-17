@@ -22,6 +22,7 @@ ProductEntity _$ProductEntityFromJson(Map<String, dynamic> json) {
 mixin _$ProductEntity {
   int? get id => throw _privateConstructorUsedError;
   CategoryEntity get category => throw _privateConstructorUsedError;
+  String? get photo => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   double? get price => throw _privateConstructorUsedError;
   double? get cost => throw _privateConstructorUsedError;
@@ -47,6 +48,7 @@ abstract class $ProductEntityCopyWith<$Res> {
   $Res call(
       {int? id,
       CategoryEntity category,
+      String? photo,
       String? name,
       double? price,
       double? cost,
@@ -73,6 +75,7 @@ class _$ProductEntityCopyWithImpl<$Res, $Val extends ProductEntity>
   $Res call({
     Object? id = freezed,
     Object? category = null,
+    Object? photo = freezed,
     Object? name = freezed,
     Object? price = freezed,
     Object? cost = freezed,
@@ -88,6 +91,10 @@ class _$ProductEntityCopyWithImpl<$Res, $Val extends ProductEntity>
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as CategoryEntity,
+      photo: freezed == photo
+          ? _value.photo
+          : photo // ignore: cast_nullable_to_non_nullable
+              as String?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -133,6 +140,7 @@ abstract class _$$ProductEntityImplCopyWith<$Res>
   $Res call(
       {int? id,
       CategoryEntity category,
+      String? photo,
       String? name,
       double? price,
       double? cost,
@@ -158,6 +166,7 @@ class __$$ProductEntityImplCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? category = null,
+    Object? photo = freezed,
     Object? name = freezed,
     Object? price = freezed,
     Object? cost = freezed,
@@ -173,6 +182,10 @@ class __$$ProductEntityImplCopyWithImpl<$Res>
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as CategoryEntity,
+      photo: freezed == photo
+          ? _value.photo
+          : photo // ignore: cast_nullable_to_non_nullable
+              as String?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -202,7 +215,8 @@ class __$$ProductEntityImplCopyWithImpl<$Res>
 class _$ProductEntityImpl implements _ProductEntity {
   const _$ProductEntityImpl(
       {this.id = null,
-      this.category = null,
+      this.category = const CategoryEntity(),
+      this.photo = null,
       this.name = null,
       this.price = null,
       this.cost = null,
@@ -218,6 +232,9 @@ class _$ProductEntityImpl implements _ProductEntity {
   @override
   @JsonKey()
   final CategoryEntity category;
+  @override
+  @JsonKey()
+  final String? photo;
   @override
   @JsonKey()
   final String? name;
@@ -236,7 +253,7 @@ class _$ProductEntityImpl implements _ProductEntity {
 
   @override
   String toString() {
-    return 'ProductEntity(id: $id, category: $category, name: $name, price: $price, cost: $cost, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'ProductEntity(id: $id, category: $category, photo: $photo, name: $name, price: $price, cost: $cost, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -247,6 +264,7 @@ class _$ProductEntityImpl implements _ProductEntity {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.category, category) ||
                 other.category == category) &&
+            (identical(other.photo, photo) || other.photo == photo) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.price, price) || other.price == price) &&
             (identical(other.cost, cost) || other.cost == cost) &&
@@ -258,8 +276,8 @@ class _$ProductEntityImpl implements _ProductEntity {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, category, name, price, cost, createdAt, updatedAt);
+  int get hashCode => Object.hash(runtimeType, id, category, photo, name, price,
+      cost, createdAt, updatedAt);
 
   /// Create a copy of ProductEntity
   /// with the given fields replaced by the non-null parameter values.
@@ -281,6 +299,7 @@ abstract class _ProductEntity implements ProductEntity {
   const factory _ProductEntity(
       {final int? id,
       final CategoryEntity category,
+      final String? photo,
       final String? name,
       final double? price,
       final double? cost,
@@ -294,6 +313,8 @@ abstract class _ProductEntity implements ProductEntity {
   int? get id;
   @override
   CategoryEntity get category;
+  @override
+  String? get photo;
   @override
   String? get name;
   @override
