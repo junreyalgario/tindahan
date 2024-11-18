@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/core/state/data_state.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/category/category_entity.dart';
@@ -27,17 +29,22 @@ class ProductEntryNotifier extends StateNotifier<ProductEntryState> {
   }
 
   Future<DataState<bool>> saveCategory() async {
-    return _categoryUsecase.save(CategoryEntity(
-      id: 2,
-      name: 'Dairy',
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-    ));
+    // final result = _categoryUsecase.save(CategoryEntity(
+    //   id: 2,
+    //   name: 'Dairy',
+    //   createdAt: DateTime.now(),
+    //   updatedAt: DateTime.now(),
+    // ));
+
+    // // Refresh state category list
+    // setCategories();
+
+    return DataState.success(true);
   }
 }
 
 final productEntryProvider =
-    StateNotifierProvider<ProductEntryNotifier, ProductEntryState>((ref) {
-  final categoryUseCase = ref.read(categoryUseCaseProvider);
-  return ProductEntryNotifier(categoryUseCase);
+    StateNotifierProvider.autoDispose<ProductEntryNotifier, ProductEntryState>(
+        (ref) {
+  return ProductEntryNotifier(ref.read(categoryUseCaseProvider));
 });

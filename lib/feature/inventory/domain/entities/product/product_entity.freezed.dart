@@ -21,7 +21,7 @@ ProductEntity _$ProductEntityFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ProductEntity {
   int? get id => throw _privateConstructorUsedError;
-  CategoryEntity get category => throw _privateConstructorUsedError;
+  CategoryEntity? get category => throw _privateConstructorUsedError;
   String? get photo => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   double? get price => throw _privateConstructorUsedError;
@@ -47,7 +47,7 @@ abstract class $ProductEntityCopyWith<$Res> {
   @useResult
   $Res call(
       {int? id,
-      CategoryEntity category,
+      CategoryEntity? category,
       String? photo,
       String? name,
       double? price,
@@ -55,7 +55,7 @@ abstract class $ProductEntityCopyWith<$Res> {
       DateTime? createdAt,
       DateTime? updatedAt});
 
-  $CategoryEntityCopyWith<$Res> get category;
+  $CategoryEntityCopyWith<$Res>? get category;
 }
 
 /// @nodoc
@@ -74,7 +74,7 @@ class _$ProductEntityCopyWithImpl<$Res, $Val extends ProductEntity>
   @override
   $Res call({
     Object? id = freezed,
-    Object? category = null,
+    Object? category = freezed,
     Object? photo = freezed,
     Object? name = freezed,
     Object? price = freezed,
@@ -87,10 +87,10 @@ class _$ProductEntityCopyWithImpl<$Res, $Val extends ProductEntity>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      category: null == category
+      category: freezed == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
-              as CategoryEntity,
+              as CategoryEntity?,
       photo: freezed == photo
           ? _value.photo
           : photo // ignore: cast_nullable_to_non_nullable
@@ -122,8 +122,12 @@ class _$ProductEntityCopyWithImpl<$Res, $Val extends ProductEntity>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $CategoryEntityCopyWith<$Res> get category {
-    return $CategoryEntityCopyWith<$Res>(_value.category, (value) {
+  $CategoryEntityCopyWith<$Res>? get category {
+    if (_value.category == null) {
+      return null;
+    }
+
+    return $CategoryEntityCopyWith<$Res>(_value.category!, (value) {
       return _then(_value.copyWith(category: value) as $Val);
     });
   }
@@ -139,7 +143,7 @@ abstract class _$$ProductEntityImplCopyWith<$Res>
   @useResult
   $Res call(
       {int? id,
-      CategoryEntity category,
+      CategoryEntity? category,
       String? photo,
       String? name,
       double? price,
@@ -148,7 +152,7 @@ abstract class _$$ProductEntityImplCopyWith<$Res>
       DateTime? updatedAt});
 
   @override
-  $CategoryEntityCopyWith<$Res> get category;
+  $CategoryEntityCopyWith<$Res>? get category;
 }
 
 /// @nodoc
@@ -165,7 +169,7 @@ class __$$ProductEntityImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? category = null,
+    Object? category = freezed,
     Object? photo = freezed,
     Object? name = freezed,
     Object? price = freezed,
@@ -178,10 +182,10 @@ class __$$ProductEntityImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      category: null == category
+      category: freezed == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
-              as CategoryEntity,
+              as CategoryEntity?,
       photo: freezed == photo
           ? _value.photo
           : photo // ignore: cast_nullable_to_non_nullable
@@ -215,7 +219,7 @@ class __$$ProductEntityImplCopyWithImpl<$Res>
 class _$ProductEntityImpl implements _ProductEntity {
   const _$ProductEntityImpl(
       {this.id = null,
-      this.category = const CategoryEntity(),
+      this.category = null,
       this.photo = null,
       this.name = null,
       this.price = null,
@@ -231,7 +235,7 @@ class _$ProductEntityImpl implements _ProductEntity {
   final int? id;
   @override
   @JsonKey()
-  final CategoryEntity category;
+  final CategoryEntity? category;
   @override
   @JsonKey()
   final String? photo;
@@ -298,7 +302,7 @@ class _$ProductEntityImpl implements _ProductEntity {
 abstract class _ProductEntity implements ProductEntity {
   const factory _ProductEntity(
       {final int? id,
-      final CategoryEntity category,
+      final CategoryEntity? category,
       final String? photo,
       final String? name,
       final double? price,
@@ -312,7 +316,7 @@ abstract class _ProductEntity implements ProductEntity {
   @override
   int? get id;
   @override
-  CategoryEntity get category;
+  CategoryEntity? get category;
   @override
   String? get photo;
   @override

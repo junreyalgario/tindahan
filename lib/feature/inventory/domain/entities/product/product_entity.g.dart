@@ -10,7 +10,7 @@ _$ProductEntityImpl _$$ProductEntityImplFromJson(Map<String, dynamic> json) =>
     _$ProductEntityImpl(
       id: (json['id'] as num?)?.toInt() ?? null,
       category: json['category'] == null
-          ? const CategoryEntity()
+          ? null
           : CategoryEntity.fromJson(json['category'] as Map<String, dynamic>),
       photo: json['photo'] as String? ?? null,
       name: json['name'] as String? ?? null,

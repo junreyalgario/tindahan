@@ -81,7 +81,12 @@ class _TiendaAppState extends State<TiendaApp> {
         backgroundColor: Colors.black,
       ),
       body: SafeArea(
-        child: widget.child,
+        child: GestureDetector(
+          onTap: () {
+            //
+          },
+          child: widget.child,
+        ),
       ),
       bottomNavigationBar: Stack(
         clipBehavior: Clip.none,

@@ -11,7 +11,7 @@ part 'product_entity.g.dart';
 class ProductEntity with _$ProductEntity {
   const factory ProductEntity({
     @Default(null) int? id,
-    @Default(CategoryEntity()) CategoryEntity category,
+    @Default(null) CategoryEntity? category,
     @Default(null) String? photo,
     @Default(null) String? name,
     @Default(null) double? price,

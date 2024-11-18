@@ -14,4 +14,11 @@ class TextFieldStyles {
       border: const OutlineInputBorder(),
     );
   }
+
+  static InputDecoration decoration2(InputDecoration inputDecoration) {
+    inputDecoration =
+        inputDecoration.copyWith(border: const OutlineInputBorder());
+
+    return inputDecoration;
+  }
 }

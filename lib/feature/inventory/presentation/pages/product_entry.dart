@@ -8,6 +8,7 @@ import 'package:tienda_pos/core/styles/text_field_styles.dart';
 import 'package:tienda_pos/core/widgets/tienda_app.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/category/category_entity.dart';
 import 'package:tienda_pos/feature/inventory/presentation/view_models/product/product_entry_notifier.dart';
+import 'package:tienda_pos/feature/inventory/presentation/widgets/category_form.dart';
 
 class ProductEntry extends ConsumerStatefulWidget {
   const ProductEntry({super.key});
@@ -19,8 +20,6 @@ class ProductEntry extends ConsumerStatefulWidget {
 class _ProductEntryState extends ConsumerState<ProductEntry> {
   @override
   Widget build(BuildContext context) {
-    final productEntryState = ref.watch(productEntryProvider);
-
     return TiendaApp(
       title: 'Product Details',
       child: SingleChildScrollView(
@@ -102,30 +101,44 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
 
   _buildDetailSection() {
     final productEntryState = ref.watch(productEntryProvider);
-    final productEntryNotifier = ref.read(productEntryProvider.notifier);
+    final productEntryNotifier = ref.watch(productEntryProvider.notifier);
 
     return [
-      DropdownButtonFormField<CategoryEntity>(
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(),
-          suffixIcon: IconButton(
+      Row(
+        children: [
+          Expanded(
+            child: DropdownButtonFormField<CategoryEntity>(
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.info_outline),
+                  onPressed: () {
+                    if (productEntryState.product.category != null) {
+                      _showCategoryDialog(productEntryState.product.category);
+                    }
+                  },
+                ),
+              ),
+              hint: const Text('Category'),
+              value: productEntryState.product.category,
+              items: productEntryState.categories.map((CategoryEntity item) {
+                return DropdownMenuItem<CategoryEntity>(
+                  value: item,
+                  child: Text(item.name!),
+                );
+              }).toList(),
+              onChanged: (CategoryEntity? value) {
+                productEntryNotifier.setProductCategory(value!);
+              },
+            ),
+          ),
+          IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              //
-              ref.read(productEntryProvider.notifier).saveCategory();
+              _showCategoryDialog(null);
             },
           ),
-        ),
-        hint: const Text('Category'),
-        items: productEntryState.categories.map((CategoryEntity item) {
-          return DropdownMenuItem<CategoryEntity>(
-            value: item,
-            child: Text(item.name!),
-          );
-        }).toList(),
-        onChanged: (CategoryEntity? value) {
-          productEntryNotifier.setProductCategory(value!);
-        },
+        ],
       ),
       const SizedBox(height: 20),
       TextFormField(
@@ -165,5 +178,25 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
         ],
       ),
     ];
+  }
+
+  _showCategoryDialog(CategoryEntity? categoryEntity) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          elevation: 10.0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          child: CategoryForm(
+            categoryEntity: categoryEntity,
+            onSuccess: () {
+              ref.watch(productEntryProvider.notifier).setCategories();
+            },
+          ),
+        );
+      },
+    );
   }
 }

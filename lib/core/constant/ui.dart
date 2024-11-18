@@ -3,5 +3,5 @@
 import 'package:flutter/material.dart';
 
 class UI {
-  static const EdgeInsets page_padding = EdgeInsets.all(10.0);
+  static const EdgeInsets page_padding = EdgeInsets.all(16);
 }
