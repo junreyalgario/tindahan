@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
+import 'package:tienda_pos/core/state/data_state.dart';
 import 'package:tienda_pos/core/styles/button_custom_styles.dart';
 import 'package:tienda_pos/core/styles/text_field_styles.dart';
 import 'package:tienda_pos/core/utils/ui/snackbar.dart';
@@ -17,10 +18,12 @@ class CategoryForm extends ConsumerStatefulWidget {
     super.key,
     this.categoryEntity = const CategoryEntity(),
     this.onSuccess,
+    this.onDelete,
   });
 
   final CategoryEntity? categoryEntity;
-  final Function()? onSuccess;
+  final Function(CategoryEntity? category)? onSuccess;
+  final Function()? onDelete;
 
   @override
   ConsumerState<CategoryForm> createState() => _CategoryFormState();
@@ -48,6 +51,7 @@ class _CategoryFormState extends ConsumerState<CategoryForm> {
   @override
   Widget build(BuildContext context) {
     final categoryNotifier = ref.watch(categoryNortifierProvider.notifier);
+    final categoryState = ref.watch(categoryNortifierProvider);
 
     return Padding(
       padding: const EdgeInsets.all(10),
@@ -73,8 +77,24 @@ class _CategoryFormState extends ConsumerState<CategoryForm> {
                         ? IconButton(
                             icon: const Icon(Icons.delete),
                             color: AppColors.danger,
-                            onPressed: () {
-                              //
+                            onPressed: () async {
+                              final DataState result =
+                                  await categoryNotifier.delete();
+                              if (result.isSuccess) {
+                                if (widget.onDelete != null) {
+                                  widget.onDelete!();
+                                }
+                                Navigator.of(context).pop();
+                                showTopSnackbar(
+                                    context: context,
+                                    color: AppColors.success,
+                                    message: 'Category deleted successfully.');
+                              } else {
+                                showTopSnackbar(
+                                    context: context,
+                                    color: AppColors.danger,
+                                    message: result.error!);
+                              }
                             },
                           )
                         : null,
@@ -117,9 +137,12 @@ class _CategoryFormState extends ConsumerState<CategoryForm> {
                     onPressed: () async {
                       if (_formKey.currentState?.validate() ?? false) {
                         final dataState = await categoryNotifier.saveCategory();
+
                         if (dataState.isSuccess) {
                           if (widget.onSuccess != null) {
-                            widget.onSuccess!();
+                            widget.onSuccess!(categoryState.id != null
+                                ? categoryState
+                                : null);
                           }
 
                           showTopSnackbar(

@@ -24,9 +24,21 @@ class CategoryDao extends Dao<Category> {
           _realm.query<Category>('id == \$0', [model.id]).firstOrNull;
 
       if (category != null) {
-        category.name = category.name;
+        category.name = model.name;
       }
     });
+  }
+
+  @override
+  void delete(int id) {
+    Category? category = _realm.find<Category>(id);
+    if (category != null) {
+      _realm.write(() {
+        _realm.delete(category);
+      });
+    } else {
+      throw Exception('Failed to delete, category not found.');
+    }
   }
 }
 

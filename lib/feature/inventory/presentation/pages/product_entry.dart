@@ -181,6 +181,8 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
   }
 
   _showCategoryDialog(CategoryEntity? categoryEntity) {
+    final productNotifier = ref.watch(productEntryProvider.notifier);
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -191,8 +193,15 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
           ),
           child: CategoryForm(
             categoryEntity: categoryEntity,
-            onSuccess: () {
-              ref.watch(productEntryProvider.notifier).setCategories();
+            onSuccess: (CategoryEntity? categoryEntity) {
+              productNotifier.setCategories();
+              if (categoryEntity != null) {
+                productNotifier.setProductCategory(categoryEntity);
+              }
+            },
+            onDelete: () {
+              productNotifier.setCategories();
+              productNotifier.setProductCategory(null);
             },
           ),
         );

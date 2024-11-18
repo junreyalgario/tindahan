@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:tienda_pos/core/state/data_state.dart';
@@ -22,8 +21,6 @@ class CategoryRepositoryImpl extends CategoryRepository {
         updatedAt: DateTime.now(),
       );
 
-      log('categoryEntity insert ->> $categoryEntity');
-
       _categoryDao.save(createCategoryfromJson(categoryEntity.toJson()));
 
       return DataState.success(true);
@@ -45,6 +42,17 @@ class CategoryRepositoryImpl extends CategoryRepository {
 
       _categoryDao.update(category);
 
+      return DataState.success(true);
+    } catch (e) {
+      log(e.toString());
+      return DataState.error(e.toString());
+    }
+  }
+
+  @override
+  Future<DataState<bool>> delete(int id) async {
+    try {
+      _categoryDao.delete(id);
       return DataState.success(true);
     } catch (e) {
       log(e.toString());

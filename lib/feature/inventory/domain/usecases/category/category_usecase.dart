@@ -20,4 +20,8 @@ class CategoryUsecase {
   Future<DataState<List<CategoryEntity>>> getCategories() async {
     return _categoryRepository.getCategories();
   }
+
+  Future<DataState<bool>> delete(int id) {
+    return _categoryRepository.delete(id);
+  }
 }

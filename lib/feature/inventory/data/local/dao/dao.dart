@@ -10,6 +10,8 @@ abstract class Dao<Model extends RealmObject> {
 
   void update(Model model);
 
+  void delete(int id);
+
   @protected
   Model? getLastInserted() {
     return _realm.query<Model>('TRUEPREDICATE SORT(id DESC)').firstOrNull;

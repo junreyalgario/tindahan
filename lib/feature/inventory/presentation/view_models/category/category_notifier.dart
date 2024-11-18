@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/core/state/data_state.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/category/category_entity.dart';
@@ -21,13 +19,18 @@ class CategoryNotifier extends StateNotifier<CategoryEntity> {
 
   Future<DataState<bool>> saveCategory() async {
     if (state.id != null) {
-      // Update category
-      log('UPDATE');
       return _categoryUsecase.update(state);
     } else {
-      // Insert new
       return _categoryUsecase.insert(state);
     }
+  }
+
+  Future<DataState<bool>> delete() async {
+    if (state.id != null) {
+      return _categoryUsecase.delete(state.id!);
+    }
+
+    return DataState.error('Failed to delete category.');
   }
 }
 
