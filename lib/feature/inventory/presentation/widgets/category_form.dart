@@ -61,7 +61,7 @@ class _CategoryFormState extends ConsumerState<CategoryForm> {
           children: [
             const SizedBox(height: 20),
             const Text(
-              'Category Name',
+              'Product Category',
               style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
             ),
             const SizedBox(height: 30),

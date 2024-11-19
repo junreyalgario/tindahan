@@ -68,6 +68,7 @@ class _TiendaLogoState extends State<TiendaLogo> with TickerProviderStateMixin {
         opacity: _blinkAnimation,
         child: Text(
           'TINDAHAN',
+          textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 60.0,
             fontWeight: FontWeight.w900,

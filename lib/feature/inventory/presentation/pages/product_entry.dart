@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
 import 'package:tienda_pos/core/constant/ui.dart';
+import 'package:tienda_pos/core/styles/button_custom_styles.dart';
 import 'package:tienda_pos/core/styles/text_field_styles.dart';
 import 'package:tienda_pos/core/widgets/tienda_app.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/category/category_entity.dart';
 import 'package:tienda_pos/feature/inventory/presentation/view_models/product/product_entry_notifier.dart';
 import 'package:tienda_pos/feature/inventory/presentation/widgets/category_form.dart';
+import 'package:tienda_pos/feature/inventory/presentation/widgets/uom_form.dart';
 
 class ProductEntry extends ConsumerStatefulWidget {
   const ProductEntry({super.key});
@@ -78,7 +80,7 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
         children: [
           IconButton(
             iconSize: 40,
-            color: AppColors.secondary,
+            color: AppColors.icon_button,
             icon: const Icon(Icons.photo),
             onPressed: () async {
               //
@@ -86,7 +88,7 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
           ),
           IconButton(
             iconSize: 40,
-            color: AppColors.secondary,
+            color: AppColors.icon_button,
             icon: const Icon(Icons.camera_alt),
             onPressed: () {
               //
@@ -102,6 +104,7 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
     final productEntryNotifier = ref.watch(productEntryProvider.notifier);
 
     return [
+      // Product category
       Row(
         children: [
           Expanded(
@@ -117,7 +120,7 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
                   },
                 ),
               ),
-              hint: const Text('Category'),
+              hint: const Text('Product category'),
               value: productEntryState.product.category,
               items: productEntryState.categories.map((CategoryEntity item) {
                 return DropdownMenuItem<CategoryEntity>(
@@ -139,11 +142,49 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
         ],
       ),
       const SizedBox(height: 20),
+      // Product name
       TextFormField(
         decoration: TextFieldStyles.decoration(
             TextFormFieldDecoration(labelText: 'Product name')),
       ),
       const SizedBox(height: 20),
+      // UOM
+      Row(
+        children: [
+          Expanded(
+            child: DropdownButtonFormField<CategoryEntity>(
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.info_outline),
+                  onPressed: () {
+                    _showUomDIalog(false);
+                  },
+                ),
+              ),
+              hint: const Text('Unit of measure'),
+              // value: productEntryState.product.category,
+              items: productEntryState.categories.map((CategoryEntity item) {
+                return DropdownMenuItem<CategoryEntity>(
+                  value: item,
+                  child: Text(item.name!),
+                );
+              }).toList(),
+              onChanged: (CategoryEntity? value) {
+                productEntryNotifier.setProductCategory(value!);
+              },
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              _showUomDIalog(true);
+            },
+          ),
+        ],
+      ),
+      const SizedBox(height: 20),
+      // Price and cost
       Row(
         children: [
           Expanded(
@@ -175,6 +216,57 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
           ),
         ],
       ),
+      const SizedBox(height: 20),
+      // Stocks and low stocks
+      Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+              decoration: TextFieldStyles.decoration(
+                  TextFormFieldDecoration(labelText: 'Stocks')),
+            ),
+          ),
+          const SizedBox(width: 20),
+          Expanded(
+            child: TextFormField(
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+              decoration: TextFieldStyles.decoration(
+                TextFormFieldDecoration(labelText: 'Low stock level'),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a number';
+                }
+                if (int.tryParse(value) == null) {
+                  return 'Please enter a valid number';
+                }
+                return null;
+              },
+            ),
+          ),
+        ],
+      ),
+      // Save button
+      Container(
+        margin: const EdgeInsets.only(top: 30, bottom: 40),
+        width: double.infinity,
+        height: 50,
+        child: ElevatedButton(
+          style: ButtonCustomStyles.elevatedStyle(
+            backgroundColor: AppColors.confirm,
+          ),
+          onPressed: () async {
+            //
+          },
+          child: const Text(
+            'SAVE',
+            style: TextStyle(color: Colors.white, fontSize: 18),
+          ),
+        ),
+      ),
     ];
   }
 
@@ -201,6 +293,23 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
               productNotifier.setCategories();
               productNotifier.setProductCategory(null);
             },
+          ),
+        );
+      },
+    );
+  }
+
+  _showUomDIalog(bool isNew) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          elevation: 10.0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          child: OumForm(
+            isNew: isNew,
           ),
         );
       },
