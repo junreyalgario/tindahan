@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
+import 'package:tienda_pos/core/widgets/dialog.dart';
 
-class CartOrder extends ConsumerStatefulWidget {
-  const CartOrder({super.key});
+class CartItem extends ConsumerStatefulWidget {
+  const CartItem({super.key});
 
   @override
-  ConsumerState<CartOrder> createState() => _CartOrderState();
+  ConsumerState<CartItem> createState() => _CartItemState();
 }
 
-class _CartOrderState extends ConsumerState<CartOrder> {
+class _CartItemState extends ConsumerState<CartItem> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -99,7 +100,15 @@ class _CartOrderState extends ConsumerState<CartOrder> {
             child: IconButton(
               icon: const Icon(Icons.delete, color: AppColors.danger),
               onPressed: () {
-                //
+                showConfirmDialog(
+                    context: context,
+                    title: 'Maharlika Rice',
+                    message: 'Remove item?',
+                    confirmText: 'Remove',
+                    confirmColor: AppColors.danger,
+                    onConfirm: () {
+                      //
+                    });
               },
             ),
           ),

@@ -104,7 +104,7 @@ class _OumFormState extends ConsumerState<OumForm> {
                       Navigator.pop(context);
                     },
                     child: const Text(
-                      'Close',
+                      'Cancel',
                       style: TextStyle(color: AppColors.confirm),
                     ),
                   ),

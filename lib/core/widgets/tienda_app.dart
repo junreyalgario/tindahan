@@ -1,6 +1,5 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -52,6 +51,8 @@ class _TiendaAppState extends State<TiendaApp> {
   }
 
   void _onBottomNavItemTapped(int index) {
+    if (TiendaApp.bottom_nav_index == index) return;
+
     Navigator.of(context)
         .pushNamedAndRemoveUntil(_pages[index], (route) => false);
     TiendaApp.bottom_nav_index = index;

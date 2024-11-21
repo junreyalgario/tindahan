@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
 import 'package:tienda_pos/core/widgets/tienda_app.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/category/category_entity.dart';
+import 'package:tienda_pos/feature/inventory/domain/entities/product/product_entity.dart';
+import 'package:tienda_pos/feature/pos/presentation/widgets/add_to_cart.dart';
 import 'package:tienda_pos/feature/pos/presentation/widgets/category_tab.dart';
 import 'package:tienda_pos/feature/pos/presentation/widgets/pos_bottom_sheet.dart';
 import 'package:tienda_pos/feature/pos/presentation/widgets/pos_cart.dart';
@@ -35,7 +37,7 @@ class _PosPageState extends ConsumerState<PosPage> {
             bottom: 0,
             left: 0,
             right: 0,
-            child: _buildReviewSection(),
+            child: _buildCartSection(),
           )
         ],
       ),
@@ -98,7 +100,12 @@ class _PosPageState extends ConsumerState<PosPage> {
             (index) {
               return SizedBox(
                 width: MediaQuery.of(context).size.width / 2 - 16,
-                child: const PosProductCard(),
+                child: PosProductCard(
+                  productEntity: const ProductEntity(),
+                  onTap: (ProductEntity productEntity) {
+                    _showAddToCart(productEntity);
+                  },
+                ),
               );
             },
           ),
@@ -107,7 +114,7 @@ class _PosPageState extends ConsumerState<PosPage> {
     );
   }
 
-  _buildReviewSection() {
+  _buildCartSection() {
     return Container(
       color: AppColors.primary,
       // height: 70,
@@ -201,5 +208,37 @@ class _PosPageState extends ConsumerState<PosPage> {
         );
       },
     );
+  }
+
+  _showAddToCart(ProductEntity productEntity) {
+    double screenHeight = MediaQuery.of(context).size.height - 360;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          elevation: 10.0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          child: AddToCart(productEntity: productEntity),
+        );
+      },
+    );
+
+    // showModalBottomSheet(
+    //   context: context,
+    //   isDismissible: false,
+    //   enableDrag: false,
+    //   clipBehavior: Clip.none,
+    //   isScrollControlled: true,
+    //   builder: (BuildContext context) {
+    //     return PosBottomSheet(
+    //       icon: Icons.add_shopping_cart,
+    //       height: screenHeight,
+    //       child: AddToCart(productEntity: productEntity),
+    //     );
+    //   },
+    // );
   }
 }

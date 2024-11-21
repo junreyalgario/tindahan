@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
+import 'package:tienda_pos/feature/inventory/domain/entities/product/product_entity.dart';
 
 class PosProductCard extends StatelessWidget {
-  const PosProductCard({super.key});
+  const PosProductCard({
+    super.key,
+    required this.productEntity,
+    required this.onTap,
+  });
+
+  final ProductEntity productEntity;
+  final Function(ProductEntity productEntity) onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +105,7 @@ class PosProductCard extends StatelessWidget {
           ),
         ),
         onTap: () {
-          //
+          onTap(productEntity);
         },
       ),
     );

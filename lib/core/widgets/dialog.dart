@@ -6,6 +6,7 @@ import 'package:tienda_pos/core/styles/button_custom_styles.dart';
 void showConfirmDialog({
   required BuildContext context,
   required String message,
+  String? title,
   required String confirmText,
   Color? confirmColor = AppColors.confirm,
   required VoidCallback onConfirm,
@@ -24,7 +25,23 @@ void showConfirmDialog({
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(height: 20),
+              title != null
+                  ? Column(
+                      children: [
+                        Text(
+                          title,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              fontSize: 20, color: AppColors.highlight),
+                        ),
+                        const Divider(
+                          color: Color.fromARGB(255, 214, 213, 213),
+                          thickness: 1.5,
+                        ),
+                      ],
+                    )
+                  : const SizedBox(height: 20),
               Text(
                 message,
                 textAlign: TextAlign.center,

@@ -78,6 +78,7 @@ class _CategoryFormState extends ConsumerState<CategoryForm> {
                             onPressed: () {
                               showConfirmDialog(
                                 context: context,
+                                title: categoryState.name,
                                 confirmText: 'Delete',
                                 confirmColor: AppColors.danger,
                                 message:
@@ -131,7 +132,7 @@ class _CategoryFormState extends ConsumerState<CategoryForm> {
                       Navigator.pop(context);
                     },
                     child: const Text(
-                      'Close',
+                      'Cancel',
                       style: TextStyle(color: AppColors.confirm),
                     ),
                   ),

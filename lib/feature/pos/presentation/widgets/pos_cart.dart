@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
 import 'package:tienda_pos/core/styles/button_custom_styles.dart';
-import 'package:tienda_pos/feature/pos/presentation/widgets/cart_order.dart';
+import 'package:tienda_pos/feature/pos/presentation/widgets/cart_item.dart';
 import 'package:tienda_pos/feature/pos/presentation/widgets/pos_bottom_sheet.dart';
 import 'package:tienda_pos/feature/pos/presentation/widgets/pos_payment.dart';
 
@@ -79,7 +79,7 @@ class _PosCartState extends ConsumerState<PosCart> {
             child: Column(
               children: [
                 ...generatedList.map((item) {
-                  return const CartOrder();
+                  return const CartItem();
                 }),
               ],
             ),
