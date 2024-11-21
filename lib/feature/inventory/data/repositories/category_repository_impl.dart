@@ -61,7 +61,7 @@ class CategoryRepositoryImpl extends CategoryRepository {
   }
 
   @override
-  Future<DataState<List<CategoryEntity>>> getCategories() async {
+  Future<DataState<List<CategoryEntity>>> getList() async {
     try {
       List<CategoryEntity> categoryEntities = [];
 
@@ -78,7 +78,7 @@ class CategoryRepositoryImpl extends CategoryRepository {
   }
 
   @override
-  Future<DataState<CategoryEntity>> getCategoryById(int id) async {
+  Future<DataState<CategoryEntity>> getById(int id) async {
     try {
       final Category? category = _categoryDao.getById(id);
 
@@ -91,5 +91,10 @@ class CategoryRepositoryImpl extends CategoryRepository {
       log(e.toString());
       return DataState.error(e.toString());
     }
+  }
+
+  @override
+  Future<DataState<List<CategoryEntity>>> search(String query) async {
+    return DataState.success([]);
   }
 }

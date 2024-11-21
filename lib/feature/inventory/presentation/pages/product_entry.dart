@@ -171,16 +171,6 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
                 return DropdownMenuItem<UomEntity>(
                   value: item,
                   child: Text('${item.name!} \t (${item.symbol!})'),
-                  // child: SizedBox(
-                  //   width: 100,
-                  //   child: Row(
-                  //     children: [
-                  //       Text(item.name!),
-                  //       const Spacer(),
-                  //       Text('(${item.symbol!})'),
-                  //     ],
-                  //   ),
-                  // ),
                 );
               }).toList(),
               onChanged: (UomEntity? value) {
