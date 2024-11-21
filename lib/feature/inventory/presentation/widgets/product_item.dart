@@ -65,37 +65,41 @@ class _ProductItemState extends State<ProductItem> {
                   const SizedBox(height: 10),
                   Row(
                     children: [
-                      SizedBox(
-                        height: 35.0,
-                        child: ElevatedButton(
-                          style: ButtonCustomStyles.elevatedStyle(
-                            backgroundColor:
-                                const Color.fromARGB(255, 62, 61, 61),
-                          ),
-                          onPressed: () {
-                            Navigator.pushNamed(
-                                context, InventoryRoutes.product_details);
-                          },
-                          child: const Text(
-                            'Details',
-                            style: TextStyle(color: Colors.white),
+                      Expanded(
+                        flex: 1,
+                        child: SizedBox(
+                          height: 35.0,
+                          child: ElevatedButton(
+                            style: ButtonCustomStyles.elevatedStyle(
+                              backgroundColor: AppColors.cancel,
+                            ),
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context, InventoryRoutes.product_details);
+                            },
+                            child: const Text(
+                              'Details',
+                              style: TextStyle(color: AppColors.confirm),
+                            ),
                           ),
                         ),
                       ),
                       const SizedBox(width: 10),
-                      SizedBox(
-                        height: 35.0,
-                        child: ElevatedButton(
-                          style: ButtonCustomStyles.elevatedStyle(
-                            backgroundColor:
-                                const Color.fromARGB(255, 6, 122, 22),
-                          ),
-                          onPressed: () {
-                            //
-                          },
-                          child: const Text(
-                            'Re-stock',
-                            style: TextStyle(color: Colors.white),
+                      Expanded(
+                        flex: 1,
+                        child: SizedBox(
+                          height: 35.0,
+                          child: ElevatedButton(
+                            style: ButtonCustomStyles.elevatedStyle(
+                              backgroundColor: AppColors.confirm,
+                            ),
+                            onPressed: () {
+                              //
+                            },
+                            child: const Text(
+                              'Inventory',
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ),
                       ),

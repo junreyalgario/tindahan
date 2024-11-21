@@ -21,11 +21,13 @@ ProductEntity _$ProductEntityFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ProductEntity {
   int? get id => throw _privateConstructorUsedError;
-  CategoryEntity? get category => throw _privateConstructorUsedError;
   String? get photo => throw _privateConstructorUsedError;
+  CategoryEntity? get category => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
+  UomEntity? get uom => throw _privateConstructorUsedError;
   double? get price => throw _privateConstructorUsedError;
-  double? get cost => throw _privateConstructorUsedError;
+  double? get lowStockLevel => throw _privateConstructorUsedError;
+  List<InventoryEntity> get inventoryList => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
 
@@ -47,15 +49,18 @@ abstract class $ProductEntityCopyWith<$Res> {
   @useResult
   $Res call(
       {int? id,
-      CategoryEntity? category,
       String? photo,
+      CategoryEntity? category,
       String? name,
+      UomEntity? uom,
       double? price,
-      double? cost,
+      double? lowStockLevel,
+      List<InventoryEntity> inventoryList,
       DateTime? createdAt,
       DateTime? updatedAt});
 
   $CategoryEntityCopyWith<$Res>? get category;
+  $UomEntityCopyWith<$Res>? get uom;
 }
 
 /// @nodoc
@@ -74,11 +79,13 @@ class _$ProductEntityCopyWithImpl<$Res, $Val extends ProductEntity>
   @override
   $Res call({
     Object? id = freezed,
-    Object? category = freezed,
     Object? photo = freezed,
+    Object? category = freezed,
     Object? name = freezed,
+    Object? uom = freezed,
     Object? price = freezed,
-    Object? cost = freezed,
+    Object? lowStockLevel = freezed,
+    Object? inventoryList = null,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
@@ -87,26 +94,34 @@ class _$ProductEntityCopyWithImpl<$Res, $Val extends ProductEntity>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      category: freezed == category
-          ? _value.category
-          : category // ignore: cast_nullable_to_non_nullable
-              as CategoryEntity?,
       photo: freezed == photo
           ? _value.photo
           : photo // ignore: cast_nullable_to_non_nullable
               as String?,
+      category: freezed == category
+          ? _value.category
+          : category // ignore: cast_nullable_to_non_nullable
+              as CategoryEntity?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String?,
+      uom: freezed == uom
+          ? _value.uom
+          : uom // ignore: cast_nullable_to_non_nullable
+              as UomEntity?,
       price: freezed == price
           ? _value.price
           : price // ignore: cast_nullable_to_non_nullable
               as double?,
-      cost: freezed == cost
-          ? _value.cost
-          : cost // ignore: cast_nullable_to_non_nullable
+      lowStockLevel: freezed == lowStockLevel
+          ? _value.lowStockLevel
+          : lowStockLevel // ignore: cast_nullable_to_non_nullable
               as double?,
+      inventoryList: null == inventoryList
+          ? _value.inventoryList
+          : inventoryList // ignore: cast_nullable_to_non_nullable
+              as List<InventoryEntity>,
       createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -131,6 +146,20 @@ class _$ProductEntityCopyWithImpl<$Res, $Val extends ProductEntity>
       return _then(_value.copyWith(category: value) as $Val);
     });
   }
+
+  /// Create a copy of ProductEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $UomEntityCopyWith<$Res>? get uom {
+    if (_value.uom == null) {
+      return null;
+    }
+
+    return $UomEntityCopyWith<$Res>(_value.uom!, (value) {
+      return _then(_value.copyWith(uom: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -143,16 +172,20 @@ abstract class _$$ProductEntityImplCopyWith<$Res>
   @useResult
   $Res call(
       {int? id,
-      CategoryEntity? category,
       String? photo,
+      CategoryEntity? category,
       String? name,
+      UomEntity? uom,
       double? price,
-      double? cost,
+      double? lowStockLevel,
+      List<InventoryEntity> inventoryList,
       DateTime? createdAt,
       DateTime? updatedAt});
 
   @override
   $CategoryEntityCopyWith<$Res>? get category;
+  @override
+  $UomEntityCopyWith<$Res>? get uom;
 }
 
 /// @nodoc
@@ -169,11 +202,13 @@ class __$$ProductEntityImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? category = freezed,
     Object? photo = freezed,
+    Object? category = freezed,
     Object? name = freezed,
+    Object? uom = freezed,
     Object? price = freezed,
-    Object? cost = freezed,
+    Object? lowStockLevel = freezed,
+    Object? inventoryList = null,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
@@ -182,26 +217,34 @@ class __$$ProductEntityImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      category: freezed == category
-          ? _value.category
-          : category // ignore: cast_nullable_to_non_nullable
-              as CategoryEntity?,
       photo: freezed == photo
           ? _value.photo
           : photo // ignore: cast_nullable_to_non_nullable
               as String?,
+      category: freezed == category
+          ? _value.category
+          : category // ignore: cast_nullable_to_non_nullable
+              as CategoryEntity?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String?,
+      uom: freezed == uom
+          ? _value.uom
+          : uom // ignore: cast_nullable_to_non_nullable
+              as UomEntity?,
       price: freezed == price
           ? _value.price
           : price // ignore: cast_nullable_to_non_nullable
               as double?,
-      cost: freezed == cost
-          ? _value.cost
-          : cost // ignore: cast_nullable_to_non_nullable
+      lowStockLevel: freezed == lowStockLevel
+          ? _value.lowStockLevel
+          : lowStockLevel // ignore: cast_nullable_to_non_nullable
               as double?,
+      inventoryList: null == inventoryList
+          ? _value._inventoryList
+          : inventoryList // ignore: cast_nullable_to_non_nullable
+              as List<InventoryEntity>,
       createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -219,13 +262,16 @@ class __$$ProductEntityImplCopyWithImpl<$Res>
 class _$ProductEntityImpl implements _ProductEntity {
   const _$ProductEntityImpl(
       {this.id = null,
-      this.category = null,
       this.photo = null,
+      this.category = null,
       this.name = null,
+      this.uom = null,
       this.price = null,
-      this.cost = null,
+      this.lowStockLevel = null,
+      final List<InventoryEntity> inventoryList = const [],
       this.createdAt = null,
-      this.updatedAt = null});
+      this.updatedAt = null})
+      : _inventoryList = inventoryList;
 
   factory _$ProductEntityImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProductEntityImplFromJson(json);
@@ -235,19 +281,31 @@ class _$ProductEntityImpl implements _ProductEntity {
   final int? id;
   @override
   @JsonKey()
-  final CategoryEntity? category;
+  final String? photo;
   @override
   @JsonKey()
-  final String? photo;
+  final CategoryEntity? category;
   @override
   @JsonKey()
   final String? name;
   @override
   @JsonKey()
+  final UomEntity? uom;
+  @override
+  @JsonKey()
   final double? price;
   @override
   @JsonKey()
-  final double? cost;
+  final double? lowStockLevel;
+  final List<InventoryEntity> _inventoryList;
+  @override
+  @JsonKey()
+  List<InventoryEntity> get inventoryList {
+    if (_inventoryList is EqualUnmodifiableListView) return _inventoryList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_inventoryList);
+  }
+
   @override
   @JsonKey()
   final DateTime? createdAt;
@@ -257,7 +315,7 @@ class _$ProductEntityImpl implements _ProductEntity {
 
   @override
   String toString() {
-    return 'ProductEntity(id: $id, category: $category, photo: $photo, name: $name, price: $price, cost: $cost, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'ProductEntity(id: $id, photo: $photo, category: $category, name: $name, uom: $uom, price: $price, lowStockLevel: $lowStockLevel, inventoryList: $inventoryList, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -266,12 +324,16 @@ class _$ProductEntityImpl implements _ProductEntity {
         (other.runtimeType == runtimeType &&
             other is _$ProductEntityImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.photo, photo) || other.photo == photo) &&
             (identical(other.category, category) ||
                 other.category == category) &&
-            (identical(other.photo, photo) || other.photo == photo) &&
             (identical(other.name, name) || other.name == name) &&
+            (identical(other.uom, uom) || other.uom == uom) &&
             (identical(other.price, price) || other.price == price) &&
-            (identical(other.cost, cost) || other.cost == cost) &&
+            (identical(other.lowStockLevel, lowStockLevel) ||
+                other.lowStockLevel == lowStockLevel) &&
+            const DeepCollectionEquality()
+                .equals(other._inventoryList, _inventoryList) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -280,8 +342,18 @@ class _$ProductEntityImpl implements _ProductEntity {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, category, photo, name, price,
-      cost, createdAt, updatedAt);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      photo,
+      category,
+      name,
+      uom,
+      price,
+      lowStockLevel,
+      const DeepCollectionEquality().hash(_inventoryList),
+      createdAt,
+      updatedAt);
 
   /// Create a copy of ProductEntity
   /// with the given fields replaced by the non-null parameter values.
@@ -302,11 +374,13 @@ class _$ProductEntityImpl implements _ProductEntity {
 abstract class _ProductEntity implements ProductEntity {
   const factory _ProductEntity(
       {final int? id,
-      final CategoryEntity? category,
       final String? photo,
+      final CategoryEntity? category,
       final String? name,
+      final UomEntity? uom,
       final double? price,
-      final double? cost,
+      final double? lowStockLevel,
+      final List<InventoryEntity> inventoryList,
       final DateTime? createdAt,
       final DateTime? updatedAt}) = _$ProductEntityImpl;
 
@@ -316,15 +390,19 @@ abstract class _ProductEntity implements ProductEntity {
   @override
   int? get id;
   @override
-  CategoryEntity? get category;
-  @override
   String? get photo;
+  @override
+  CategoryEntity? get category;
   @override
   String? get name;
   @override
+  UomEntity? get uom;
+  @override
   double? get price;
   @override
-  double? get cost;
+  double? get lowStockLevel;
+  @override
+  List<InventoryEntity> get inventoryList;
   @override
   DateTime? get createdAt;
   @override
