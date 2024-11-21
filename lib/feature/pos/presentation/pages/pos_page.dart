@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
+import 'package:tienda_pos/core/router/routes.dart';
 import 'package:tienda_pos/core/widgets/tienda_app.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/category/category_entity.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/product/product_entity.dart';
@@ -48,33 +49,46 @@ class _PosPageState extends ConsumerState<PosPage> {
     return [
       Container(
         height: 60,
-        padding:
-            const EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
-        child: TextField(
-          cursorColor: AppColors.primary,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: AppColors.card_background,
-            hintText: 'Search product',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5.0),
-              borderSide: BorderSide.none,
+        padding: const EdgeInsets.only(left: 16, right: 0, top: 10, bottom: 10),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextField(
+                cursorColor: AppColors.primary,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: AppColors.card_background,
+                  hintText: 'Search product',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                    borderSide: BorderSide.none,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 10.0,
+                    horizontal: 15.0,
+                  ),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.search),
+                    onPressed: () {
+                      // Search
+                    },
+                  ),
+                ),
+              ),
             ),
-            contentPadding: const EdgeInsets.symmetric(
-              vertical: 10.0,
-              horizontal: 15.0,
-            ),
-            suffixIcon: IconButton(
-              icon: const Icon(Icons.search),
+            IconButton(
+              icon: const Icon(Icons.add),
               onPressed: () {
-                // Search
+                Navigator.of(context)
+                    .pushNamed(InventoryRoutes.product_details);
               },
             ),
-          ),
+          ],
         ),
       ),
       CategoryTab(
         items: const [
+          CategoryEntity(name: 'Orders'),
           CategoryEntity(name: 'Dairy'),
           CategoryEntity(name: 'Grains'),
           CategoryEntity(name: 'Condiments'),
