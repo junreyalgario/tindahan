@@ -28,7 +28,7 @@ class _ProductItemState extends State<ProductItem> {
             ClipRRect(
               borderRadius: BorderRadius.circular(8.0),
               child: Image.network(
-                'https://fastly.picsum.photos/id/217/200/200.jpg?hmac=LoNAUhfCfURrqYjw6WECEWybn4B8y37k5G2odewlZ_Y',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRY_38OB-O3ct4_WTA4CLOW7rpDmuU8RkDVsQ&s',
                 width: 120,
                 height: 100,
                 fit: BoxFit.cover,
@@ -42,7 +42,7 @@ class _ProductItemState extends State<ProductItem> {
                   Text(
                     widget.title,
                     style: const TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

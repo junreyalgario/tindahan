@@ -41,7 +41,7 @@ class _TiendaAppState extends State<TiendaApp> {
   final List<IconData> _icons = [
     Icons.inventory,
     Icons.analytics,
-    Icons.store,
+    Icons.point_of_sale,
     Icons.settings,
     Icons.account_box,
   ];
@@ -147,9 +147,11 @@ class _TiendaAppState extends State<TiendaApp> {
                       width: 3,
                     ),
                   ),
-                  child: const Icon(
-                    Icons.store,
-                    color: Colors.white,
+                  child: Icon(
+                    Icons.point_of_sale,
+                    color: TiendaApp.bottom_nav_index == 2
+                        ? Colors.white
+                        : Colors.grey,
                     size: 30,
                   ),
                 ),

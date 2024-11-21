@@ -14,4 +14,5 @@ class AppColors {
   static const Color cancel = Color.fromARGB(255, 232, 232, 232);
   static const Color danger = Color.fromARGB(255, 192, 2, 2);
   static const Color icon_button = Color.fromARGB(255, 187, 187, 187);
+  static const Color highlight = Colors.deepOrange;
 }
