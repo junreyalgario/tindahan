@@ -22,7 +22,7 @@ class CategoryForm extends ConsumerStatefulWidget {
 
   final CategoryEntity? categoryEntity;
   final Function(CategoryEntity? category)? onSuccess;
-  final Function()? onDelete;
+  final VoidCallback? onDelete;
 
   @override
   ConsumerState<CategoryForm> createState() => _CategoryFormState();

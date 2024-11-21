@@ -1,16 +1,30 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
 import 'package:tienda_pos/core/constant/enums.dart';
 import 'package:tienda_pos/core/constant/ui.dart';
+import 'package:tienda_pos/core/state/data_state.dart';
 import 'package:tienda_pos/core/styles/button_custom_styles.dart';
 import 'package:tienda_pos/core/styles/text_field_styles.dart';
 import 'package:tienda_pos/core/widgets/dialog.dart';
+import 'package:tienda_pos/core/widgets/snackbar.dart';
+import 'package:tienda_pos/feature/inventory/domain/entities/uom/uom_entity.dart';
+import 'package:tienda_pos/feature/inventory/presentation/view_models/uom/uom_notifier.dart';
 
 class OumForm extends ConsumerStatefulWidget {
-  const OumForm({super.key, this.isNew = true});
+  const OumForm({
+    super.key,
+    required this.uomEntity,
+    this.onSuccess,
+    this.onDelete,
+  });
 
-  final bool isNew;
+  final UomEntity? uomEntity;
+  final Function(UomEntity? uomEntity)? onSuccess;
+  final VoidCallback? onDelete;
 
   @override
   ConsumerState<OumForm> createState() => _OumFormState();
@@ -18,9 +32,36 @@ class OumForm extends ConsumerStatefulWidget {
 
 class _OumFormState extends ConsumerState<OumForm> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController symbolController = TextEditingController();
+  ProductUnit? _productUnit;
+
+  bool get _isNewUom => widget.uomEntity?.id == null;
+
+  @override
+  void initState() {
+    super.initState();
+
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      if (widget.uomEntity?.id != null) {
+        ref.watch(uomNotifierProvider.notifier).setState(widget.uomEntity!);
+
+        nameController.text = widget.uomEntity!.name!;
+        symbolController.text = widget.uomEntity!.symbol!;
+        setState(() {
+          _productUnit = ref
+              .read(uomNotifierProvider.notifier)
+              .resolveProductUnit(widget.uomEntity!.uom!);
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final uomNotifier = ref.watch(uomNotifierProvider.notifier);
+    final uomState = ref.watch(uomNotifierProvider);
+
     return Padding(
       padding: UI.dialog_padding,
       child: Form(
@@ -38,6 +79,7 @@ class _OumFormState extends ConsumerState<OumForm> {
             SizedBox(
               height: UI.need_validation_field_height,
               child: TextFormField(
+                controller: nameController,
                 decoration: TextFieldStyles.decoration2(
                   const InputDecoration(
                     labelText: 'Name of measurement',
@@ -50,7 +92,7 @@ class _OumFormState extends ConsumerState<OumForm> {
                   return null;
                 },
                 onChanged: (value) {
-                  //
+                  uomNotifier.setName(value);
                 },
               ),
             ),
@@ -58,6 +100,7 @@ class _OumFormState extends ConsumerState<OumForm> {
             SizedBox(
               height: UI.need_validation_field_height,
               child: TextFormField(
+                controller: symbolController,
                 decoration: TextFieldStyles.decoration2(
                   const InputDecoration(
                     labelText: 'Symbol of measure',
@@ -70,7 +113,7 @@ class _OumFormState extends ConsumerState<OumForm> {
                   return null;
                 },
                 onChanged: (value) {
-                  //
+                  uomNotifier.setSymbol(value);
                 },
               ),
             ),
@@ -80,6 +123,7 @@ class _OumFormState extends ConsumerState<OumForm> {
                 border: OutlineInputBorder(),
               ),
               hint: const Text('Unit of measure'),
+              value: _productUnit,
               items: [ProductUnit.piece, ProductUnit.scale, ProductUnit.length]
                   .map((ProductUnit productUnit) {
                 return DropdownMenuItem<ProductUnit>(
@@ -87,8 +131,10 @@ class _OumFormState extends ConsumerState<OumForm> {
                   child: Text(productUnit.value),
                 );
               }).toList(),
-              onChanged: (ProductUnit? value) {
-                //
+              onChanged: (ProductUnit? unit) {
+                if (unit != null) {
+                  uomNotifier.setUom(unit.value);
+                }
               },
             ),
             const SizedBox(height: 20),
@@ -110,7 +156,7 @@ class _OumFormState extends ConsumerState<OumForm> {
                   ),
                 ),
                 const SizedBox(width: 10),
-                widget.isNew
+                _isNewUom
                     ? Container()
                     : Expanded(
                         child: ElevatedButton(
@@ -124,8 +170,24 @@ class _OumFormState extends ConsumerState<OumForm> {
                                     'Confirm delete? This action cannot be undone.',
                                 confirmText: 'Delete',
                                 confirmColor: AppColors.danger,
-                                onConfirm: () {
-                                  //
+                                onConfirm: () async {
+                                  final DataState result =
+                                      await uomNotifier.delete();
+                                  if (result.isSuccess) {
+                                    if (widget.onDelete != null) {
+                                      widget.onDelete!();
+                                    }
+                                    Navigator.of(context).pop();
+                                    showTopSnackbar(
+                                        context: context,
+                                        color: AppColors.success,
+                                        message: 'Uom deleted successfully.');
+                                  } else {
+                                    showTopSnackbar(
+                                        context: context,
+                                        color: AppColors.danger,
+                                        message: result.error!);
+                                  }
                                 });
                           },
                           child: const Text(
@@ -142,7 +204,24 @@ class _OumFormState extends ConsumerState<OumForm> {
                     ),
                     onPressed: () async {
                       if (_formKey.currentState?.validate() ?? false) {
-                        //
+                        final dataState = await uomNotifier.save();
+
+                        if (dataState.isSuccess) {
+                          widget.onSuccess!(
+                              uomState.id != null ? uomState : null);
+
+                          showTopSnackbar(
+                              context: context,
+                              color: AppColors.success,
+                              message: 'Uom saved successfully!');
+
+                          Navigator.pop(context);
+                        } else {
+                          showTopSnackbar(
+                              context: context,
+                              color: AppColors.error,
+                              message: 'Failed to save uom.');
+                        }
                       }
                     },
                     child: const Text(

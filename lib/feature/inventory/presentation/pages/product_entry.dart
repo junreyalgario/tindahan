@@ -6,6 +6,7 @@ import 'package:tienda_pos/core/styles/button_custom_styles.dart';
 import 'package:tienda_pos/core/styles/text_field_styles.dart';
 import 'package:tienda_pos/core/widgets/tienda_app.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/category/category_entity.dart';
+import 'package:tienda_pos/feature/inventory/domain/entities/uom/uom_entity.dart';
 import 'package:tienda_pos/feature/inventory/presentation/view_models/product/product_entry_notifier.dart';
 import 'package:tienda_pos/feature/inventory/presentation/widgets/category_form.dart';
 import 'package:tienda_pos/feature/inventory/presentation/widgets/uom_form.dart';
@@ -152,33 +153,45 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
       Row(
         children: [
           Expanded(
-            child: DropdownButtonFormField<CategoryEntity>(
+            child: DropdownButtonFormField<UomEntity>(
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.info_outline),
                   onPressed: () {
-                    _showUomDIalog(false);
+                    if (productEntryState.product.uom != null) {
+                      _showUomDIalog(productEntryState.product.uom);
+                    }
                   },
                 ),
               ),
               hint: const Text('Unit of measure'),
-              // value: productEntryState.product.category,
-              items: productEntryState.categories.map((CategoryEntity item) {
-                return DropdownMenuItem<CategoryEntity>(
+              value: productEntryState.product.uom,
+              items: productEntryState.uomList.map((UomEntity item) {
+                return DropdownMenuItem<UomEntity>(
                   value: item,
-                  child: Text(item.name!),
+                  child: Text('${item.name!} \t (${item.symbol!})'),
+                  // child: SizedBox(
+                  //   width: 100,
+                  //   child: Row(
+                  //     children: [
+                  //       Text(item.name!),
+                  //       const Spacer(),
+                  //       Text('(${item.symbol!})'),
+                  //     ],
+                  //   ),
+                  // ),
                 );
               }).toList(),
-              onChanged: (CategoryEntity? value) {
-                productEntryNotifier.setProductCategory(value!);
+              onChanged: (UomEntity? value) {
+                productEntryNotifier.setProductUom(value!);
               },
             ),
           ),
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              _showUomDIalog(true);
+              _showUomDIalog(null);
             },
           ),
         ],
@@ -299,7 +312,9 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
     );
   }
 
-  _showUomDIalog(bool isNew) {
+  _showUomDIalog(UomEntity? uomEntity) {
+    final productNotifier = ref.watch(productEntryProvider.notifier);
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -309,7 +324,19 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
             borderRadius: BorderRadius.circular(5.0),
           ),
           child: OumForm(
-            isNew: isNew,
+            uomEntity: uomEntity,
+            onSuccess: (UomEntity? uomEntity) {
+              productNotifier.setUomList();
+              if (uomEntity != null) {
+                setState(() {
+                  productNotifier.setProductUom(uomEntity);
+                });
+              }
+            },
+            onDelete: () {
+              productNotifier.setUomList();
+              productNotifier.setProductUom(null);
+            },
           ),
         );
       },

@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$ProductEntryState {
   ProductEntity get product => throw _privateConstructorUsedError;
   List<CategoryEntity> get categories => throw _privateConstructorUsedError;
+  List<UomEntity> get uomList => throw _privateConstructorUsedError;
 
   /// Create a copy of ProductEntryState
   /// with the given fields replaced by the non-null parameter values.
@@ -32,7 +33,10 @@ abstract class $ProductEntryStateCopyWith<$Res> {
           ProductEntryState value, $Res Function(ProductEntryState) then) =
       _$ProductEntryStateCopyWithImpl<$Res, ProductEntryState>;
   @useResult
-  $Res call({ProductEntity product, List<CategoryEntity> categories});
+  $Res call(
+      {ProductEntity product,
+      List<CategoryEntity> categories,
+      List<UomEntity> uomList});
 
   $ProductEntityCopyWith<$Res> get product;
 }
@@ -54,6 +58,7 @@ class _$ProductEntryStateCopyWithImpl<$Res, $Val extends ProductEntryState>
   $Res call({
     Object? product = null,
     Object? categories = null,
+    Object? uomList = null,
   }) {
     return _then(_value.copyWith(
       product: null == product
@@ -64,6 +69,10 @@ class _$ProductEntryStateCopyWithImpl<$Res, $Val extends ProductEntryState>
           ? _value.categories
           : categories // ignore: cast_nullable_to_non_nullable
               as List<CategoryEntity>,
+      uomList: null == uomList
+          ? _value.uomList
+          : uomList // ignore: cast_nullable_to_non_nullable
+              as List<UomEntity>,
     ) as $Val);
   }
 
@@ -86,7 +95,10 @@ abstract class _$$ProductEntryStateImplCopyWith<$Res>
       __$$ProductEntryStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({ProductEntity product, List<CategoryEntity> categories});
+  $Res call(
+      {ProductEntity product,
+      List<CategoryEntity> categories,
+      List<UomEntity> uomList});
 
   @override
   $ProductEntityCopyWith<$Res> get product;
@@ -107,6 +119,7 @@ class __$$ProductEntryStateImplCopyWithImpl<$Res>
   $Res call({
     Object? product = null,
     Object? categories = null,
+    Object? uomList = null,
   }) {
     return _then(_$ProductEntryStateImpl(
       product: null == product
@@ -117,6 +130,10 @@ class __$$ProductEntryStateImplCopyWithImpl<$Res>
           ? _value._categories
           : categories // ignore: cast_nullable_to_non_nullable
               as List<CategoryEntity>,
+      uomList: null == uomList
+          ? _value._uomList
+          : uomList // ignore: cast_nullable_to_non_nullable
+              as List<UomEntity>,
     ));
   }
 }
@@ -126,8 +143,10 @@ class __$$ProductEntryStateImplCopyWithImpl<$Res>
 class _$ProductEntryStateImpl implements _ProductEntryState {
   const _$ProductEntryStateImpl(
       {this.product = const ProductEntity(),
-      final List<CategoryEntity> categories = const []})
-      : _categories = categories;
+      final List<CategoryEntity> categories = const [],
+      final List<UomEntity> uomList = const []})
+      : _categories = categories,
+        _uomList = uomList;
 
   @override
   @JsonKey()
@@ -141,9 +160,18 @@ class _$ProductEntryStateImpl implements _ProductEntryState {
     return EqualUnmodifiableListView(_categories);
   }
 
+  final List<UomEntity> _uomList;
+  @override
+  @JsonKey()
+  List<UomEntity> get uomList {
+    if (_uomList is EqualUnmodifiableListView) return _uomList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_uomList);
+  }
+
   @override
   String toString() {
-    return 'ProductEntryState(product: $product, categories: $categories)';
+    return 'ProductEntryState(product: $product, categories: $categories, uomList: $uomList)';
   }
 
   @override
@@ -153,12 +181,16 @@ class _$ProductEntryStateImpl implements _ProductEntryState {
             other is _$ProductEntryStateImpl &&
             (identical(other.product, product) || other.product == product) &&
             const DeepCollectionEquality()
-                .equals(other._categories, _categories));
+                .equals(other._categories, _categories) &&
+            const DeepCollectionEquality().equals(other._uomList, _uomList));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, product, const DeepCollectionEquality().hash(_categories));
+      runtimeType,
+      product,
+      const DeepCollectionEquality().hash(_categories),
+      const DeepCollectionEquality().hash(_uomList));
 
   /// Create a copy of ProductEntryState
   /// with the given fields replaced by the non-null parameter values.
@@ -173,12 +205,15 @@ class _$ProductEntryStateImpl implements _ProductEntryState {
 abstract class _ProductEntryState implements ProductEntryState {
   const factory _ProductEntryState(
       {final ProductEntity product,
-      final List<CategoryEntity> categories}) = _$ProductEntryStateImpl;
+      final List<CategoryEntity> categories,
+      final List<UomEntity> uomList}) = _$ProductEntryStateImpl;
 
   @override
   ProductEntity get product;
   @override
   List<CategoryEntity> get categories;
+  @override
+  List<UomEntity> get uomList;
 
   /// Create a copy of ProductEntryState
   /// with the given fields replaced by the non-null parameter values.
