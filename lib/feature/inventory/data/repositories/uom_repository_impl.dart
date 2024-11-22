@@ -64,7 +64,7 @@ class UomRepositoryImpl implements UomRepository {
         updatedAt: DateTime.now(),
       );
 
-      _uomDao.save(createUomfromJson(entity.toJson()));
+      _uomDao.save($Uom.fromJson(entity.toJson()));
 
       return DataState.success(true);
     } catch (e) {

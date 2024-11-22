@@ -1,16 +1,17 @@
 // ignore_for_file: unused_element
 
 import 'package:realm/realm.dart';
+import 'package:tienda_pos/feature/inventory/data/models/product/product.dart';
 
-part 'uom.realm.dart';
+part 'inventory.realm.dart';
 
 @RealmModel()
-class $Uom {
+class $Inventory {
   @PrimaryKey()
   late int id;
-  late String name;
-  late String symbol;
-  late String uom;
+  late double cost;
+  late double stocks;
+  late $Product? product;
   late DateTime createdAt;
   late DateTime updatedAt;
 
@@ -18,23 +19,23 @@ class $Uom {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'name': name,
-      'symbol': symbol,
-      'uom': uom,
+      'cost': cost,
+      'stocks': stocks,
+      'product': product?.toJson(),
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
     };
   }
 
-  // Create Realm object from JSON
-  static Uom fromJson(Map<String, dynamic> json) {
-    return Uom(
+  static Inventory fromJson(Map<String, dynamic> json) {
+    return Inventory(
       json['id'],
-      json['name'],
-      json['symbol'],
-      json['uom'],
+      json['cost'],
+      json['stocks'],
       DateTime.parse(json['createdAt']),
       DateTime.parse(json['updatedAt']),
+      product:
+          json['product'] != null ? $Product.fromJson(json['product']) : null,
     );
   }
 }

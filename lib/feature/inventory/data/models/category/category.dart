@@ -5,7 +5,7 @@ import 'package:realm/realm.dart';
 part 'category.realm.dart';
 
 @RealmModel()
-class _Category {
+class $Category {
   @PrimaryKey()
   late int id;
   late String name;
@@ -21,14 +21,14 @@ class _Category {
       'updatedAt': updatedAt.toIso8601String(),
     };
   }
-}
 
-// Create Realm object from JSON
-Category createCategoryfromJson(Map<String, dynamic> json) {
-  return Category(
-    json['id'],
-    json['name'],
-    DateTime.parse(json['createdAt']),
-    DateTime.parse(json['updatedAt']),
-  );
+  // Create Realm object from JSON
+  static Category fromJson(Map<String, dynamic> json) {
+    return Category(
+      json['id'],
+      json['name'],
+      DateTime.parse(json['createdAt']),
+      DateTime.parse(json['updatedAt']),
+    );
+  }
 }

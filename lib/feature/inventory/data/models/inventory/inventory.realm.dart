@@ -1,27 +1,31 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'category.dart';
+part of 'inventory.dart';
 
 // **************************************************************************
 // RealmObjectGenerator
 // **************************************************************************
 
 // ignore_for_file: type=lint
-class Category extends $Category
+class Inventory extends $Inventory
     with RealmEntity, RealmObjectBase, RealmObject {
-  Category(
+  Inventory(
     int id,
-    String name,
+    double cost,
+    double stocks,
     DateTime createdAt,
-    DateTime updatedAt,
-  ) {
+    DateTime updatedAt, {
+    Product? product,
+  }) {
     RealmObjectBase.set(this, 'id', id);
-    RealmObjectBase.set(this, 'name', name);
+    RealmObjectBase.set(this, 'cost', cost);
+    RealmObjectBase.set(this, 'stocks', stocks);
+    RealmObjectBase.set(this, 'product', product);
     RealmObjectBase.set(this, 'createdAt', createdAt);
     RealmObjectBase.set(this, 'updatedAt', updatedAt);
   }
 
-  Category._();
+  Inventory._();
 
   @override
   int get id => RealmObjectBase.get<int>(this, 'id') as int;
@@ -29,9 +33,21 @@ class Category extends $Category
   set id(int value) => RealmObjectBase.set(this, 'id', value);
 
   @override
-  String get name => RealmObjectBase.get<String>(this, 'name') as String;
+  double get cost => RealmObjectBase.get<double>(this, 'cost') as double;
   @override
-  set name(String value) => RealmObjectBase.set(this, 'name', value);
+  set cost(double value) => RealmObjectBase.set(this, 'cost', value);
+
+  @override
+  double get stocks => RealmObjectBase.get<double>(this, 'stocks') as double;
+  @override
+  set stocks(double value) => RealmObjectBase.set(this, 'stocks', value);
+
+  @override
+  Product? get product =>
+      RealmObjectBase.get<Product>(this, 'product') as Product?;
+  @override
+  set product(covariant Product? value) =>
+      RealmObjectBase.set(this, 'product', value);
 
   @override
   DateTime get createdAt =>
@@ -48,51 +64,59 @@ class Category extends $Category
       RealmObjectBase.set(this, 'updatedAt', value);
 
   @override
-  Stream<RealmObjectChanges<Category>> get changes =>
-      RealmObjectBase.getChanges<Category>(this);
+  Stream<RealmObjectChanges<Inventory>> get changes =>
+      RealmObjectBase.getChanges<Inventory>(this);
 
   @override
-  Stream<RealmObjectChanges<Category>> changesFor([List<String>? keyPaths]) =>
-      RealmObjectBase.getChangesFor<Category>(this, keyPaths);
+  Stream<RealmObjectChanges<Inventory>> changesFor([List<String>? keyPaths]) =>
+      RealmObjectBase.getChangesFor<Inventory>(this, keyPaths);
 
   @override
-  Category freeze() => RealmObjectBase.freezeObject<Category>(this);
+  Inventory freeze() => RealmObjectBase.freezeObject<Inventory>(this);
 
   EJsonValue toEJson() {
     return <String, dynamic>{
       'id': id.toEJson(),
-      'name': name.toEJson(),
+      'cost': cost.toEJson(),
+      'stocks': stocks.toEJson(),
+      'product': product.toEJson(),
       'createdAt': createdAt.toEJson(),
       'updatedAt': updatedAt.toEJson(),
     };
   }
 
-  static EJsonValue _toEJson(Category value) => value.toEJson();
-  static Category _fromEJson(EJsonValue ejson) {
+  static EJsonValue _toEJson(Inventory value) => value.toEJson();
+  static Inventory _fromEJson(EJsonValue ejson) {
     if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
     return switch (ejson) {
       {
         'id': EJsonValue id,
-        'name': EJsonValue name,
+        'cost': EJsonValue cost,
+        'stocks': EJsonValue stocks,
         'createdAt': EJsonValue createdAt,
         'updatedAt': EJsonValue updatedAt,
       } =>
-        Category(
+        Inventory(
           fromEJson(id),
-          fromEJson(name),
+          fromEJson(cost),
+          fromEJson(stocks),
           fromEJson(createdAt),
           fromEJson(updatedAt),
+          product: fromEJson(ejson['product']),
         ),
       _ => raiseInvalidEJson(ejson),
     };
   }
 
   static final schema = () {
-    RealmObjectBase.registerFactory(Category._);
+    RealmObjectBase.registerFactory(Inventory._);
     register(_toEJson, _fromEJson);
-    return const SchemaObject(ObjectType.realmObject, Category, 'Category', [
+    return const SchemaObject(ObjectType.realmObject, Inventory, 'Inventory', [
       SchemaProperty('id', RealmPropertyType.int, primaryKey: true),
-      SchemaProperty('name', RealmPropertyType.string),
+      SchemaProperty('cost', RealmPropertyType.double),
+      SchemaProperty('stocks', RealmPropertyType.double),
+      SchemaProperty('product', RealmPropertyType.object,
+          optional: true, linkTarget: 'Product'),
       SchemaProperty('createdAt', RealmPropertyType.timestamp),
       SchemaProperty('updatedAt', RealmPropertyType.timestamp),
     ]);

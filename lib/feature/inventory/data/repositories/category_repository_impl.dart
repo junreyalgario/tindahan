@@ -21,7 +21,7 @@ class CategoryRepositoryImpl extends CategoryRepository {
         updatedAt: DateTime.now(),
       );
 
-      _categoryDao.save(createCategoryfromJson(categoryEntity.toJson()));
+      _categoryDao.save($Category.fromJson(categoryEntity.toJson()));
 
       return DataState.success(true);
     } catch (e) {

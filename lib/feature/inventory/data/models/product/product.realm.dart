@@ -7,7 +7,7 @@ part of 'product.dart';
 // **************************************************************************
 
 // ignore_for_file: type=lint
-class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
+class Product extends $Product with RealmEntity, RealmObjectBase, RealmObject {
   Product(
     int id,
     String name,
@@ -16,12 +16,19 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
     DateTime createdAt,
     DateTime updatedAt, {
     String? photo,
+    Category? category,
+    Uom? uom,
+    Iterable<Inventory> inventories = const [],
   }) {
     RealmObjectBase.set(this, 'id', id);
     RealmObjectBase.set(this, 'photo', photo);
     RealmObjectBase.set(this, 'name', name);
     RealmObjectBase.set(this, 'price', price);
     RealmObjectBase.set(this, 'cost', cost);
+    RealmObjectBase.set(this, 'category', category);
+    RealmObjectBase.set(this, 'uom', uom);
+    RealmObjectBase.set<RealmList<Inventory>>(
+        this, 'inventories', RealmList<Inventory>(inventories));
     RealmObjectBase.set(this, 'createdAt', createdAt);
     RealmObjectBase.set(this, 'updatedAt', updatedAt);
   }
@@ -52,6 +59,26 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
   double get cost => RealmObjectBase.get<double>(this, 'cost') as double;
   @override
   set cost(double value) => RealmObjectBase.set(this, 'cost', value);
+
+  @override
+  Category? get category =>
+      RealmObjectBase.get<Category>(this, 'category') as Category?;
+  @override
+  set category(covariant Category? value) =>
+      RealmObjectBase.set(this, 'category', value);
+
+  @override
+  Uom? get uom => RealmObjectBase.get<Uom>(this, 'uom') as Uom?;
+  @override
+  set uom(covariant Uom? value) => RealmObjectBase.set(this, 'uom', value);
+
+  @override
+  RealmList<Inventory> get inventories =>
+      RealmObjectBase.get<Inventory>(this, 'inventories')
+          as RealmList<Inventory>;
+  @override
+  set inventories(covariant RealmList<Inventory> value) =>
+      throw RealmUnsupportedSetError();
 
   @override
   DateTime get createdAt =>
@@ -85,6 +112,9 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
       'name': name.toEJson(),
       'price': price.toEJson(),
       'cost': cost.toEJson(),
+      'category': category.toEJson(),
+      'uom': uom.toEJson(),
+      'inventories': inventories.toEJson(),
       'createdAt': createdAt.toEJson(),
       'updatedAt': updatedAt.toEJson(),
     };
@@ -110,6 +140,9 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
           fromEJson(createdAt),
           fromEJson(updatedAt),
           photo: fromEJson(ejson['photo']),
+          category: fromEJson(ejson['category']),
+          uom: fromEJson(ejson['uom']),
+          inventories: fromEJson(ejson['inventories']),
         ),
       _ => raiseInvalidEJson(ejson),
     };
@@ -124,6 +157,12 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
       SchemaProperty('name', RealmPropertyType.string),
       SchemaProperty('price', RealmPropertyType.double),
       SchemaProperty('cost', RealmPropertyType.double),
+      SchemaProperty('category', RealmPropertyType.object,
+          optional: true, linkTarget: 'Category'),
+      SchemaProperty('uom', RealmPropertyType.object,
+          optional: true, linkTarget: 'Uom'),
+      SchemaProperty('inventories', RealmPropertyType.object,
+          linkTarget: 'Inventory', collectionType: RealmCollectionType.list),
       SchemaProperty('createdAt', RealmPropertyType.timestamp),
       SchemaProperty('updatedAt', RealmPropertyType.timestamp),
     ]);

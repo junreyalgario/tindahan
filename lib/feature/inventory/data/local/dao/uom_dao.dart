@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:realm/realm.dart';
 import 'package:tienda_pos/core/constant/strings.dart';
 import 'package:tienda_pos/feature/inventory/data/local/dao/dao.dart';
-import 'package:tienda_pos/feature/inventory/data/local/dao/realm_provider.dart';
+import 'package:tienda_pos/core/providers/realm_provider.dart';
 import 'package:tienda_pos/feature/inventory/data/models/uom/uom.dart';
 
 class UomDao extends Dao<Uom> {

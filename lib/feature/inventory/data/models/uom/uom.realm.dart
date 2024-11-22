@@ -7,7 +7,7 @@ part of 'uom.dart';
 // **************************************************************************
 
 // ignore_for_file: type=lint
-class Uom extends _Uom with RealmEntity, RealmObjectBase, RealmObject {
+class Uom extends $Uom with RealmEntity, RealmObjectBase, RealmObject {
   Uom(
     int id,
     String name,
