@@ -118,27 +118,84 @@ class _OumFormState extends ConsumerState<OumForm> {
               ),
             ),
             // Unit
-            DropdownButtonFormField<ProductUnit>(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
+            SizedBox(
+              height: UI.need_validation_field_height,
+              child: DropdownButtonFormField<ProductUnit>(
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                ),
+                hint: const Text('Unit of measure'),
+                value: _productUnit,
+                items: [
+                  ProductUnit.piece,
+                  ProductUnit.scale,
+                  ProductUnit.length
+                ].map((ProductUnit productUnit) {
+                  return DropdownMenuItem<ProductUnit>(
+                    value: productUnit,
+                    child: Text(productUnit.value),
+                  );
+                }).toList(),
+                validator: (value) {
+                  if (value == null) {
+                    return '';
+                  }
+                  return null;
+                },
+                onChanged: (ProductUnit? unit) {
+                  if (unit != null) {
+                    uomNotifier.setUom(unit.value);
+                  }
+                },
               ),
-              hint: const Text('Unit of measure'),
-              value: _productUnit,
-              items: [ProductUnit.piece, ProductUnit.scale, ProductUnit.length]
-                  .map((ProductUnit productUnit) {
-                return DropdownMenuItem<ProductUnit>(
-                  value: productUnit,
-                  child: Text(productUnit.value),
-                );
-              }).toList(),
-              onChanged: (ProductUnit? unit) {
-                if (unit != null) {
-                  uomNotifier.setUom(unit.value);
-                }
-              },
             ),
-            const SizedBox(height: 20),
             // Action buttons
+            _isNewUom
+                ? Container()
+                : Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton.icon(
+                      onPressed: () {
+                        showConfirmDialog(
+                            context: context,
+                            title:
+                                '${widget.uomEntity?.name!} (${widget.uomEntity?.symbol!})',
+                            message:
+                                'Confirm delete? This action cannot be undone.',
+                            confirmText: 'CONFIRM',
+                            confirmColor: AppColors.danger,
+                            onConfirm: () async {
+                              final DataState result =
+                                  await uomNotifier.delete();
+                              if (result.isSuccess) {
+                                if (widget.onDelete != null) {
+                                  widget.onDelete!();
+                                }
+                                Navigator.of(context).pop();
+                                showTopSnackbar(
+                                    context: context,
+                                    color: AppColors.success,
+                                    message: 'Uom deleted successfully.');
+                              } else {
+                                showTopSnackbar(
+                                    context: context,
+                                    color: AppColors.danger,
+                                    message: result.error!);
+                              }
+                            });
+                      },
+                      // icon: Icon(Icons.delete),
+                      label: const Text('DELETE'),
+                      style: TextButton.styleFrom(
+                        foregroundColor: AppColors.danger,
+                        textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                      ),
+                    ),
+                  ),
+            const SizedBox(height: 10),
             Row(
               children: [
                 Expanded(
@@ -150,52 +207,11 @@ class _OumFormState extends ConsumerState<OumForm> {
                       Navigator.pop(context);
                     },
                     child: const Text(
-                      'Cancel',
+                      'CANCEL',
                       style: TextStyle(color: AppColors.confirm),
                     ),
                   ),
                 ),
-                const SizedBox(width: 10),
-                _isNewUom
-                    ? Container()
-                    : Expanded(
-                        child: ElevatedButton(
-                          style: ButtonCustomStyles.elevatedStyle(
-                            backgroundColor: AppColors.danger,
-                          ),
-                          onPressed: () {
-                            showConfirmDialog(
-                                context: context,
-                                message:
-                                    'Confirm delete? This action cannot be undone.',
-                                confirmText: 'Delete',
-                                confirmColor: AppColors.danger,
-                                onConfirm: () async {
-                                  final DataState result =
-                                      await uomNotifier.delete();
-                                  if (result.isSuccess) {
-                                    if (widget.onDelete != null) {
-                                      widget.onDelete!();
-                                    }
-                                    Navigator.of(context).pop();
-                                    showTopSnackbar(
-                                        context: context,
-                                        color: AppColors.success,
-                                        message: 'Uom deleted successfully.');
-                                  } else {
-                                    showTopSnackbar(
-                                        context: context,
-                                        color: AppColors.danger,
-                                        message: result.error!);
-                                  }
-                                });
-                          },
-                          child: const Text(
-                            'Delete',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
                 const SizedBox(width: 10),
                 Expanded(
                   child: ElevatedButton(
@@ -225,13 +241,13 @@ class _OumFormState extends ConsumerState<OumForm> {
                       }
                     },
                     child: const Text(
-                      'Save',
+                      'SAVE',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),

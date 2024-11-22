@@ -72,7 +72,7 @@ class _PosChangeState extends ConsumerState<PosChange> {
               Navigator.of(context).pop();
             },
             child: const Text(
-              'NEW ENTRY',
+              'NEW TRANSACTION',
               style: TextStyle(color: Colors.white),
             ),
           ),

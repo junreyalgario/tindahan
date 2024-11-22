@@ -59,7 +59,7 @@ void showConfirmDialog({
                         Navigator.pop(context);
                       },
                       child: const Text(
-                        'Cancel',
+                        'CANCEL',
                         style: TextStyle(color: AppColors.confirm),
                       ),
                     ),
@@ -75,7 +75,7 @@ void showConfirmDialog({
                         onConfirm();
                       },
                       child: Text(
-                        confirmText,
+                        confirmText.toUpperCase(),
                         style: const TextStyle(color: Colors.white),
                       ),
                     ),

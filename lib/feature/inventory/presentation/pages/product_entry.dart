@@ -167,12 +167,19 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
               ),
               hint: const Text('Unit of measure'),
               value: productEntryState.product.uom,
+              isExpanded: true,
               items: productEntryState.uomList.map((UomEntity item) {
                 return DropdownMenuItem<UomEntity>(
                   value: item,
                   child: Text('${item.name!} \t (${item.symbol!})'),
                 );
               }).toList(),
+              validator: (value) {
+                if (value == null) {
+                  return '';
+                }
+                return null;
+              },
               onChanged: (UomEntity? value) {
                 productEntryNotifier.setProductUom(value!);
               },
