@@ -1,7 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:realm/realm.dart';
-import 'package:tienda_pos/feature/inventory/data/local/dao/dao.dart';
+import 'package:tienda_pos/core/data/dao.dart';
 import 'package:tienda_pos/core/providers/realm_provider.dart';
+import 'package:tienda_pos/core/utils/logger.dart';
 import 'package:tienda_pos/feature/inventory/data/models/category/category.dart';
 
 class CategoryDao extends Dao<Category> {
@@ -12,7 +13,7 @@ class CategoryDao extends Dao<Category> {
   @override
   int getNextId() {
     final Category? category = getLastInserted();
-    return category != null ? (category.id + 1) : 0;
+    return category != null ? (category.id + 1) : 1;
   }
 
   @override
@@ -23,6 +24,10 @@ class CategoryDao extends Dao<Category> {
 
       if (category != null) {
         category.name = model.name;
+      } else {
+        Log.error('Failed to update category: ID not found (${model.id})');
+        throw Exception(
+            'Failed to update category: ID not found (${model.id})');
       }
     });
   }
@@ -35,7 +40,8 @@ class CategoryDao extends Dao<Category> {
         _realm.delete(category);
       });
     } else {
-      throw Exception('Failed to delete, category not found.');
+      Log.error('Failed to delete category: ID not found ($id)');
+      throw Exception('Failed to delete category: ID not found ($id)');
     }
   }
 }

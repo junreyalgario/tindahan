@@ -4,6 +4,7 @@ import 'package:tienda_pos/core/constant/app_colors.dart';
 import 'package:tienda_pos/core/constant/enums.dart';
 import 'package:tienda_pos/core/router/routes.dart';
 import 'package:tienda_pos/core/widgets/tienda_app.dart';
+import 'package:tienda_pos/feature/inventory/presentation/view_models/inventory/inventory_notifier.dart';
 import 'package:tienda_pos/feature/inventory/presentation/widgets/product_item.dart';
 
 class InventoryPage extends ConsumerStatefulWidget {
@@ -14,24 +15,10 @@ class InventoryPage extends ConsumerStatefulWidget {
 }
 
 class _InventoryPageState extends ConsumerState<InventoryPage> {
-  // Dummy data
-  final List<dynamic> _productList = [
-    'Bunay',
-    'Mantika',
-    'Maharlika Rice',
-    'Jaguar Rice',
-    'Jaguar 5kls Rice',
-    'Rabbit White Rice',
-    'Rabbit Yellow Rice',
-    'Sibuyas',
-    'Lasuna',
-    'Luy-a',
-    'Kamatis',
-    'Paminta Durog'
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(inventoryNotifierProvider);
+
     return TiendaApp(
       isRootPage: true,
       child: CustomScrollView(
@@ -73,9 +60,14 @@ class _InventoryPageState extends ConsumerState<InventoryPage> {
                   ),
                   IconButton(
                     icon: const Icon(Icons.add),
-                    onPressed: () {
-                      Navigator.of(context)
+                    onPressed: () async {
+                      final result = await Navigator.of(context)
                           .pushNamed(InventoryRoutes.product_details);
+                      if (result != null) {
+                        ref
+                            .watch(inventoryNotifierProvider.notifier)
+                            .setProductList();
+                      }
                     },
                   ),
                   PopupMenuButton<ProductFilter>(
@@ -107,10 +99,10 @@ class _InventoryPageState extends ConsumerState<InventoryPage> {
                 (context, index) {
                   return Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: ProductItem(title: _productList[index]),
+                    child: ProductItem(productEntity: state.productList[index]),
                   );
                 },
-                childCount: _productList.length,
+                childCount: state.productList.length,
               ),
             ),
           ),

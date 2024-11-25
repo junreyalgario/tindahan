@@ -26,7 +26,10 @@ mixin _$ProductEntity {
   String? get name => throw _privateConstructorUsedError;
   UomEntity? get uom => throw _privateConstructorUsedError;
   double? get price => throw _privateConstructorUsedError;
+  double? get stockOnHand => throw _privateConstructorUsedError;
+  double? get currentCost => throw _privateConstructorUsedError;
   double? get lowStockLevel => throw _privateConstructorUsedError;
+  @JsonKey(name: 'inventories')
   List<InventoryEntity> get inventoryList => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
@@ -54,8 +57,10 @@ abstract class $ProductEntityCopyWith<$Res> {
       String? name,
       UomEntity? uom,
       double? price,
+      double? stockOnHand,
+      double? currentCost,
       double? lowStockLevel,
-      List<InventoryEntity> inventoryList,
+      @JsonKey(name: 'inventories') List<InventoryEntity> inventoryList,
       DateTime? createdAt,
       DateTime? updatedAt});
 
@@ -84,6 +89,8 @@ class _$ProductEntityCopyWithImpl<$Res, $Val extends ProductEntity>
     Object? name = freezed,
     Object? uom = freezed,
     Object? price = freezed,
+    Object? stockOnHand = freezed,
+    Object? currentCost = freezed,
     Object? lowStockLevel = freezed,
     Object? inventoryList = null,
     Object? createdAt = freezed,
@@ -113,6 +120,14 @@ class _$ProductEntityCopyWithImpl<$Res, $Val extends ProductEntity>
       price: freezed == price
           ? _value.price
           : price // ignore: cast_nullable_to_non_nullable
+              as double?,
+      stockOnHand: freezed == stockOnHand
+          ? _value.stockOnHand
+          : stockOnHand // ignore: cast_nullable_to_non_nullable
+              as double?,
+      currentCost: freezed == currentCost
+          ? _value.currentCost
+          : currentCost // ignore: cast_nullable_to_non_nullable
               as double?,
       lowStockLevel: freezed == lowStockLevel
           ? _value.lowStockLevel
@@ -177,8 +192,10 @@ abstract class _$$ProductEntityImplCopyWith<$Res>
       String? name,
       UomEntity? uom,
       double? price,
+      double? stockOnHand,
+      double? currentCost,
       double? lowStockLevel,
-      List<InventoryEntity> inventoryList,
+      @JsonKey(name: 'inventories') List<InventoryEntity> inventoryList,
       DateTime? createdAt,
       DateTime? updatedAt});
 
@@ -207,6 +224,8 @@ class __$$ProductEntityImplCopyWithImpl<$Res>
     Object? name = freezed,
     Object? uom = freezed,
     Object? price = freezed,
+    Object? stockOnHand = freezed,
+    Object? currentCost = freezed,
     Object? lowStockLevel = freezed,
     Object? inventoryList = null,
     Object? createdAt = freezed,
@@ -236,6 +255,14 @@ class __$$ProductEntityImplCopyWithImpl<$Res>
       price: freezed == price
           ? _value.price
           : price // ignore: cast_nullable_to_non_nullable
+              as double?,
+      stockOnHand: freezed == stockOnHand
+          ? _value.stockOnHand
+          : stockOnHand // ignore: cast_nullable_to_non_nullable
+              as double?,
+      currentCost: freezed == currentCost
+          ? _value.currentCost
+          : currentCost // ignore: cast_nullable_to_non_nullable
               as double?,
       lowStockLevel: freezed == lowStockLevel
           ? _value.lowStockLevel
@@ -267,7 +294,10 @@ class _$ProductEntityImpl implements _ProductEntity {
       this.name = null,
       this.uom = null,
       this.price = null,
+      this.stockOnHand = null,
+      this.currentCost = null,
       this.lowStockLevel = null,
+      @JsonKey(name: 'inventories')
       final List<InventoryEntity> inventoryList = const [],
       this.createdAt = null,
       this.updatedAt = null})
@@ -296,10 +326,16 @@ class _$ProductEntityImpl implements _ProductEntity {
   final double? price;
   @override
   @JsonKey()
+  final double? stockOnHand;
+  @override
+  @JsonKey()
+  final double? currentCost;
+  @override
+  @JsonKey()
   final double? lowStockLevel;
   final List<InventoryEntity> _inventoryList;
   @override
-  @JsonKey()
+  @JsonKey(name: 'inventories')
   List<InventoryEntity> get inventoryList {
     if (_inventoryList is EqualUnmodifiableListView) return _inventoryList;
     // ignore: implicit_dynamic_type
@@ -315,7 +351,7 @@ class _$ProductEntityImpl implements _ProductEntity {
 
   @override
   String toString() {
-    return 'ProductEntity(id: $id, photo: $photo, category: $category, name: $name, uom: $uom, price: $price, lowStockLevel: $lowStockLevel, inventoryList: $inventoryList, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'ProductEntity(id: $id, photo: $photo, category: $category, name: $name, uom: $uom, price: $price, stockOnHand: $stockOnHand, currentCost: $currentCost, lowStockLevel: $lowStockLevel, inventoryList: $inventoryList, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -330,6 +366,10 @@ class _$ProductEntityImpl implements _ProductEntity {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.uom, uom) || other.uom == uom) &&
             (identical(other.price, price) || other.price == price) &&
+            (identical(other.stockOnHand, stockOnHand) ||
+                other.stockOnHand == stockOnHand) &&
+            (identical(other.currentCost, currentCost) ||
+                other.currentCost == currentCost) &&
             (identical(other.lowStockLevel, lowStockLevel) ||
                 other.lowStockLevel == lowStockLevel) &&
             const DeepCollectionEquality()
@@ -350,6 +390,8 @@ class _$ProductEntityImpl implements _ProductEntity {
       name,
       uom,
       price,
+      stockOnHand,
+      currentCost,
       lowStockLevel,
       const DeepCollectionEquality().hash(_inventoryList),
       createdAt,
@@ -379,8 +421,10 @@ abstract class _ProductEntity implements ProductEntity {
       final String? name,
       final UomEntity? uom,
       final double? price,
+      final double? stockOnHand,
+      final double? currentCost,
       final double? lowStockLevel,
-      final List<InventoryEntity> inventoryList,
+      @JsonKey(name: 'inventories') final List<InventoryEntity> inventoryList,
       final DateTime? createdAt,
       final DateTime? updatedAt}) = _$ProductEntityImpl;
 
@@ -400,8 +444,13 @@ abstract class _ProductEntity implements ProductEntity {
   @override
   double? get price;
   @override
+  double? get stockOnHand;
+  @override
+  double? get currentCost;
+  @override
   double? get lowStockLevel;
   @override
+  @JsonKey(name: 'inventories')
   List<InventoryEntity> get inventoryList;
   @override
   DateTime? get createdAt;

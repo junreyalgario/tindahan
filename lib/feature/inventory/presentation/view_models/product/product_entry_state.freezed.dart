@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$ProductEntryState {
   ProductEntity get product => throw _privateConstructorUsedError;
+  InventoryEntity get inventory => throw _privateConstructorUsedError;
   List<CategoryEntity> get categories => throw _privateConstructorUsedError;
   List<UomEntity> get uomList => throw _privateConstructorUsedError;
 
@@ -35,10 +36,12 @@ abstract class $ProductEntryStateCopyWith<$Res> {
   @useResult
   $Res call(
       {ProductEntity product,
+      InventoryEntity inventory,
       List<CategoryEntity> categories,
       List<UomEntity> uomList});
 
   $ProductEntityCopyWith<$Res> get product;
+  $InventoryEntityCopyWith<$Res> get inventory;
 }
 
 /// @nodoc
@@ -57,6 +60,7 @@ class _$ProductEntryStateCopyWithImpl<$Res, $Val extends ProductEntryState>
   @override
   $Res call({
     Object? product = null,
+    Object? inventory = null,
     Object? categories = null,
     Object? uomList = null,
   }) {
@@ -65,6 +69,10 @@ class _$ProductEntryStateCopyWithImpl<$Res, $Val extends ProductEntryState>
           ? _value.product
           : product // ignore: cast_nullable_to_non_nullable
               as ProductEntity,
+      inventory: null == inventory
+          ? _value.inventory
+          : inventory // ignore: cast_nullable_to_non_nullable
+              as InventoryEntity,
       categories: null == categories
           ? _value.categories
           : categories // ignore: cast_nullable_to_non_nullable
@@ -85,6 +93,16 @@ class _$ProductEntryStateCopyWithImpl<$Res, $Val extends ProductEntryState>
       return _then(_value.copyWith(product: value) as $Val);
     });
   }
+
+  /// Create a copy of ProductEntryState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $InventoryEntityCopyWith<$Res> get inventory {
+    return $InventoryEntityCopyWith<$Res>(_value.inventory, (value) {
+      return _then(_value.copyWith(inventory: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -97,11 +115,14 @@ abstract class _$$ProductEntryStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {ProductEntity product,
+      InventoryEntity inventory,
       List<CategoryEntity> categories,
       List<UomEntity> uomList});
 
   @override
   $ProductEntityCopyWith<$Res> get product;
+  @override
+  $InventoryEntityCopyWith<$Res> get inventory;
 }
 
 /// @nodoc
@@ -118,6 +139,7 @@ class __$$ProductEntryStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? product = null,
+    Object? inventory = null,
     Object? categories = null,
     Object? uomList = null,
   }) {
@@ -126,6 +148,10 @@ class __$$ProductEntryStateImplCopyWithImpl<$Res>
           ? _value.product
           : product // ignore: cast_nullable_to_non_nullable
               as ProductEntity,
+      inventory: null == inventory
+          ? _value.inventory
+          : inventory // ignore: cast_nullable_to_non_nullable
+              as InventoryEntity,
       categories: null == categories
           ? _value._categories
           : categories // ignore: cast_nullable_to_non_nullable
@@ -143,6 +169,7 @@ class __$$ProductEntryStateImplCopyWithImpl<$Res>
 class _$ProductEntryStateImpl implements _ProductEntryState {
   const _$ProductEntryStateImpl(
       {this.product = const ProductEntity(),
+      this.inventory = const InventoryEntity(),
       final List<CategoryEntity> categories = const [],
       final List<UomEntity> uomList = const []})
       : _categories = categories,
@@ -151,6 +178,9 @@ class _$ProductEntryStateImpl implements _ProductEntryState {
   @override
   @JsonKey()
   final ProductEntity product;
+  @override
+  @JsonKey()
+  final InventoryEntity inventory;
   final List<CategoryEntity> _categories;
   @override
   @JsonKey()
@@ -171,7 +201,7 @@ class _$ProductEntryStateImpl implements _ProductEntryState {
 
   @override
   String toString() {
-    return 'ProductEntryState(product: $product, categories: $categories, uomList: $uomList)';
+    return 'ProductEntryState(product: $product, inventory: $inventory, categories: $categories, uomList: $uomList)';
   }
 
   @override
@@ -180,6 +210,8 @@ class _$ProductEntryStateImpl implements _ProductEntryState {
         (other.runtimeType == runtimeType &&
             other is _$ProductEntryStateImpl &&
             (identical(other.product, product) || other.product == product) &&
+            (identical(other.inventory, inventory) ||
+                other.inventory == inventory) &&
             const DeepCollectionEquality()
                 .equals(other._categories, _categories) &&
             const DeepCollectionEquality().equals(other._uomList, _uomList));
@@ -189,6 +221,7 @@ class _$ProductEntryStateImpl implements _ProductEntryState {
   int get hashCode => Object.hash(
       runtimeType,
       product,
+      inventory,
       const DeepCollectionEquality().hash(_categories),
       const DeepCollectionEquality().hash(_uomList));
 
@@ -205,11 +238,14 @@ class _$ProductEntryStateImpl implements _ProductEntryState {
 abstract class _ProductEntryState implements ProductEntryState {
   const factory _ProductEntryState(
       {final ProductEntity product,
+      final InventoryEntity inventory,
       final List<CategoryEntity> categories,
       final List<UomEntity> uomList}) = _$ProductEntryStateImpl;
 
   @override
   ProductEntity get product;
+  @override
+  InventoryEntity get inventory;
   @override
   List<CategoryEntity> get categories;
   @override

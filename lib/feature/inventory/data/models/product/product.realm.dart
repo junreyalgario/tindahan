@@ -12,7 +12,8 @@ class Product extends $Product with RealmEntity, RealmObjectBase, RealmObject {
     int id,
     String name,
     double price,
-    double cost,
+    double lowStockLevel,
+    double stockOnHand,
     DateTime createdAt,
     DateTime updatedAt, {
     String? photo,
@@ -24,7 +25,8 @@ class Product extends $Product with RealmEntity, RealmObjectBase, RealmObject {
     RealmObjectBase.set(this, 'photo', photo);
     RealmObjectBase.set(this, 'name', name);
     RealmObjectBase.set(this, 'price', price);
-    RealmObjectBase.set(this, 'cost', cost);
+    RealmObjectBase.set(this, 'lowStockLevel', lowStockLevel);
+    RealmObjectBase.set(this, 'stockOnHand', stockOnHand);
     RealmObjectBase.set(this, 'category', category);
     RealmObjectBase.set(this, 'uom', uom);
     RealmObjectBase.set<RealmList<Inventory>>(
@@ -56,9 +58,18 @@ class Product extends $Product with RealmEntity, RealmObjectBase, RealmObject {
   set price(double value) => RealmObjectBase.set(this, 'price', value);
 
   @override
-  double get cost => RealmObjectBase.get<double>(this, 'cost') as double;
+  double get lowStockLevel =>
+      RealmObjectBase.get<double>(this, 'lowStockLevel') as double;
   @override
-  set cost(double value) => RealmObjectBase.set(this, 'cost', value);
+  set lowStockLevel(double value) =>
+      RealmObjectBase.set(this, 'lowStockLevel', value);
+
+  @override
+  double get stockOnHand =>
+      RealmObjectBase.get<double>(this, 'stockOnHand') as double;
+  @override
+  set stockOnHand(double value) =>
+      RealmObjectBase.set(this, 'stockOnHand', value);
 
   @override
   Category? get category =>
@@ -111,7 +122,8 @@ class Product extends $Product with RealmEntity, RealmObjectBase, RealmObject {
       'photo': photo.toEJson(),
       'name': name.toEJson(),
       'price': price.toEJson(),
-      'cost': cost.toEJson(),
+      'lowStockLevel': lowStockLevel.toEJson(),
+      'stockOnHand': stockOnHand.toEJson(),
       'category': category.toEJson(),
       'uom': uom.toEJson(),
       'inventories': inventories.toEJson(),
@@ -128,7 +140,8 @@ class Product extends $Product with RealmEntity, RealmObjectBase, RealmObject {
         'id': EJsonValue id,
         'name': EJsonValue name,
         'price': EJsonValue price,
-        'cost': EJsonValue cost,
+        'lowStockLevel': EJsonValue lowStockLevel,
+        'stockOnHand': EJsonValue stockOnHand,
         'createdAt': EJsonValue createdAt,
         'updatedAt': EJsonValue updatedAt,
       } =>
@@ -136,7 +149,8 @@ class Product extends $Product with RealmEntity, RealmObjectBase, RealmObject {
           fromEJson(id),
           fromEJson(name),
           fromEJson(price),
-          fromEJson(cost),
+          fromEJson(lowStockLevel),
+          fromEJson(stockOnHand),
           fromEJson(createdAt),
           fromEJson(updatedAt),
           photo: fromEJson(ejson['photo']),
@@ -156,7 +170,8 @@ class Product extends $Product with RealmEntity, RealmObjectBase, RealmObject {
       SchemaProperty('photo', RealmPropertyType.string, optional: true),
       SchemaProperty('name', RealmPropertyType.string),
       SchemaProperty('price', RealmPropertyType.double),
-      SchemaProperty('cost', RealmPropertyType.double),
+      SchemaProperty('lowStockLevel', RealmPropertyType.double),
+      SchemaProperty('stockOnHand', RealmPropertyType.double),
       SchemaProperty('category', RealmPropertyType.object,
           optional: true, linkTarget: 'Category'),
       SchemaProperty('uom', RealmPropertyType.object,

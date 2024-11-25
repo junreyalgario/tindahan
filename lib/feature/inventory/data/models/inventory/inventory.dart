@@ -16,12 +16,13 @@ class $Inventory {
   late DateTime updatedAt;
 
   // Convert Realm object to JSON
-  Map<String, dynamic> toJson() {
+  // `serializeProduct` parameter controls whether the `product` field should be serialized.
+  Map<String, dynamic> toJson({required bool serializeProduct}) {
     return {
       'id': id,
       'cost': cost,
       'stocks': stocks,
-      'product': product?.toJson(),
+      'product': serializeProduct ? product?.toJson() : null,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
     };

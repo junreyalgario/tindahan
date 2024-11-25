@@ -18,8 +18,12 @@ class ProductEntity with _$ProductEntity {
     @Default(null) String? name,
     @Default(null) UomEntity? uom,
     @Default(null) double? price,
+    @Default(null) double? stockOnHand,
+    @Default(null) double? currentCost,
     @Default(null) double? lowStockLevel,
-    @Default([]) List<InventoryEntity> inventoryList,
+    @JsonKey(name: 'inventories')
+    @Default([])
+    List<InventoryEntity> inventoryList,
     @Default(null) DateTime? createdAt,
     @Default(null) DateTime? updatedAt,
   }) = _ProductEntity;

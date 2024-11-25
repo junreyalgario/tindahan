@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
 import 'package:tienda_pos/core/router/routes.dart';
-import 'package:tienda_pos/core/styles/button_custom_styles.dart';
+import 'package:tienda_pos/feature/inventory/domain/entities/product/product_entity.dart';
+import 'package:tienda_pos/feature/inventory/inventory.dart';
 
 class ProductItem extends StatefulWidget {
-  const ProductItem({super.key, required this.title});
+  const ProductItem({super.key, required this.productEntity});
 
-  final String title;
+  final ProductEntity productEntity;
 
   @override
   State<ProductItem> createState() => _ProductItemState();
@@ -25,84 +26,99 @@ class _ProductItemState extends State<ProductItem> {
         padding: const EdgeInsets.all(16.0),
         child: Row(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: Image.network(
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRY_38OB-O3ct4_WTA4CLOW7rpDmuU8RkDVsQ&s',
-                width: 120,
-                height: 100,
-                fit: BoxFit.cover,
+            InkWell(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(5.0),
+                child: Image.network(
+                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRY_38OB-O3ct4_WTA4CLOW7rpDmuU8RkDVsQ&s',
+                  width: 160,
+                  height: 190,
+                  fit: BoxFit.cover,
+                ),
               ),
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  InventoryRoutes.product_details,
+                  arguments: widget.productEntity,
+                );
+              },
             ),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    widget.title,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const Row(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Cost Price:'),
-                      SizedBox(width: 5),
-                      Text('₱12.00',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      Flexible(
+                        child: Text(
+                          widget.productEntity.name!,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ),
+                      Text('(${widget.productEntity.uom!.symbol!})')
                     ],
                   ),
-                  const Row(
-                    children: [
-                      Text('Stock:'),
-                      SizedBox(width: 5),
-                      Text('200',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
+                  const Divider(thickness: 0.3),
                   Row(
                     children: [
-                      Expanded(
-                        flex: 1,
-                        child: SizedBox(
-                          height: 35.0,
-                          child: ElevatedButton(
-                            style: ButtonCustomStyles.elevatedStyle(
-                              backgroundColor: AppColors.cancel,
-                            ),
-                            onPressed: () {
-                              Navigator.pushNamed(
-                                  context, InventoryRoutes.product_details);
-                            },
-                            child: const Text(
-                              'Details',
-                              style: TextStyle(color: AppColors.confirm),
-                            ),
-                          ),
-                        ),
+                      const Text('Cost Price:'),
+                      const SizedBox(width: 5),
+                      Text(
+                          '₱${widget.productEntity.currentCost?.toStringAsFixed(2)}',
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                  const Divider(thickness: 0.3),
+                  Row(
+                    children: [
+                      const Text('Selling Price:'),
+                      const SizedBox(width: 5),
+                      Text('₱${widget.productEntity.price?.toStringAsFixed(2)}',
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                  const Divider(thickness: 0.3),
+                  Row(
+                    children: [
+                      const Text('Stock count:'),
+                      const SizedBox(width: 5),
+                      Text(
+                          widget.productEntity.stockOnHand != null
+                              ? widget.productEntity.stockOnHand!
+                                  .toStringAsFixed(1)
+                              : '0.0',
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                  const Divider(thickness: 0.3),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        iconSize: 30,
+                        color: AppColors.danger,
+                        icon: const Icon(Icons.delete),
+                        onPressed: () {
+                          //
+                        },
                       ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        flex: 1,
-                        child: SizedBox(
-                          height: 35.0,
-                          child: ElevatedButton(
-                            style: ButtonCustomStyles.elevatedStyle(
-                              backgroundColor: AppColors.confirm,
-                            ),
-                            onPressed: () {
-                              //
-                            },
-                            child: const Text(
-                              'Inventory',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
+                      IconButton(
+                        iconSize: 30,
+                        color: AppColors.confirm,
+                        icon: const Icon(Icons.add_circle),
+                        onPressed: () {
+                          //
+                        },
+                      )
                     ],
                   )
                 ],

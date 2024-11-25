@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
-import 'package:tienda_pos/core/router/router_navigator.dart';
+import 'package:tienda_pos/core/router/route_navigator.dart';
 import 'package:tienda_pos/core/router/routes.dart';
 
 void main() {

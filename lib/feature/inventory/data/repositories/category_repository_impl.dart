@@ -13,15 +13,15 @@ class CategoryRepositoryImpl extends CategoryRepository {
       : _categoryDao = categoryDao;
 
   @override
-  Future<DataState<bool>> insert(CategoryEntity categoryEntity) async {
+  Future<DataState<bool>> insert(CategoryEntity entity) async {
     try {
-      categoryEntity = categoryEntity.copyWith(
+      entity = entity.copyWith(
         id: _categoryDao.getNextId(),
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       );
 
-      _categoryDao.save($Category.fromJson(categoryEntity.toJson()));
+      _categoryDao.save($Category.fromJson(entity.toJson()));
 
       return DataState.success(true);
     } catch (e) {
@@ -31,12 +31,12 @@ class CategoryRepositoryImpl extends CategoryRepository {
   }
 
   @override
-  Future<DataState<bool>> update(CategoryEntity categoryEntity) async {
+  Future<DataState<bool>> update(CategoryEntity entity) async {
     try {
       final Category category = Category(
-        categoryEntity.id!,
-        categoryEntity.name!,
-        categoryEntity.createdAt!,
+        entity.id!,
+        entity.name!,
+        entity.createdAt!,
         DateTime.now(),
       );
 

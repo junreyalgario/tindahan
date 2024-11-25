@@ -18,8 +18,10 @@ _$ProductEntityImpl _$$ProductEntityImplFromJson(Map<String, dynamic> json) =>
           ? null
           : UomEntity.fromJson(json['uom'] as Map<String, dynamic>),
       price: (json['price'] as num?)?.toDouble() ?? null,
+      stockOnHand: (json['stockOnHand'] as num?)?.toDouble() ?? null,
+      currentCost: (json['currentCost'] as num?)?.toDouble() ?? null,
       lowStockLevel: (json['lowStockLevel'] as num?)?.toDouble() ?? null,
-      inventoryList: (json['inventoryList'] as List<dynamic>?)
+      inventoryList: (json['inventories'] as List<dynamic>?)
               ?.map((e) => InventoryEntity.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
@@ -39,8 +41,10 @@ Map<String, dynamic> _$$ProductEntityImplToJson(_$ProductEntityImpl instance) =>
       'name': instance.name,
       'uom': instance.uom,
       'price': instance.price,
+      'stockOnHand': instance.stockOnHand,
+      'currentCost': instance.currentCost,
       'lowStockLevel': instance.lowStockLevel,
-      'inventoryList': instance.inventoryList,
+      'inventories': instance.inventoryList,
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
     };

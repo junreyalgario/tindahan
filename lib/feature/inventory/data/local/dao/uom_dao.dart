@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:realm/realm.dart';
-import 'package:tienda_pos/core/constant/strings.dart';
-import 'package:tienda_pos/feature/inventory/data/local/dao/dao.dart';
+import 'package:tienda_pos/core/data/dao.dart';
 import 'package:tienda_pos/core/providers/realm_provider.dart';
+import 'package:tienda_pos/core/utils/logger.dart';
 import 'package:tienda_pos/feature/inventory/data/models/uom/uom.dart';
 
 class UomDao extends Dao<Uom> {
@@ -18,14 +18,15 @@ class UomDao extends Dao<Uom> {
         _realm.delete(uom);
       });
     } else {
-      throw Exception(AppString.uom_failed_delete);
+      Log.error('Failed to update UOM: ID not found ($id)');
+      throw Exception('Failed to update UOM: ID not found ($id)');
     }
   }
 
   @override
   int getNextId() {
     final Uom? uom = getLastInserted();
-    return uom != null ? (uom.id + 1) : 0;
+    return uom != null ? (uom.id + 1) : 1;
   }
 
   @override
@@ -38,7 +39,8 @@ class UomDao extends Dao<Uom> {
         uom.symbol = model.symbol;
         uom.uom = model.uom;
       } else {
-        throw Exception(AppString.uom_failed_update);
+        Log.error('Failed to update UOM: ID not found (${model.id})');
+        throw Exception('Failed to update UOM: ID not found (${model.id})');
       }
     });
   }

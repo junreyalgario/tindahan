@@ -1,4 +1,5 @@
 import 'package:realm/realm.dart';
+import 'package:tienda_pos/core/utils/logger.dart';
 import 'package:tienda_pos/feature/inventory/data/models/category/category.dart';
 import 'package:tienda_pos/feature/inventory/data/models/inventory/inventory.dart';
 import 'package:tienda_pos/feature/inventory/data/models/uom/uom.dart';
@@ -12,7 +13,8 @@ class $Product {
   String? photo;
   late String name;
   late double price;
-  late double cost;
+  late double lowStockLevel;
+  late double stockOnHand;
   late $Category? category;
   late $Uom? uom;
   late List<$Inventory> inventories;
@@ -26,11 +28,13 @@ class $Product {
       'photo': photo,
       'name': name,
       'price': price,
-      'cost': cost,
+      'lowStockLevel': lowStockLevel,
+      'stockOnHand': stockOnHand,
       'category': category?.toJson(),
       'uom': uom?.toJson(),
-      'inventories':
-          inventories.map((inventory) => inventory.toJson()).toList(),
+      'inventories': inventories
+          .map((inventory) => inventory.toJson(serializeProduct: false))
+          .toList(),
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
     };
@@ -42,7 +46,8 @@ class $Product {
       json['id'],
       json['name'],
       json['price'],
-      json['cost'],
+      json['lowStockLevel'],
+      json['stockOnHand'],
       DateTime.parse(json['createdAt']),
       DateTime.parse(json['updatedAt']),
       photo: json['photo'],

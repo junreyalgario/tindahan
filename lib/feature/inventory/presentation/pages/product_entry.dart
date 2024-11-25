@@ -1,24 +1,46 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
 import 'package:tienda_pos/core/constant/ui.dart';
+import 'package:tienda_pos/core/state/data_state.dart';
 import 'package:tienda_pos/core/styles/button_custom_styles.dart';
 import 'package:tienda_pos/core/styles/text_field_styles.dart';
+import 'package:tienda_pos/core/widgets/snackbar.dart';
 import 'package:tienda_pos/core/widgets/tienda_app.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/category/category_entity.dart';
+import 'package:tienda_pos/feature/inventory/domain/entities/product/product_entity.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/uom/uom_entity.dart';
 import 'package:tienda_pos/feature/inventory/presentation/view_models/product/product_entry_notifier.dart';
 import 'package:tienda_pos/feature/inventory/presentation/widgets/category_form.dart';
 import 'package:tienda_pos/feature/inventory/presentation/widgets/uom_form.dart';
 
 class ProductEntry extends ConsumerStatefulWidget {
-  const ProductEntry({super.key});
+  const ProductEntry({super.key, this.productEntity});
+
+  final ProductEntity? productEntity;
 
   @override
   ConsumerState<ProductEntry> createState() => _ProductEntryState();
 }
 
 class _ProductEntryState extends ConsumerState<ProductEntry> {
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      if (widget.productEntity != null) {
+        ref
+            .watch(productEntryProvider.notifier)
+            .setProduct(widget.productEntity!);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return TiendaApp(
@@ -31,7 +53,48 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
             children: [
               ..._buildPhotoSection(),
               const SizedBox(height: 10),
-              ..._buildDetailSection(),
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    ..._buildDetailSection(),
+                  ],
+                ),
+              ),
+
+              // Save button
+              Container(
+                margin: const EdgeInsets.only(top: 20, bottom: 40),
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  style: ButtonCustomStyles.elevatedStyle(
+                    backgroundColor: AppColors.confirm,
+                  ),
+                  onPressed: () async {
+                    if (_formKey.currentState?.validate() ?? false) {
+                      final DataState result =
+                          await ref.watch(productEntryProvider.notifier).save();
+                      if (result.isSuccess) {
+                        showTopSnackbar(
+                            context: context,
+                            color: AppColors.success,
+                            message: 'Product saved successfully!');
+                        Navigator.of(context).pop(true);
+                      } else {
+                        showTopSnackbar(
+                            context: context,
+                            color: AppColors.danger,
+                            message: 'Failed to save product.');
+                      }
+                    }
+                  },
+                  child: const Text(
+                    'SAVE',
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -101,180 +164,238 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
   }
 
   _buildDetailSection() {
-    final productEntryState = ref.watch(productEntryProvider);
-    final productEntryNotifier = ref.watch(productEntryProvider.notifier);
+    final productState = ref.watch(productEntryProvider);
+    final productNotifier = ref.watch(productEntryProvider.notifier);
 
     return [
       // Product category
-      Row(
-        children: [
-          Expanded(
-            child: DropdownButtonFormField<CategoryEntity>(
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.info_outline),
-                  onPressed: () {
-                    if (productEntryState.product.category != null) {
-                      _showCategoryDialog(productEntryState.product.category);
+      SizedBox(
+        height: UI.need_validation_field_height,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: SizedBox(
+                height: UI.need_validation_field_height,
+                child: DropdownButtonFormField<CategoryEntity>(
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.info_outline),
+                      onPressed: () {
+                        if (productState.product.category != null) {
+                          _showCategoryDialog(productState.product.category);
+                        }
+                      },
+                    ),
+                  ),
+                  hint: const Text('Product category'),
+                  value: productState.product.category,
+                  items: productState.categories.map((CategoryEntity item) {
+                    return DropdownMenuItem<CategoryEntity>(
+                      value: item,
+                      child: Text(item.name!),
+                    );
+                  }).toList(),
+                  validator: (value) {
+                    if (value == null) {
+                      return '';
                     }
+                    return null;
+                  },
+                  onChanged: (CategoryEntity? value) {
+                    productNotifier.setProductCategory(value!);
                   },
                 ),
               ),
-              hint: const Text('Product category'),
-              value: productEntryState.product.category,
-              items: productEntryState.categories.map((CategoryEntity item) {
-                return DropdownMenuItem<CategoryEntity>(
-                  value: item,
-                  child: Text(item.name!),
-                );
-              }).toList(),
-              onChanged: (CategoryEntity? value) {
-                productEntryNotifier.setProductCategory(value!);
-              },
             ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              _showCategoryDialog(null);
-            },
-          ),
-        ],
+            Container(
+              margin: const EdgeInsets.only(top: 5),
+              child: IconButton(
+                icon: const Icon(Icons.add),
+                onPressed: () {
+                  _showCategoryDialog(null);
+                },
+              ),
+            ),
+          ],
+        ),
       ),
-      const SizedBox(height: 20),
+
       // Product name
-      TextFormField(
-        decoration: TextFieldStyles.decoration(
-            TextFormFieldDecoration(labelText: 'Product name')),
+      SizedBox(
+        height: 75,
+        child: TextFormField(
+          decoration: TextFieldStyles.decoration(
+            TextFormFieldDecoration(labelText: 'Product name'),
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return '';
+            }
+            return null;
+          },
+          onChanged: (value) {
+            productNotifier.setProductName(value);
+          },
+        ),
       ),
-      const SizedBox(height: 20),
+
       // UOM
-      Row(
-        children: [
-          Expanded(
-            child: DropdownButtonFormField<UomEntity>(
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.info_outline),
-                  onPressed: () {
-                    if (productEntryState.product.uom != null) {
-                      _showUomDIalog(productEntryState.product.uom);
+      SizedBox(
+        height: UI.need_validation_field_height,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: SizedBox(
+                height: UI.need_validation_field_height,
+                child: DropdownButtonFormField<UomEntity>(
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.info_outline),
+                      onPressed: () {
+                        if (productState.product.uom != null) {
+                          _showUomDIalog(productState.product.uom);
+                        }
+                      },
+                    ),
+                  ),
+                  hint: const Text('Unit of measure'),
+                  value: productState.product.uom,
+                  isExpanded: true,
+                  items: productState.uomList.map((UomEntity item) {
+                    return DropdownMenuItem<UomEntity>(
+                      value: item,
+                      child: Text('${item.name!} \t (${item.symbol!})'),
+                    );
+                  }).toList(),
+                  validator: (value) {
+                    if (value == null) {
+                      return '';
                     }
+                    return null;
+                  },
+                  onChanged: (UomEntity? value) {
+                    productNotifier.setProductUom(value!);
                   },
                 ),
               ),
-              hint: const Text('Unit of measure'),
-              value: productEntryState.product.uom,
-              isExpanded: true,
-              items: productEntryState.uomList.map((UomEntity item) {
-                return DropdownMenuItem<UomEntity>(
-                  value: item,
-                  child: Text('${item.name!} \t (${item.symbol!})'),
-                );
-              }).toList(),
-              validator: (value) {
-                if (value == null) {
-                  return '';
-                }
-                return null;
-              },
-              onChanged: (UomEntity? value) {
-                productEntryNotifier.setProductUom(value!);
-              },
             ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              _showUomDIalog(null);
-            },
-          ),
-        ],
+            Container(
+              margin: const EdgeInsets.only(top: 5),
+              child: IconButton(
+                icon: const Icon(Icons.add),
+                onPressed: () {
+                  _showUomDIalog(null);
+                },
+              ),
+            ),
+          ],
+        ),
       ),
-      const SizedBox(height: 20),
+
       // Price and cost
-      Row(
-        children: [
-          Expanded(
-            child: TextFormField(
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
-              decoration: TextFieldStyles.decoration(
-                  TextFormFieldDecoration(labelText: 'Price')),
-            ),
-          ),
-          const SizedBox(width: 20),
-          Expanded(
-            child: TextFormField(
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
-              decoration: TextFieldStyles.decoration(
-                TextFormFieldDecoration(labelText: 'Cost'),
+      SizedBox(
+        height: UI.need_validation_field_height,
+        child: Row(
+          children: [
+            Expanded(
+              child: SizedBox(
+                height: UI.need_validation_field_height,
+                child: TextFormField(
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  decoration: TextFieldStyles.decoration(
+                      TextFormFieldDecoration(labelText: 'Price')),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return '';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    productNotifier.setProductPrice(double.parse(value));
+                  },
+                ),
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a number';
-                }
-                if (int.tryParse(value) == null) {
-                  return 'Please enter a valid number';
-                }
-                return null;
-              },
             ),
-          ),
-        ],
+            const SizedBox(width: 20),
+            Expanded(
+              child: SizedBox(
+                height: UI.need_validation_field_height,
+                child: TextFormField(
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  decoration: TextFieldStyles.decoration(
+                    TextFormFieldDecoration(labelText: 'Cost'),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return '';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    productNotifier.setProductCost(double.parse(value));
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
-      const SizedBox(height: 20),
+
       // Stocks and low stocks
-      Row(
-        children: [
-          Expanded(
-            child: TextFormField(
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
-              decoration: TextFieldStyles.decoration(
-                  TextFormFieldDecoration(labelText: 'Stocks')),
-            ),
-          ),
-          const SizedBox(width: 20),
-          Expanded(
-            child: TextFormField(
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
-              decoration: TextFieldStyles.decoration(
-                TextFormFieldDecoration(labelText: 'Low stock level'),
+      SizedBox(
+        height: 75,
+        child: Row(
+          children: [
+            Expanded(
+              child: SizedBox(
+                height: UI.need_validation_field_height,
+                child: TextFormField(
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  decoration: TextFieldStyles.decoration(
+                      TextFormFieldDecoration(labelText: 'Stocks')),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return '';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    productNotifier.setProductStocks(double.parse(value));
+                  },
+                ),
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a number';
-                }
-                if (int.tryParse(value) == null) {
-                  return 'Please enter a valid number';
-                }
-                return null;
-              },
             ),
-          ),
-        ],
-      ),
-      // Save button
-      Container(
-        margin: const EdgeInsets.only(top: 30, bottom: 40),
-        width: double.infinity,
-        height: 50,
-        child: ElevatedButton(
-          style: ButtonCustomStyles.elevatedStyle(
-            backgroundColor: AppColors.confirm,
-          ),
-          onPressed: () async {
-            //
-          },
-          child: const Text(
-            'SAVE',
-            style: TextStyle(color: Colors.white, fontSize: 18),
-          ),
+            const SizedBox(width: 20),
+            Expanded(
+              child: SizedBox(
+                height: UI.need_validation_field_height,
+                child: TextFormField(
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  decoration: TextFieldStyles.decoration(
+                    TextFormFieldDecoration(labelText: 'Low stock level'),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return '';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    productNotifier
+                        .setProductLowStockLevel(double.parse(value));
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     ];
