@@ -17,7 +17,6 @@ class InventoryNotifier extends StateNotifier<InventoryState> {
     final result = await _productUsecase.getList();
 
     if (result.isSuccess) {
-      Log.info('PRODUCT LIST: ${result.data?.length}');
       state = state.copyWith(productList: result.data!);
     }
   }

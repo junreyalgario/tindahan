@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
 import 'package:tienda_pos/core/widgets/dialog.dart';
+import 'package:tienda_pos/feature/pos/domain/entities/pos_item/pos_item_entity.dart';
+import 'package:tienda_pos/feature/pos/presentation/view_models/cart/cart_notifier.dart';
 
 class CartItem extends ConsumerStatefulWidget {
-  const CartItem({super.key});
+  final PosItemEntity posItem;
+
+  const CartItem({super.key, required this.posItem});
 
   @override
   ConsumerState<CartItem> createState() => _CartItemState();
@@ -13,6 +17,8 @@ class CartItem extends ConsumerStatefulWidget {
 class _CartItemState extends ConsumerState<CartItem> {
   @override
   Widget build(BuildContext context) {
+    final cartNotifier = ref.watch(cartNotifierProvider.notifier);
+
     return Card(
       elevation: 0,
       color: AppColors.card_background,
@@ -37,11 +43,11 @@ class _CartItemState extends ConsumerState<CartItem> {
                     ),
                   ),
                   const SizedBox(width: 4),
-                  const Expanded(
+                  Expanded(
                     child: Text(
-                      'Maharlika Blue',
+                      widget.posItem.product!.name!,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
@@ -60,15 +66,17 @@ class _CartItemState extends ConsumerState<CartItem> {
                         Icon(Icons.remove, size: 15, color: AppColors.danger),
                   ),
                   onTap: () {
-                    //
+                    cartNotifier.editQuantity(
+                        widget.posItem.product!.id!, CartOperation.subract);
                   },
                 ),
                 Container(
                   width: 40,
                   alignment: Alignment.center,
-                  child: const Text(
-                    '8',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  child: Text(
+                    widget.posItem.orderCount.toStringAsFixed(1),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                 ),
                 InkWell(
@@ -77,20 +85,22 @@ class _CartItemState extends ConsumerState<CartItem> {
                     child: Icon(Icons.add, size: 15, color: AppColors.success),
                   ),
                   onTap: () {
-                    //
+                    cartNotifier.editQuantity(
+                        widget.posItem.product!.id!, CartOperation.add);
                   },
                 ),
               ],
             ),
           ),
-          const SizedBox(
+          SizedBox(
             height: 40,
             width: 75,
             child: Row(
               children: [
                 Text(
-                  '₱1.88',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  '₱${widget.posItem.subTotalAmount}',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ],
             ),

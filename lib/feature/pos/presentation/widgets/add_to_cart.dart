@@ -19,52 +19,56 @@ class AddToCart extends ConsumerStatefulWidget {
 }
 
 class _AddToCartState extends ConsumerState<AddToCart> {
+  final TextEditingController qtyController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
         children: [
-          // const Text(
-          //   'Add to Cart',
-          //   overflow: TextOverflow.ellipsis,
-          //   textAlign: TextAlign.center,
-          //   style: TextStyle(fontSize: 20, color: AppColors.highlight),
-          // ),
           const Text(
             'Add to Cart',
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+            style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: AppColors.highlight,
+                fontSize: 20),
           ),
           const SizedBox(height: 20),
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Product name',
+              const Text('Product name',
                   style: TextStyle(fontWeight: FontWeight.bold)),
-              Text('Maharlika Rice',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+              Text(widget.productEntity.name!,
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
             ],
           ),
           const Divider(
             color: Color.fromARGB(255, 214, 213, 213),
             thickness: 1,
           ),
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Stocks', style: TextStyle(fontWeight: FontWeight.bold)),
-              Text('120.78 kl', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text('Stocks',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              Text(
+                  '${widget.productEntity.stockOnHand} ${widget.productEntity.uom?.symbol!}',
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
             ],
           ),
           const Divider(
             color: Color.fromARGB(255, 214, 213, 213),
             thickness: 1,
           ),
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Price', style: TextStyle(fontWeight: FontWeight.bold)),
-              Text('54.00 kl', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text('Price',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              Text('₱${widget.productEntity.price!.toStringAsFixed(2)}',
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
             ],
           ),
 
@@ -77,9 +81,9 @@ class _AddToCartState extends ConsumerState<AddToCart> {
               borderRadius: BorderRadius.circular(5.0),
             ),
             alignment: Alignment.center,
-            child: const Text(
-              '₱123.00',
-              style: TextStyle(
+            child: Text(
+              '₱${widget.productEntity.price!.toStringAsFixed(2)}',
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: AppColors.secondary,
@@ -104,6 +108,7 @@ class _AddToCartState extends ConsumerState<AddToCart> {
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
+              controller: qtyController,
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: [
@@ -148,7 +153,7 @@ class _AddToCartState extends ConsumerState<AddToCart> {
                     backgroundColor: AppColors.confirm,
                   ),
                   onPressed: () async {
-                    //
+                    Navigator.pop(context, double.parse(qtyController.text));
                   },
                   child: const Text(
                     'CONFIRM',

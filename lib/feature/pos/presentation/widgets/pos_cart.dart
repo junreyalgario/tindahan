@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
 import 'package:tienda_pos/core/styles/button_custom_styles.dart';
+import 'package:tienda_pos/feature/pos/presentation/view_models/cart/cart_notifier.dart';
 import 'package:tienda_pos/feature/pos/presentation/widgets/cart_item.dart';
 import 'package:tienda_pos/feature/pos/presentation/widgets/pos_bottom_sheet.dart';
 import 'package:tienda_pos/feature/pos/presentation/widgets/pos_payment.dart';
@@ -14,18 +15,18 @@ class PosCart extends ConsumerStatefulWidget {
 }
 
 class _PosCartState extends ConsumerState<PosCart> {
-  List<String> generatedList = List.generate(12, (index) => '');
-
   double get _orderListHeight {
     const maxItems = 6;
-    return (generatedList.length < maxItems
-            ? (56 * generatedList.length)
+    return (ref.watch(cartNotifierProvider).posItems.length < maxItems
+            ? (56 * ref.watch(cartNotifierProvider).posItems.length)
             : (56 * maxItems))
         .toDouble();
   }
 
   @override
   Widget build(BuildContext context) {
+    final cartState = ref.watch(cartNotifierProvider);
+
     return Column(
       children: [
         // Header
@@ -78,8 +79,8 @@ class _PosCartState extends ConsumerState<PosCart> {
             padding: const EdgeInsets.only(left: 8, right: 8),
             child: Column(
               children: [
-                ...generatedList.map((item) {
-                  return const CartItem();
+                ...cartState.posItems.entries.map((item) {
+                  return CartItem(posItem: item.value);
                 }),
               ],
             ),
@@ -143,8 +144,9 @@ class _PosCartState extends ConsumerState<PosCart> {
             ),
           ),
         ),
+        const Spacer(),
         Padding(
-          padding: const EdgeInsets.only(left: 11, right: 11),
+          padding: const EdgeInsets.only(left: 11, right: 11, bottom: 20),
           child: Row(
             children: [
               Expanded(

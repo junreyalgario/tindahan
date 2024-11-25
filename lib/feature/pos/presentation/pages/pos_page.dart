@@ -4,14 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
 import 'package:tienda_pos/core/router/routes.dart';
+import 'package:tienda_pos/core/utils/logger.dart';
 import 'package:tienda_pos/core/widgets/tienda_app.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/category/category_entity.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/product/product_entity.dart';
+import 'package:tienda_pos/feature/pos/presentation/view_models/cart/cart_notifier.dart';
+import 'package:tienda_pos/feature/pos/presentation/view_models/pos/pos_notifier.dart';
+import 'package:tienda_pos/feature/pos/presentation/view_models/pos_category/pos_category_notifier.dart';
+import 'package:tienda_pos/feature/pos/presentation/view_models/pos_item_notifier.dart';
 import 'package:tienda_pos/feature/pos/presentation/widgets/add_to_cart.dart';
 import 'package:tienda_pos/feature/pos/presentation/widgets/category_tab.dart';
 import 'package:tienda_pos/feature/pos/presentation/widgets/pos_bottom_sheet.dart';
 import 'package:tienda_pos/feature/pos/presentation/widgets/pos_cart.dart';
-import 'package:tienda_pos/feature/pos/presentation/widgets/pos_product_card.dart';
+import 'package:tienda_pos/feature/pos/presentation/widgets/pos_item_card.dart';
 
 class PosPage extends ConsumerStatefulWidget {
   const PosPage({super.key});
@@ -46,6 +51,8 @@ class _PosPageState extends ConsumerState<PosPage> {
   }
 
   _buildHeader() {
+    final posCatState = ref.watch(posCategoryNotifierProvider);
+
     return [
       Container(
         height: 60,
@@ -87,42 +94,43 @@ class _PosPageState extends ConsumerState<PosPage> {
         ),
       ),
       CategoryTab(
-        items: const [
-          CategoryEntity(name: 'Orders'),
-          CategoryEntity(name: 'Dairy'),
-          CategoryEntity(name: 'Grains'),
-          CategoryEntity(name: 'Condiments'),
-          CategoryEntity(name: 'Cigarettes'),
-          CategoryEntity(name: 'Fresh'),
-        ],
-        onChangeTab: (CategoryEntity? category) {
-          //
+        items: posCatState.categories,
+        value: posCatState.activeCategory,
+        onChanged: (CategoryEntity? category) {
+          ref
+              .watch(posCategoryNotifierProvider.notifier)
+              .setActiveCategory(category);
         },
       ),
     ];
   }
 
   _buildProductMenu() {
+    final posState = ref.watch(posNotifierProvider);
+
     return Expanded(
       child: SingleChildScrollView(
         padding: const EdgeInsets.only(bottom: 100),
         child: Wrap(
-          spacing: 5, // Horizontal spacing between cards
-          runSpacing: 5, // Vertical spacing between rows
-          children: List.generate(
-            10,
-            (index) {
-              return SizedBox(
-                width: MediaQuery.of(context).size.width / 2 - 16,
-                child: PosProductCard(
-                  productEntity: const ProductEntity(),
-                  onTap: (ProductEntity productEntity) {
-                    _showAddToCart(productEntity);
-                  },
-                ),
-              );
-            },
-          ),
+          spacing: 5,
+          runSpacing: 5,
+          children: posState.items.map((posItem) {
+            return SizedBox(
+              width: MediaQuery.of(context).size.width / 2 - 16,
+              child: PosItemCard(
+                order: ref.watch(posItemNotifierProvider(posItem.product!)),
+                onTap: (ProductEntity productEntity) async {
+                  double qty = await _showAddToCart(productEntity);
+                  ref
+                      .watch(posItemNotifierProvider(posItem.product!).notifier)
+                      .addOrder(qty);
+                  // ref
+                  //     .watch(posNotifierProvider.notifier)
+                  //     .addToCart(productEntity, qty);
+                },
+              ),
+            );
+          }).toList(),
         ),
       ),
     );
@@ -172,6 +180,7 @@ class _PosPageState extends ConsumerState<PosPage> {
                   size: 30,
                 ),
                 onTap: () {
+                  //
                   _showCart();
                 },
               ),
@@ -224,10 +233,8 @@ class _PosPageState extends ConsumerState<PosPage> {
     );
   }
 
-  _showAddToCart(ProductEntity productEntity) {
-    double screenHeight = MediaQuery.of(context).size.height - 360;
-
-    showDialog(
+  Future<double> _showAddToCart(ProductEntity productEntity) async {
+    final result = await showDialog(
       context: context,
       builder: (BuildContext context) {
         return Dialog(
@@ -240,19 +247,10 @@ class _PosPageState extends ConsumerState<PosPage> {
       },
     );
 
-    // showModalBottomSheet(
-    //   context: context,
-    //   isDismissible: false,
-    //   enableDrag: false,
-    //   clipBehavior: Clip.none,
-    //   isScrollControlled: true,
-    //   builder: (BuildContext context) {
-    //     return PosBottomSheet(
-    //       icon: Icons.add_shopping_cart,
-    //       height: screenHeight,
-    //       child: AddToCart(productEntity: productEntity),
-    //     );
-    //   },
-    // );
+    if (result != null) {
+      return result;
+    } else {
+      return 0;
+    }
   }
 }
