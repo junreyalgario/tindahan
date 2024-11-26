@@ -6,14 +6,14 @@ import 'package:tienda_pos/feature/pos/domain/entities/pos_item/pos_item_entity.
 class PosItemCard extends StatelessWidget {
   const PosItemCard({
     super.key,
-    required this.order,
+    required this.posItem,
     required this.onTap,
   });
 
-  final PosItemEntity order;
+  final PosItemEntity posItem;
   final Function(ProductEntity productEntity) onTap;
 
-  bool get _showOrderCount => order.orderCount > 0;
+  bool get _showOrderCount => posItem.orderCount > 0;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,7 @@ class PosItemCard extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                order.orderCount.toStringAsFixed(1),
+                                posItem.orderCount.toStringAsFixed(1),
                                 style: const TextStyle(
                                   fontSize: 40,
                                   fontWeight: FontWeight.bold,
@@ -63,7 +63,7 @@ class PosItemCard extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                order.product!.uom!.name!,
+                                posItem.product!.uom!.name!,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                   fontSize: 12,
@@ -78,7 +78,7 @@ class PosItemCard extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                order.product!.name!,
+                posItem.product!.name!,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   fontSize: 15,
@@ -90,7 +90,7 @@ class PosItemCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    '₱${order.product!.price!.toStringAsFixed(2)}',
+                    '₱${posItem.product!.price!.toStringAsFixed(2)}',
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -99,7 +99,7 @@ class PosItemCard extends StatelessWidget {
                   ),
                   const Spacer(),
                   Text(
-                    '${order.product!.stockOnHand} ${order.product!.uom!.symbol}',
+                    '${posItem.product!.stockOnHand} ${posItem.product!.uom!.symbol}',
                     style: const TextStyle(
                       fontSize: 12,
                       color: AppColors.primary,
@@ -112,7 +112,7 @@ class PosItemCard extends StatelessWidget {
           ),
         ),
         onTap: () {
-          onTap(order.product!);
+          onTap(posItem.product!);
         },
       ),
     );

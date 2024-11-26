@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$PosState {
+  List<PosItemEntity> get allItems => throw _privateConstructorUsedError;
   List<PosItemEntity> get items => throw _privateConstructorUsedError;
 
   /// Create a copy of PosState
@@ -30,7 +31,7 @@ abstract class $PosStateCopyWith<$Res> {
   factory $PosStateCopyWith(PosState value, $Res Function(PosState) then) =
       _$PosStateCopyWithImpl<$Res, PosState>;
   @useResult
-  $Res call({List<PosItemEntity> items});
+  $Res call({List<PosItemEntity> allItems, List<PosItemEntity> items});
 }
 
 /// @nodoc
@@ -48,9 +49,14 @@ class _$PosStateCopyWithImpl<$Res, $Val extends PosState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? allItems = null,
     Object? items = null,
   }) {
     return _then(_value.copyWith(
+      allItems: null == allItems
+          ? _value.allItems
+          : allItems // ignore: cast_nullable_to_non_nullable
+              as List<PosItemEntity>,
       items: null == items
           ? _value.items
           : items // ignore: cast_nullable_to_non_nullable
@@ -67,7 +73,7 @@ abstract class _$$PosStateImplCopyWith<$Res>
       __$$PosStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<PosItemEntity> items});
+  $Res call({List<PosItemEntity> allItems, List<PosItemEntity> items});
 }
 
 /// @nodoc
@@ -83,9 +89,14 @@ class __$$PosStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? allItems = null,
     Object? items = null,
   }) {
     return _then(_$PosStateImpl(
+      allItems: null == allItems
+          ? _value._allItems
+          : allItems // ignore: cast_nullable_to_non_nullable
+              as List<PosItemEntity>,
       items: null == items
           ? _value._items
           : items // ignore: cast_nullable_to_non_nullable
@@ -97,8 +108,20 @@ class __$$PosStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$PosStateImpl with DiagnosticableTreeMixin implements _PosState {
-  const _$PosStateImpl({final List<PosItemEntity> items = const []})
-      : _items = items;
+  const _$PosStateImpl(
+      {final List<PosItemEntity> allItems = const [],
+      final List<PosItemEntity> items = const []})
+      : _allItems = allItems,
+        _items = items;
+
+  final List<PosItemEntity> _allItems;
+  @override
+  @JsonKey()
+  List<PosItemEntity> get allItems {
+    if (_allItems is EqualUnmodifiableListView) return _allItems;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_allItems);
+  }
 
   final List<PosItemEntity> _items;
   @override
@@ -111,7 +134,7 @@ class _$PosStateImpl with DiagnosticableTreeMixin implements _PosState {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'PosState(items: $items)';
+    return 'PosState(allItems: $allItems, items: $items)';
   }
 
   @override
@@ -119,6 +142,7 @@ class _$PosStateImpl with DiagnosticableTreeMixin implements _PosState {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'PosState'))
+      ..add(DiagnosticsProperty('allItems', allItems))
       ..add(DiagnosticsProperty('items', items));
   }
 
@@ -127,12 +151,15 @@ class _$PosStateImpl with DiagnosticableTreeMixin implements _PosState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PosStateImpl &&
+            const DeepCollectionEquality().equals(other._allItems, _allItems) &&
             const DeepCollectionEquality().equals(other._items, _items));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_items));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_allItems),
+      const DeepCollectionEquality().hash(_items));
 
   /// Create a copy of PosState
   /// with the given fields replaced by the non-null parameter values.
@@ -144,8 +171,12 @@ class _$PosStateImpl with DiagnosticableTreeMixin implements _PosState {
 }
 
 abstract class _PosState implements PosState {
-  const factory _PosState({final List<PosItemEntity> items}) = _$PosStateImpl;
+  const factory _PosState(
+      {final List<PosItemEntity> allItems,
+      final List<PosItemEntity> items}) = _$PosStateImpl;
 
+  @override
+  List<PosItemEntity> get allItems;
   @override
   List<PosItemEntity> get items;
 

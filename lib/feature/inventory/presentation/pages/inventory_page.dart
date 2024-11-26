@@ -94,17 +94,35 @@ class _InventoryPageState extends ConsumerState<InventoryPage> {
           ),
           SliverPadding(
             padding: const EdgeInsets.only(bottom: 30.0),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: ProductItem(productEntity: state.productList[index]),
-                  );
-                },
-                childCount: state.productList.length,
-              ),
-            ),
+            sliver: state.productList.isEmpty
+                ? const SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 10.0, vertical: 20.0),
+                      child: Center(
+                        child: Text(
+                          'No products added.',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: ProductItem(
+                              productEntity: state.productList[index]),
+                        );
+                      },
+                      childCount: state.productList.length,
+                    ),
+                  ),
           ),
         ],
       ),

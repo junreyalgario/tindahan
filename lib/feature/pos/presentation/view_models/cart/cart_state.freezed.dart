@@ -17,6 +17,8 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$CartState {
   Map<String, PosItemEntity> get posItems => throw _privateConstructorUsedError;
+  double get totalqty => throw _privateConstructorUsedError;
+  double get grandTotalAmount => throw _privateConstructorUsedError;
 
   /// Create a copy of CartState
   /// with the given fields replaced by the non-null parameter values.
@@ -30,7 +32,10 @@ abstract class $CartStateCopyWith<$Res> {
   factory $CartStateCopyWith(CartState value, $Res Function(CartState) then) =
       _$CartStateCopyWithImpl<$Res, CartState>;
   @useResult
-  $Res call({Map<String, PosItemEntity> posItems});
+  $Res call(
+      {Map<String, PosItemEntity> posItems,
+      double totalqty,
+      double grandTotalAmount});
 }
 
 /// @nodoc
@@ -49,12 +54,22 @@ class _$CartStateCopyWithImpl<$Res, $Val extends CartState>
   @override
   $Res call({
     Object? posItems = null,
+    Object? totalqty = null,
+    Object? grandTotalAmount = null,
   }) {
     return _then(_value.copyWith(
       posItems: null == posItems
           ? _value.posItems
           : posItems // ignore: cast_nullable_to_non_nullable
               as Map<String, PosItemEntity>,
+      totalqty: null == totalqty
+          ? _value.totalqty
+          : totalqty // ignore: cast_nullable_to_non_nullable
+              as double,
+      grandTotalAmount: null == grandTotalAmount
+          ? _value.grandTotalAmount
+          : grandTotalAmount // ignore: cast_nullable_to_non_nullable
+              as double,
     ) as $Val);
   }
 }
@@ -67,7 +82,10 @@ abstract class _$$CartStateImplCopyWith<$Res>
       __$$CartStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Map<String, PosItemEntity> posItems});
+  $Res call(
+      {Map<String, PosItemEntity> posItems,
+      double totalqty,
+      double grandTotalAmount});
 }
 
 /// @nodoc
@@ -84,12 +102,22 @@ class __$$CartStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? posItems = null,
+    Object? totalqty = null,
+    Object? grandTotalAmount = null,
   }) {
     return _then(_$CartStateImpl(
       posItems: null == posItems
           ? _value._posItems
           : posItems // ignore: cast_nullable_to_non_nullable
               as Map<String, PosItemEntity>,
+      totalqty: null == totalqty
+          ? _value.totalqty
+          : totalqty // ignore: cast_nullable_to_non_nullable
+              as double,
+      grandTotalAmount: null == grandTotalAmount
+          ? _value.grandTotalAmount
+          : grandTotalAmount // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -97,7 +125,10 @@ class __$$CartStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$CartStateImpl with DiagnosticableTreeMixin implements _CartState {
-  const _$CartStateImpl({final Map<String, PosItemEntity> posItems = const {}})
+  const _$CartStateImpl(
+      {final Map<String, PosItemEntity> posItems = const {},
+      this.totalqty = 0,
+      this.grandTotalAmount = 0})
       : _posItems = posItems;
 
   final Map<String, PosItemEntity> _posItems;
@@ -110,8 +141,15 @@ class _$CartStateImpl with DiagnosticableTreeMixin implements _CartState {
   }
 
   @override
+  @JsonKey()
+  final double totalqty;
+  @override
+  @JsonKey()
+  final double grandTotalAmount;
+
+  @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CartState(posItems: $posItems)';
+    return 'CartState(posItems: $posItems, totalqty: $totalqty, grandTotalAmount: $grandTotalAmount)';
   }
 
   @override
@@ -119,7 +157,9 @@ class _$CartStateImpl with DiagnosticableTreeMixin implements _CartState {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CartState'))
-      ..add(DiagnosticsProperty('posItems', posItems));
+      ..add(DiagnosticsProperty('posItems', posItems))
+      ..add(DiagnosticsProperty('totalqty', totalqty))
+      ..add(DiagnosticsProperty('grandTotalAmount', grandTotalAmount));
   }
 
   @override
@@ -127,12 +167,19 @@ class _$CartStateImpl with DiagnosticableTreeMixin implements _CartState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CartStateImpl &&
-            const DeepCollectionEquality().equals(other._posItems, _posItems));
+            const DeepCollectionEquality().equals(other._posItems, _posItems) &&
+            (identical(other.totalqty, totalqty) ||
+                other.totalqty == totalqty) &&
+            (identical(other.grandTotalAmount, grandTotalAmount) ||
+                other.grandTotalAmount == grandTotalAmount));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_posItems));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_posItems),
+      totalqty,
+      grandTotalAmount);
 
   /// Create a copy of CartState
   /// with the given fields replaced by the non-null parameter values.
@@ -144,11 +191,17 @@ class _$CartStateImpl with DiagnosticableTreeMixin implements _CartState {
 }
 
 abstract class _CartState implements CartState {
-  const factory _CartState({final Map<String, PosItemEntity> posItems}) =
-      _$CartStateImpl;
+  const factory _CartState(
+      {final Map<String, PosItemEntity> posItems,
+      final double totalqty,
+      final double grandTotalAmount}) = _$CartStateImpl;
 
   @override
   Map<String, PosItemEntity> get posItems;
+  @override
+  double get totalqty;
+  @override
+  double get grandTotalAmount;
 
   /// Create a copy of CartState
   /// with the given fields replaced by the non-null parameter values.

@@ -10,5 +10,7 @@ part 'cart_state.freezed.dart';
 class CartState with _$CartState {
   const factory CartState({
     @Default({}) Map<String, PosItemEntity> posItems,
+    @Default(0) double totalqty,
+    @Default(0) double grandTotalAmount,
   }) = _CartState;
 }

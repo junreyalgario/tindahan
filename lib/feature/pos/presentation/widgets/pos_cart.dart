@@ -73,19 +73,31 @@ class _PosCartState extends ConsumerState<PosCart> {
           ),
         ),
         // Order List
-        SizedBox(
-          height: _orderListHeight,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.only(left: 8, right: 8),
-            child: Column(
-              children: [
-                ...cartState.posItems.entries.map((item) {
-                  return CartItem(posItem: item.value);
-                }),
-              ],
-            ),
-          ),
-        ),
+        cartState.posItems.isEmpty
+            ? Container(
+                margin: const EdgeInsets.only(top: 20, bottom: 20),
+                child: const Text(
+                  'No more items to show.',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                  ),
+                ),
+              )
+            : SizedBox(
+                height: _orderListHeight,
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.only(left: 8, right: 8),
+                  child: Column(
+                    children: [
+                      ...cartState.posItems.entries.map((item) {
+                        return CartItem(posItem: item.value);
+                      }),
+                    ],
+                  ),
+                ),
+              ),
         // Summary
         Padding(
           padding: const EdgeInsets.only(left: 8, right: 8),
@@ -95,28 +107,28 @@ class _PosCartState extends ConsumerState<PosCart> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5.0),
             ),
-            child: const Padding(
-              padding: EdgeInsets.only(top: 8, bottom: 8),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8, bottom: 8),
               child: Row(
                 children: [
-                  SizedBox(width: 10),
-                  Text(
+                  const SizedBox(width: 10),
+                  const Text(
                     'Total Qty: \t\t\t\t\t',
                     style: TextStyle(
                       color: Colors.grey,
                     ),
                   ),
                   Text(
-                    '29.70',
-                    style: TextStyle(
+                    cartState.totalqty.toStringAsFixed(1),
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Row(
                     children: [
-                      Text(
+                      const Text(
                         'Grand Total:',
                         style: TextStyle(
                           color: Colors.grey,
@@ -127,8 +139,8 @@ class _PosCartState extends ConsumerState<PosCart> {
                         child: Align(
                           alignment: Alignment.centerRight,
                           child: Text(
-                            '₱1090.45',
-                            style: TextStyle(
+                            '₱${cartState.grandTotalAmount.toStringAsFixed(2)}',
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                               fontSize: 20,
@@ -138,7 +150,7 @@ class _PosCartState extends ConsumerState<PosCart> {
                       )
                     ],
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                 ],
               ),
             ),
@@ -163,21 +175,23 @@ class _PosCartState extends ConsumerState<PosCart> {
                   ),
                 ),
               ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: ElevatedButton(
-                  style: ButtonCustomStyles.elevatedStyle(
-                    backgroundColor: AppColors.confirm,
-                  ),
-                  onPressed: () async {
-                    _showPayment();
-                  },
-                  child: const Text(
-                    'CHECKOUT',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
+              SizedBox(width: cartState.posItems.isNotEmpty ? 10 : 0),
+              cartState.posItems.isNotEmpty
+                  ? Expanded(
+                      child: ElevatedButton(
+                        style: ButtonCustomStyles.elevatedStyle(
+                          backgroundColor: AppColors.confirm,
+                        ),
+                        onPressed: () async {
+                          _showPayment();
+                        },
+                        child: const Text(
+                          'CHECKOUT',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    )
+                  : Container(),
             ],
           ),
         ),

@@ -56,14 +56,15 @@ class _CartItemState extends ConsumerState<CartItem> {
           ),
           SizedBox(
             height: 40,
-            width: 90,
+            width: 110,
             child: Row(
               children: [
                 InkWell(
                   child: const SizedBox(
-                    height: 30,
+                    height: 40,
+                    width: 30,
                     child:
-                        Icon(Icons.remove, size: 15, color: AppColors.danger),
+                        Icon(Icons.remove, size: 20, color: AppColors.danger),
                   ),
                   onTap: () {
                     cartNotifier.editQuantity(
@@ -81,8 +82,9 @@ class _CartItemState extends ConsumerState<CartItem> {
                 ),
                 InkWell(
                   child: const SizedBox(
-                    height: 30,
-                    child: Icon(Icons.add, size: 15, color: AppColors.success),
+                    height: 40,
+                    width: 30,
+                    child: Icon(Icons.add, size: 20, color: AppColors.success),
                   ),
                   onTap: () {
                     cartNotifier.editQuantity(
@@ -98,7 +100,7 @@ class _CartItemState extends ConsumerState<CartItem> {
             child: Row(
               children: [
                 Text(
-                  '₱${widget.posItem.subTotalAmount}',
+                  '₱${widget.posItem.subTotalAmount.toStringAsFixed(2)}',
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 16),
                 ),

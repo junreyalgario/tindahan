@@ -9,6 +9,7 @@ part 'pos_state.freezed.dart';
 @freezed
 class PosState with _$PosState {
   const factory PosState({
+    @Default([]) List<PosItemEntity> allItems,
     @Default([]) List<PosItemEntity> items,
   }) = _PosState;
 }
