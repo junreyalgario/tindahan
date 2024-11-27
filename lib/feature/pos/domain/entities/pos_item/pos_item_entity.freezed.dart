@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$PosItemEntity {
   ProductEntity? get product => throw _privateConstructorUsedError;
+  double get priceChange => throw _privateConstructorUsedError;
   double get orderCount => throw _privateConstructorUsedError;
   double get subTotalAmount => throw _privateConstructorUsedError;
 
@@ -33,7 +34,11 @@ abstract class $PosItemEntityCopyWith<$Res> {
           PosItemEntity value, $Res Function(PosItemEntity) then) =
       _$PosItemEntityCopyWithImpl<$Res, PosItemEntity>;
   @useResult
-  $Res call({ProductEntity? product, double orderCount, double subTotalAmount});
+  $Res call(
+      {ProductEntity? product,
+      double priceChange,
+      double orderCount,
+      double subTotalAmount});
 
   $ProductEntityCopyWith<$Res>? get product;
 }
@@ -54,6 +59,7 @@ class _$PosItemEntityCopyWithImpl<$Res, $Val extends PosItemEntity>
   @override
   $Res call({
     Object? product = freezed,
+    Object? priceChange = null,
     Object? orderCount = null,
     Object? subTotalAmount = null,
   }) {
@@ -62,6 +68,10 @@ class _$PosItemEntityCopyWithImpl<$Res, $Val extends PosItemEntity>
           ? _value.product
           : product // ignore: cast_nullable_to_non_nullable
               as ProductEntity?,
+      priceChange: null == priceChange
+          ? _value.priceChange
+          : priceChange // ignore: cast_nullable_to_non_nullable
+              as double,
       orderCount: null == orderCount
           ? _value.orderCount
           : orderCount // ignore: cast_nullable_to_non_nullable
@@ -96,7 +106,11 @@ abstract class _$$PosItemEntityImplCopyWith<$Res>
       __$$PosItemEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({ProductEntity? product, double orderCount, double subTotalAmount});
+  $Res call(
+      {ProductEntity? product,
+      double priceChange,
+      double orderCount,
+      double subTotalAmount});
 
   @override
   $ProductEntityCopyWith<$Res>? get product;
@@ -116,6 +130,7 @@ class __$$PosItemEntityImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? product = freezed,
+    Object? priceChange = null,
     Object? orderCount = null,
     Object? subTotalAmount = null,
   }) {
@@ -124,6 +139,10 @@ class __$$PosItemEntityImplCopyWithImpl<$Res>
           ? _value.product
           : product // ignore: cast_nullable_to_non_nullable
               as ProductEntity?,
+      priceChange: null == priceChange
+          ? _value.priceChange
+          : priceChange // ignore: cast_nullable_to_non_nullable
+              as double,
       orderCount: null == orderCount
           ? _value.orderCount
           : orderCount // ignore: cast_nullable_to_non_nullable
@@ -140,11 +159,17 @@ class __$$PosItemEntityImplCopyWithImpl<$Res>
 
 class _$PosItemEntityImpl implements _PosItemEntity {
   const _$PosItemEntityImpl(
-      {this.product = null, this.orderCount = 0, this.subTotalAmount = 0});
+      {this.product = null,
+      this.priceChange = 0,
+      this.orderCount = 0,
+      this.subTotalAmount = 0});
 
   @override
   @JsonKey()
   final ProductEntity? product;
+  @override
+  @JsonKey()
+  final double priceChange;
   @override
   @JsonKey()
   final double orderCount;
@@ -154,7 +179,7 @@ class _$PosItemEntityImpl implements _PosItemEntity {
 
   @override
   String toString() {
-    return 'PosItemEntity(product: $product, orderCount: $orderCount, subTotalAmount: $subTotalAmount)';
+    return 'PosItemEntity(product: $product, priceChange: $priceChange, orderCount: $orderCount, subTotalAmount: $subTotalAmount)';
   }
 
   @override
@@ -163,6 +188,8 @@ class _$PosItemEntityImpl implements _PosItemEntity {
         (other.runtimeType == runtimeType &&
             other is _$PosItemEntityImpl &&
             (identical(other.product, product) || other.product == product) &&
+            (identical(other.priceChange, priceChange) ||
+                other.priceChange == priceChange) &&
             (identical(other.orderCount, orderCount) ||
                 other.orderCount == orderCount) &&
             (identical(other.subTotalAmount, subTotalAmount) ||
@@ -170,8 +197,8 @@ class _$PosItemEntityImpl implements _PosItemEntity {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, product, orderCount, subTotalAmount);
+  int get hashCode => Object.hash(
+      runtimeType, product, priceChange, orderCount, subTotalAmount);
 
   /// Create a copy of PosItemEntity
   /// with the given fields replaced by the non-null parameter values.
@@ -185,11 +212,14 @@ class _$PosItemEntityImpl implements _PosItemEntity {
 abstract class _PosItemEntity implements PosItemEntity {
   const factory _PosItemEntity(
       {final ProductEntity? product,
+      final double priceChange,
       final double orderCount,
       final double subTotalAmount}) = _$PosItemEntityImpl;
 
   @override
   ProductEntity? get product;
+  @override
+  double get priceChange;
   @override
   double get orderCount;
   @override

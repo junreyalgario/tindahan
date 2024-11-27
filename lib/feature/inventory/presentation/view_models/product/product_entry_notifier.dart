@@ -13,6 +13,7 @@ import 'package:tienda_pos/feature/inventory/providers/product_providers.dart';
 import 'package:tienda_pos/feature/inventory/providers/uom_providers.dart';
 
 class ProductEntryNotifier extends StateNotifier<ProductEntryState> {
+  // Constructor initializes use cases for category, UOM, and product.
   ProductEntryNotifier({
     required CategoryUsecase categoryUsecase,
     required UomUsecase uomUsecase,
@@ -21,84 +22,101 @@ class ProductEntryNotifier extends StateNotifier<ProductEntryState> {
         _uomUsecase = uomUsecase,
         _productUsecase = productUsecase,
         super(const ProductEntryState()) {
-    setCategories();
-    setUomList();
+    setCategories(); // Sets categories when the notifier is created.
+    setUomList(); // Sets UOM list when the notifier is created.
   }
 
   final CategoryUsecase _categoryUsecase;
   final UomUsecase _uomUsecase;
   final ProductUsecase _productUsecase;
 
+  // Fetches categories and updates the state with the result.
   Future<void> setCategories() async {
     final result = await _categoryUsecase.getCategories();
     if (result.isSuccess) {
-      state = state.copyWith(categories: result.data!);
+      state = state.copyWith(
+          categories: result.data!); // Update state with categories.
     }
   }
 
+  // Fetches the list of UOM (Units of Measure) and updates the state.
   Future<void> setUomList() async {
     final result = await _uomUsecase.getList();
     if (result.isSuccess) {
-      state = state.copyWith(uomList: result.data!);
+      state =
+          state.copyWith(uomList: result.data!); // Update state with UOM list.
     }
   }
 
+  // Sets the product in the state with the provided ProductEntity.
   void setProduct(ProductEntity productEntity) {
     state = state.copyWith(product: productEntity);
   }
 
-  // Generic product updater method
+  // Generic method for updating product data in the state.
   void _updateProduct(ProductEntity Function(ProductEntity product) updater) {
     state = state.copyWith(product: updater(state.product));
   }
 
-  // Generic inventory updater method
+  // Generic method for updating inventory data in the state.
   void _updateInventory(
       InventoryEntity Function(InventoryEntity inventory) updater) {
     state = state.copyWith(inventory: updater(state.inventory));
   }
 
+  // Sets the product category by updating the product entity.
   void setProductCategory(CategoryEntity? categoryEntity) {
     _updateProduct((product) => product.copyWith(category: categoryEntity));
   }
 
+  // Sets the product UOM (unit of measure) by updating the product entity.
   void setProductUom(UomEntity? uomEntity) {
     _updateProduct((product) => product.copyWith(uom: uomEntity));
   }
 
+  // Sets the product name by updating the product entity.
   void setProductName(String? name) {
     _updateProduct((product) => product.copyWith(name: name));
   }
 
+  // Sets the product price by updating the product entity.
   void setProductPrice(double? price) {
     _updateProduct((product) => product.copyWith(price: price));
   }
 
+  // Sets the product's low stock level by updating the product entity.
   void setProductLowStockLevel(double? lowStockLevel) {
     _updateProduct((product) => product.copyWith(lowStockLevel: lowStockLevel));
   }
 
+  // Sets the product cost by updating the inventory entity.
   void setProductCost(double? cost) {
     _updateInventory((inventory) => inventory.copyWith(cost: cost));
   }
 
+  // Sets the product stock quantity by updating the inventory entity.
   void setProductStocks(double? stocks) {
     _updateInventory((inventory) => inventory.copyWith(stocks: stocks));
   }
 
+  // Saves the product and its inventory data to the repository.
   Future<DataState<bool>> save() async {
     state = state.copyWith(
         product: state.product.copyWith(inventoryList: [state.inventory]));
-    return _productUsecase.insert(state.product);
+    return _productUsecase
+        .insert(state.product); // Inserts the product and inventory.
   }
 }
 
+// Provider for ProductEntryNotifier, making it available for dependency injection.
 final productEntryProvider =
     StateNotifierProvider.autoDispose<ProductEntryNotifier, ProductEntryState>(
         (ref) {
   return ProductEntryNotifier(
-    categoryUsecase: ref.read(categoryUseCaseProvider),
-    uomUsecase: ref.read(uomUsecaseProvider),
-    productUsecase: ref.read(productUsecaseProvider),
+    categoryUsecase:
+        ref.read(categoryUseCaseProvider), // Reads CategoryUsecase provider.
+    uomUsecase: ref.read(uomUsecaseProvider), // Reads UOMUsecase provider.
+    productUsecase:
+        ref.read(productUsecaseProvider), // Reads ProductUsecase provider.
   );
 });

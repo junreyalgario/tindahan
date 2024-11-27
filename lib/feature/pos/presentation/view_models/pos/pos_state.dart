@@ -11,5 +11,6 @@ class PosState with _$PosState {
   const factory PosState({
     @Default([]) List<PosItemEntity> allItems,
     @Default([]) List<PosItemEntity> items,
+    @Default([]) List<PosItemEntity> originalItems,
   }) = _PosState;
 }

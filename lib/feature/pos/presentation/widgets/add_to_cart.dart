@@ -20,13 +20,17 @@ class AddToCart extends ConsumerStatefulWidget {
 }
 
 class _AddToCartState extends ConsumerState<AddToCart> {
-  final TextEditingController qtyController = TextEditingController();
+  final TextEditingController _qtyController = TextEditingController();
+  final TextEditingController _priceChangeController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     if (widget.posItem.orderCount > 0) {
-      qtyController.text = widget.posItem.orderCount.toString();
+      _qtyController.text = widget.posItem.orderCount.toString();
+      _priceChangeController.text = widget.posItem.priceChange > 0
+          ? widget.posItem.priceChange.toString()
+          : '';
     }
   }
 
@@ -83,7 +87,7 @@ class _AddToCartState extends ConsumerState<AddToCart> {
           ),
 
           Container(
-            height: 50,
+            height: 40,
             margin: const EdgeInsets.only(top: 10),
             width: double.infinity,
             decoration: BoxDecoration(
@@ -94,10 +98,64 @@ class _AddToCartState extends ConsumerState<AddToCart> {
             child: Text(
               '₱${ref.watch(posItemNotifierProvider(widget.posItem)).subTotalAmount.toStringAsFixed(2)}',
               style: const TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: AppColors.secondary,
               ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          RichText(
+            textAlign: TextAlign.center,
+            text: const TextSpan(
+              children: [
+                TextSpan(
+                  text: 'Enter the new price',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: AppColors.secondary,
+                  ),
+                ),
+                TextSpan(
+                  text: '\nLeave blank if the price remains unchanged.',
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: AppColors.secondary,
+                  ),
+                )
+              ],
+            ),
+          ),
+          const SizedBox(height: 5),
+          SizedBox(
+            height: 40,
+            child: TextFormField(
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+              controller: _priceChangeController,
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
+              ],
+              decoration: TextFieldStyles.decoration2(
+                const InputDecoration(
+                  contentPadding: EdgeInsets.all(5),
+                  hintText: '₱0.00',
+                  hintStyle: TextStyle(color: Colors.grey),
+                ),
+              ),
+              onChanged: (value) {
+                double price = double.tryParse(value) ?? 0;
+                double qty = double.tryParse(_qtyController.text) ?? 0;
+                ref
+                    .read(posItemNotifierProvider(widget.posItem).notifier)
+                    .setPriceChange(price: price, quantity: qty);
+              },
             ),
           ),
           const SizedBox(height: 10),
@@ -105,27 +163,31 @@ class _AddToCartState extends ConsumerState<AddToCart> {
             'Enter product quantity',
             style: TextStyle(
               fontSize: 16,
-              color: Colors.grey,
+              color: AppColors.secondary,
             ),
           ),
           const SizedBox(height: 5),
           SizedBox(
-            height: 50,
+            height: 40,
             child: TextFormField(
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
-              controller: qtyController,
+              controller: _qtyController,
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
               ],
               decoration: TextFieldStyles.decoration2(
-                const InputDecoration(contentPadding: EdgeInsets.all(5)),
+                const InputDecoration(
+                  contentPadding: EdgeInsets.all(5),
+                  hintText: '0.0',
+                  hintStyle: TextStyle(color: Colors.grey),
+                ),
               ),
               onChanged: (value) {
                 double qty = double.tryParse(value) ?? 0;
@@ -160,7 +222,7 @@ class _AddToCartState extends ConsumerState<AddToCart> {
                     backgroundColor: AppColors.confirm,
                   ),
                   onPressed: () async {
-                    double qty = double.tryParse(qtyController.text) ?? 0;
+                    double qty = double.tryParse(_qtyController.text) ?? 0;
                     Navigator.pop(context, qty);
                   },
                   child: const Text(

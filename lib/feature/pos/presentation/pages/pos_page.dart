@@ -5,11 +5,11 @@ import 'package:tienda_pos/core/router/routes.dart';
 import 'package:tienda_pos/core/widgets/tienda_app.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/category/category_entity.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/product/product_entity.dart';
-import 'package:tienda_pos/feature/pos/domain/entities/pos_item/pos_item_entity.dart';
 import 'package:tienda_pos/feature/pos/presentation/view_models/cart/cart_notifier.dart';
 import 'package:tienda_pos/feature/pos/presentation/view_models/pos/pos_notifier.dart';
 import 'package:tienda_pos/feature/pos/presentation/view_models/pos_category/pos_category_notifier.dart';
-import 'package:tienda_pos/feature/pos/presentation/widgets/add_to_cart.dart';
+import 'package:tienda_pos/feature/pos/presentation/view_models/pos_category/pos_category_state.dart';
+import 'package:tienda_pos/feature/pos/presentation/view_models/pos_item/pos_item_notifier.dart';
 import 'package:tienda_pos/feature/pos/presentation/widgets/add_to_cart_dialog.dart';
 import 'package:tienda_pos/feature/pos/presentation/widgets/category_tab.dart';
 import 'package:tienda_pos/feature/pos/presentation/widgets/pos_bottom_sheet.dart';
@@ -24,8 +24,16 @@ class PosPage extends ConsumerStatefulWidget {
 }
 
 class _PosPageState extends ConsumerState<PosPage> {
+  final TextEditingController _searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    ref.listen<PosCategoryState>(posCategoryNotifierProvider, (previous, next) {
+      if (previous?.activeCategory != next.activeCategory) {
+        _searchController.text = '';
+      }
+    });
+
     return TiendaApp(
       isRootPage: true,
       child: Stack(
@@ -61,6 +69,7 @@ class _PosPageState extends ConsumerState<PosPage> {
           children: [
             Expanded(
               child: TextField(
+                controller: _searchController,
                 cursorColor: AppColors.primary,
                 decoration: InputDecoration(
                   filled: true,
@@ -77,7 +86,7 @@ class _PosPageState extends ConsumerState<PosPage> {
                   suffixIcon: const Icon(Icons.search),
                 ),
                 onChanged: (value) {
-                  ref.read(posNotifierProvider.notifier).searchProduct(value);
+                  ref.read(posNotifierProvider.notifier).onSearchChanged(value);
                 },
               ),
             ),
@@ -126,7 +135,7 @@ class _PosPageState extends ConsumerState<PosPage> {
                               context: context, posItem: posItem);
                           if (qty != null) {
                             ref.watch(cartNotifierProvider.notifier).addToCart(
-                                  posItem,
+                                  ref.watch(posItemNotifierProvider(posItem)),
                                   qty,
                                 );
                           }

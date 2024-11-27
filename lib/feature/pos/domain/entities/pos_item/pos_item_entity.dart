@@ -9,6 +9,7 @@ part 'pos_item_entity.freezed.dart';
 class PosItemEntity with _$PosItemEntity {
   const factory PosItemEntity({
     @Default(null) ProductEntity? product,
+    @Default(0) double priceChange,
     @Default(0) double orderCount,
     @Default(0) double subTotalAmount,
   }) = _PosItemEntity;

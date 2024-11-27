@@ -4,6 +4,7 @@ import 'package:tienda_pos/core/constant/app_colors.dart';
 import 'package:tienda_pos/core/widgets/dialog.dart';
 import 'package:tienda_pos/feature/pos/domain/entities/pos_item/pos_item_entity.dart';
 import 'package:tienda_pos/feature/pos/presentation/view_models/cart/cart_notifier.dart';
+import 'package:tienda_pos/feature/pos/presentation/view_models/pos_item/pos_item_notifier.dart';
 import 'package:tienda_pos/feature/pos/presentation/widgets/add_to_cart_dialog.dart';
 
 class CartItem extends ConsumerStatefulWidget {
@@ -69,7 +70,7 @@ class _CartItemState extends ConsumerState<CartItem> {
                   ),
                   onTap: () {
                     cartNotifier.editQuantity(
-                        widget.posItem.product!.id!, CartOperation.subract);
+                        widget.posItem.product!.id!, CartOperation.subtract);
                   },
                 ),
                 InkWell(
@@ -87,7 +88,7 @@ class _CartItemState extends ConsumerState<CartItem> {
                         context: context, posItem: widget.posItem);
                     if (qty != null) {
                       ref.read(cartNotifierProvider.notifier).addToCart(
-                            widget.posItem,
+                            ref.read(posItemNotifierProvider(widget.posItem)),
                             qty,
                           );
                     }
