@@ -89,3 +89,75 @@ void showConfirmDialog({
     },
   );
 }
+
+void showMessageDialog({
+  required BuildContext context,
+  required String message,
+  String? title,
+  VoidCallback? onPressedOk,
+}) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        elevation: 10.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+        child: Container(
+          width: 200,
+          padding: UI.dialog_padding,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              title != null
+                  ? Column(
+                      children: [
+                        Text(
+                          title,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              fontSize: 20, color: AppColors.highlight),
+                        ),
+                        const Divider(
+                          color: Color.fromARGB(255, 214, 213, 213),
+                          thickness: 1.5,
+                        ),
+                      ],
+                    )
+                  : const SizedBox(height: 20),
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 20),
+              ),
+              const SizedBox(height: 30),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ButtonCustomStyles.elevatedStyle(
+                        backgroundColor: AppColors.primary,
+                      ),
+                      onPressed: () async {
+                        Navigator.of(context).pop();
+                        if (onPressedOk != null) {
+                          onPressedOk();
+                        }
+                      },
+                      child: const Text(
+                        'OK',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}

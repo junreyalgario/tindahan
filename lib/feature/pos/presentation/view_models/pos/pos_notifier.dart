@@ -155,6 +155,11 @@ class PosNotifier extends StateNotifier<PosState> {
           activeCategory.id; // Filter by specific category
     }).toList();
   }
+
+  void transactionCompleted() {
+    _cartNotifier.reset();
+    _initPosItems();
+  }
 }
 
 // Provider to manage the state of PosNotifier and inject dependencies like PosUsecase and other providers

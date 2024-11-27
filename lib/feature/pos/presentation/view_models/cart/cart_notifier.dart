@@ -99,6 +99,10 @@ class CartNotifier extends StateNotifier<CartState> {
     // Recalculate the total quantity and grand total after removing the item
     _calculateTotalQtyAndGrandTotal();
   }
+
+  void reset() {
+    state = state.copyWith(posItems: {}, totalqty: 0, grandTotalAmount: 0);
+  }
 }
 
 // Provider for the CartNotifier, which manages the cart state

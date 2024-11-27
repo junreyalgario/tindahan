@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tienda_pos/core/utils/logger.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/category/category_entity.dart';
 import 'package:tienda_pos/feature/pos/presentation/widgets/category_card.dart';
 

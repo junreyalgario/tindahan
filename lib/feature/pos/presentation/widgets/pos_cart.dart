@@ -214,7 +214,8 @@ class _PosCartState extends ConsumerState<PosCart> {
         return PosBottomSheet(
           icon: Icons.payment,
           height: screenHeight,
-          child: const PosPayment(),
+          child: PosPayment(
+              amountPayable: ref.read(cartNotifierProvider).grandTotalAmount),
         );
       },
     );

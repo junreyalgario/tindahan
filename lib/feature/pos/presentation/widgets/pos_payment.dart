@@ -4,11 +4,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
 import 'package:tienda_pos/core/styles/button_custom_styles.dart';
 import 'package:tienda_pos/core/styles/text_field_styles.dart';
+import 'package:tienda_pos/core/utils/logger.dart';
+import 'package:tienda_pos/core/widgets/dialog.dart';
+import 'package:tienda_pos/feature/pos/presentation/view_models/payment/payment_notifier.dart';
 import 'package:tienda_pos/feature/pos/presentation/widgets/pos_bottom_sheet.dart';
 import 'package:tienda_pos/feature/pos/presentation/widgets/pos_change.dart';
 
 class PosPayment extends ConsumerStatefulWidget {
-  const PosPayment({super.key});
+  final double amountPayable;
+
+  const PosPayment({
+    super.key,
+    required this.amountPayable,
+  });
 
   @override
   ConsumerState<PosPayment> createState() => _PosPaymentState();
@@ -16,6 +24,7 @@ class PosPayment extends ConsumerStatefulWidget {
 
 class _PosPaymentState extends ConsumerState<PosPayment> {
   final List<int> bills = [10, 20, 50, 100, 200, 300, 400, 500, 1000];
+  final TextEditingController _amountController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +40,9 @@ class _PosPaymentState extends ConsumerState<PosPayment> {
               color: AppColors.highlight,
             ),
           ),
-          const Text(
-            '₱129.89',
-            style: TextStyle(
+          Text(
+            '₱${widget.amountPayable}',
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 40,
               color: AppColors.primary,
@@ -54,6 +63,7 @@ class _PosPaymentState extends ConsumerState<PosPayment> {
             child: Column(
               children: [
                 TextFormField(
+                  controller: _amountController,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 30,
@@ -79,9 +89,7 @@ class _PosPaymentState extends ConsumerState<PosPayment> {
                     }
                     return null;
                   },
-                  onChanged: (value) {
-                    //
-                  },
+                  // onChanged: (value) {},
                 ),
                 const SizedBox(height: 20),
                 const Text(
@@ -117,7 +125,30 @@ class _PosPaymentState extends ConsumerState<PosPayment> {
                           backgroundColor: AppColors.confirm,
                         ),
                         onPressed: () async {
-                          _showChange();
+                          double amounReceived =
+                              double.tryParse(_amountController.text) ?? 0;
+
+                          if (amounReceived < 1) return;
+
+                          if (amounReceived >= widget.amountPayable) {
+                            // Process payment and save transaction
+                            double change = ref
+                                .read(paymentNotifierProvider.notifier)
+                                .processPayment(amounReceived);
+
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            _showChange(
+                                payable: widget.amountPayable,
+                                amountReceived: amounReceived,
+                                change: change);
+                          } else {
+                            showMessageDialog(
+                                context: context,
+                                title: 'Insufficient Payment',
+                                message:
+                                    'The amount tendered is insufficient.');
+                          }
                         },
                         child: const Text(
                           'PROCEED',
@@ -177,7 +208,8 @@ class _PosPaymentState extends ConsumerState<PosPayment> {
                           ),
                         ),
                         onTap: () {
-                          //
+                          _amountController.text =
+                              bills[3 * rowIndex + colIndex].toString();
                         },
                       );
                     }),
@@ -200,7 +232,7 @@ class _PosPaymentState extends ConsumerState<PosPayment> {
               ),
             ),
             onTap: () {
-              //
+              _amountController.text = widget.amountPayable.toString();
             },
           )
         ],
@@ -208,7 +240,10 @@ class _PosPaymentState extends ConsumerState<PosPayment> {
     );
   }
 
-  _showChange() {
+  _showChange(
+      {required double payable,
+      required amountReceived,
+      required double change}) {
     double screenHeight = MediaQuery.of(context).size.height - 230;
 
     showModalBottomSheet(
@@ -218,12 +253,16 @@ class _PosPaymentState extends ConsumerState<PosPayment> {
       elevation: 5,
       clipBehavior: Clip.none,
       isScrollControlled: true,
-      barrierColor: Colors.black.withOpacity(0),
+      // barrierColor: Colors.black.withOpacity(0),
       builder: (BuildContext context) {
         return PosBottomSheet(
           icon: Icons.monetization_on,
           height: screenHeight,
-          child: const PosChange(),
+          child: PosChange(
+            amountPayable: payable,
+            amountReceived: amountReceived,
+            changedAmount: change,
+          ),
         );
       },
     );
