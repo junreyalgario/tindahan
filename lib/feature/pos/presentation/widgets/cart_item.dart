@@ -4,6 +4,7 @@ import 'package:tienda_pos/core/constant/app_colors.dart';
 import 'package:tienda_pos/core/widgets/dialog.dart';
 import 'package:tienda_pos/feature/pos/domain/entities/pos_item/pos_item_entity.dart';
 import 'package:tienda_pos/feature/pos/presentation/view_models/cart/cart_notifier.dart';
+import 'package:tienda_pos/feature/pos/presentation/widgets/add_to_cart_dialog.dart';
 
 class CartItem extends ConsumerStatefulWidget {
   final PosItemEntity posItem;
@@ -71,14 +72,26 @@ class _CartItemState extends ConsumerState<CartItem> {
                         widget.posItem.product!.id!, CartOperation.subract);
                   },
                 ),
-                Container(
-                  width: 40,
-                  alignment: Alignment.center,
-                  child: Text(
-                    widget.posItem.orderCount.toStringAsFixed(1),
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 16),
+                InkWell(
+                  child: Container(
+                    width: 40,
+                    alignment: Alignment.center,
+                    child: Text(
+                      widget.posItem.orderCount.toStringAsFixed(1),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
                   ),
+                  onTap: () async {
+                    double? qty = await showAddToCart(
+                        context: context, posItem: widget.posItem);
+                    if (qty != null) {
+                      ref.read(cartNotifierProvider.notifier).addToCart(
+                            widget.posItem,
+                            qty,
+                          );
+                    }
+                  },
                 ),
                 InkWell(
                   child: const SizedBox(
@@ -114,12 +127,14 @@ class _CartItemState extends ConsumerState<CartItem> {
               onPressed: () {
                 showConfirmDialog(
                     context: context,
-                    title: 'Maharlika Rice',
+                    title: widget.posItem.product!.name!,
                     message: 'Remove item?',
                     confirmText: 'Remove',
                     confirmColor: AppColors.danger,
                     onConfirm: () {
-                      //
+                      ref
+                          .read(cartNotifierProvider.notifier)
+                          .removeItem(widget.posItem.product!.id!);
                     });
               },
             ),

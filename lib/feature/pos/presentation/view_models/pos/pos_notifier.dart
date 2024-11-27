@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tienda_pos/core/utils/logger.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/category/category_entity.dart';
 import 'package:tienda_pos/feature/pos/domain/entities/pos_item/pos_item_entity.dart';
 import 'package:tienda_pos/feature/pos/domain/usecases/pos_usecase.dart';
@@ -40,12 +41,19 @@ class PosNotifier extends StateNotifier<PosState> {
         final String key = item.product!.id.toString();
         return cartState.posItems.containsKey(key)
             ? cartState.posItems[key]!
-            : item;
+            : item.copyWith(orderCount: 0, subTotalAmount: 0);
       }).toList();
     }
 
     final updatedAllItems = updateItems(state.allItems);
-    final updatedItems = updateItems(state.items);
+    late List<PosItemEntity> updatedItems;
+    CategoryEntity? activeCategory = _categoryNotifier.getActiveCategory();
+
+    if (activeCategory != null && activeCategory.id! == -1) {
+      updatedItems = _getFilteredItems(activeCategory);
+    } else {
+      updatedItems = updateItems(state.items);
+    }
 
     state = state.copyWith(allItems: updatedAllItems, items: updatedItems);
   }
@@ -54,6 +62,28 @@ class PosNotifier extends StateNotifier<PosState> {
     if (catState.activeCategory == null) return;
     final filteredItems = _getFilteredItems(catState.activeCategory!);
     state = state.copyWith(items: filteredItems);
+  }
+
+  void searchProduct(String query) {
+    if (query.isEmpty) {
+      state = state.copyWith(items: state.allItems);
+      return;
+    }
+
+    List<PosItemEntity> items = state.allItems.where((item) {
+      return item.product!.name!.toLowerCase().contains(query.toLowerCase()) ||
+          item.product!.category!.name!
+              .toLowerCase()
+              .contains(query.toLowerCase()) ||
+          item.product!.uom!.name!
+              .toLowerCase()
+              .contains(query.toLowerCase()) ||
+          item.product!.uom!.symbol!
+              .toLowerCase()
+              .contains(query.toLowerCase());
+    }).toList();
+
+    state = state.copyWith(items: items);
   }
 
   List<PosItemEntity> _getFilteredItems(CategoryEntity activeCategory) {
@@ -71,6 +101,6 @@ final posNotifierProvider =
   return PosNotifier(
     posUsecase: ref.read(posUsecaseProvider),
     categoryNotifier: ref.read(posCategoryNotifierProvider.notifier),
-    cartNotifier: ref.read(cartNotifierProvider.notifier),
+    cartNotifier: ref.watch(cartNotifierProvider.notifier),
   );
 });

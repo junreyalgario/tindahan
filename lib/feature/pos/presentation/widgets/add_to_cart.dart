@@ -4,15 +4,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
 import 'package:tienda_pos/core/styles/button_custom_styles.dart';
 import 'package:tienda_pos/core/styles/text_field_styles.dart';
-import 'package:tienda_pos/feature/inventory/domain/entities/product/product_entity.dart';
+import 'package:tienda_pos/feature/pos/domain/entities/pos_item/pos_item_entity.dart';
+import 'package:tienda_pos/feature/pos/presentation/view_models/pos_item/pos_item_notifier.dart';
 
 class AddToCart extends ConsumerStatefulWidget {
   const AddToCart({
     super.key,
-    required this.productEntity,
+    required this.posItem,
   });
 
-  final ProductEntity productEntity;
+  final PosItemEntity posItem;
 
   @override
   ConsumerState<AddToCart> createState() => _AddToCartState();
@@ -20,6 +21,14 @@ class AddToCart extends ConsumerStatefulWidget {
 
 class _AddToCartState extends ConsumerState<AddToCart> {
   final TextEditingController qtyController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.posItem.orderCount > 0) {
+      qtyController.text = widget.posItem.orderCount.toString();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +49,7 @@ class _AddToCartState extends ConsumerState<AddToCart> {
             children: [
               const Text('Product name',
                   style: TextStyle(fontWeight: FontWeight.bold)),
-              Text(widget.productEntity.name!,
+              Text(widget.posItem.product!.name!,
                   style: const TextStyle(fontWeight: FontWeight.bold)),
             ],
           ),
@@ -54,7 +63,7 @@ class _AddToCartState extends ConsumerState<AddToCart> {
               const Text('Stocks',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               Text(
-                  '${widget.productEntity.stockOnHand} ${widget.productEntity.uom?.symbol!}',
+                  '${widget.posItem.product!.stockOnHand} ${widget.posItem.product!.uom?.symbol!}',
                   style: const TextStyle(fontWeight: FontWeight.bold)),
             ],
           ),
@@ -67,7 +76,8 @@ class _AddToCartState extends ConsumerState<AddToCart> {
             children: [
               const Text('Price',
                   style: TextStyle(fontWeight: FontWeight.bold)),
-              Text('₱${widget.productEntity.price!.toStringAsFixed(2)}',
+              Text(
+                  '₱${widget.posItem.product!.price!.toStringAsFixed(2)}/${widget.posItem.product!.uom?.symbol!}',
                   style: const TextStyle(fontWeight: FontWeight.bold)),
             ],
           ),
@@ -82,7 +92,7 @@ class _AddToCartState extends ConsumerState<AddToCart> {
             ),
             alignment: Alignment.center,
             child: Text(
-              '₱${widget.productEntity.price!.toStringAsFixed(2)}',
+              '₱${ref.watch(posItemNotifierProvider(widget.posItem)).subTotalAmount.toStringAsFixed(2)}',
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -117,14 +127,11 @@ class _AddToCartState extends ConsumerState<AddToCart> {
               decoration: TextFieldStyles.decoration2(
                 const InputDecoration(contentPadding: EdgeInsets.all(5)),
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return '';
-                }
-                return null;
-              },
               onChanged: (value) {
-                //
+                double qty = double.tryParse(value) ?? 0;
+                ref
+                    .read(posItemNotifierProvider(widget.posItem).notifier)
+                    .setAmount(qty);
               },
             ),
           ),
@@ -153,7 +160,8 @@ class _AddToCartState extends ConsumerState<AddToCart> {
                     backgroundColor: AppColors.confirm,
                   ),
                   onPressed: () async {
-                    Navigator.pop(context, double.parse(qtyController.text));
+                    double qty = double.tryParse(qtyController.text) ?? 0;
+                    Navigator.pop(context, qty);
                   },
                   child: const Text(
                     'CONFIRM',

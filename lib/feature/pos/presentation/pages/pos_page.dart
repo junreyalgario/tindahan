@@ -5,10 +5,12 @@ import 'package:tienda_pos/core/router/routes.dart';
 import 'package:tienda_pos/core/widgets/tienda_app.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/category/category_entity.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/product/product_entity.dart';
+import 'package:tienda_pos/feature/pos/domain/entities/pos_item/pos_item_entity.dart';
 import 'package:tienda_pos/feature/pos/presentation/view_models/cart/cart_notifier.dart';
 import 'package:tienda_pos/feature/pos/presentation/view_models/pos/pos_notifier.dart';
 import 'package:tienda_pos/feature/pos/presentation/view_models/pos_category/pos_category_notifier.dart';
 import 'package:tienda_pos/feature/pos/presentation/widgets/add_to_cart.dart';
+import 'package:tienda_pos/feature/pos/presentation/widgets/add_to_cart_dialog.dart';
 import 'package:tienda_pos/feature/pos/presentation/widgets/category_tab.dart';
 import 'package:tienda_pos/feature/pos/presentation/widgets/pos_bottom_sheet.dart';
 import 'package:tienda_pos/feature/pos/presentation/widgets/pos_cart.dart';
@@ -35,12 +37,14 @@ class _PosPageState extends ConsumerState<PosPage> {
               _buildProductMenu(),
             ],
           ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: _buildCartSection(),
-          )
+          ref.watch(cartNotifierProvider).posItems.isNotEmpty
+              ? Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: _buildCartSection(),
+                )
+              : Container(),
         ],
       ),
     );
@@ -70,13 +74,11 @@ class _PosPageState extends ConsumerState<PosPage> {
                     vertical: 10.0,
                     horizontal: 15.0,
                   ),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: () {
-                      // Search
-                    },
-                  ),
+                  suffixIcon: const Icon(Icons.search),
                 ),
+                onChanged: (value) {
+                  ref.read(posNotifierProvider.notifier).searchProduct(value);
+                },
               ),
             ),
             IconButton(
@@ -106,28 +108,33 @@ class _PosPageState extends ConsumerState<PosPage> {
 
     return Expanded(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.only(bottom: 100),
+        padding: const EdgeInsets.only(bottom: 100, left: 13, right: 13),
         child: posState.items.isNotEmpty
-            ? Wrap(
-                spacing: 5,
-                runSpacing: 5,
-                children: posState.items.map((posItem) {
-                  return SizedBox(
-                    width: MediaQuery.of(context).size.width / 2 - 16,
-                    child: PosItemCard(
-                      posItem: posItem,
-                      onTap: (ProductEntity productEntity) async {
-                        double qty = await _showAddToCart(productEntity);
-                        if (qty > 0) {
-                          ref.watch(cartNotifierProvider.notifier).addToCart(
-                                posItem,
-                                qty,
-                              );
-                        }
-                      },
-                    ),
-                  );
-                }).toList(),
+            ? SizedBox(
+                width: double.infinity,
+                child: Wrap(
+                  spacing: 5,
+                  runSpacing: 5,
+                  alignment: WrapAlignment.start,
+                  children: posState.items.map((posItem) {
+                    return SizedBox(
+                      width: MediaQuery.of(context).size.width / 2 - 16,
+                      child: PosItemCard(
+                        posItem: posItem,
+                        onTap: (ProductEntity productEntity) async {
+                          double? qty = await showAddToCart(
+                              context: context, posItem: posItem);
+                          if (qty != null) {
+                            ref.watch(cartNotifierProvider.notifier).addToCart(
+                                  posItem,
+                                  qty,
+                                );
+                          }
+                        },
+                      ),
+                    );
+                  }).toList(),
+                ),
               )
             : Container(
                 margin: const EdgeInsets.only(top: 20),
@@ -237,26 +244,5 @@ class _PosPageState extends ConsumerState<PosPage> {
         );
       },
     );
-  }
-
-  Future<double> _showAddToCart(ProductEntity productEntity) async {
-    final result = await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          elevation: 10.0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5.0),
-          ),
-          child: AddToCart(productEntity: productEntity),
-        );
-      },
-    );
-
-    if (result != null) {
-      return result;
-    } else {
-      return 0;
-    }
   }
 }

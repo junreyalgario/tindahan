@@ -27,11 +27,8 @@ class PosCategoryNotifier extends StateNotifier<PosCategoryState> {
     state = state.copyWith(activeCategory: category);
   }
 
-  @override
-  void dispose() {
-    // Clean up logic or logging
-    print("PosCategoryNotifier is disposed.");
-    super.dispose();
+  CategoryEntity? getActiveCategory() {
+    return state.activeCategory;
   }
 }
 
