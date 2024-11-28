@@ -20,6 +20,7 @@ class Product extends $Product with RealmEntity, RealmObjectBase, RealmObject {
     Category? category,
     Uom? uom,
     Iterable<Inventory> inventories = const [],
+    Iterable<PosOrder> orders = const [],
   }) {
     RealmObjectBase.set(this, 'id', id);
     RealmObjectBase.set(this, 'photo', photo);
@@ -31,6 +32,8 @@ class Product extends $Product with RealmEntity, RealmObjectBase, RealmObject {
     RealmObjectBase.set(this, 'uom', uom);
     RealmObjectBase.set<RealmList<Inventory>>(
         this, 'inventories', RealmList<Inventory>(inventories));
+    RealmObjectBase.set<RealmList<PosOrder>>(
+        this, 'orders', RealmList<PosOrder>(orders));
     RealmObjectBase.set(this, 'createdAt', createdAt);
     RealmObjectBase.set(this, 'updatedAt', updatedAt);
   }
@@ -92,6 +95,13 @@ class Product extends $Product with RealmEntity, RealmObjectBase, RealmObject {
       throw RealmUnsupportedSetError();
 
   @override
+  RealmList<PosOrder> get orders =>
+      RealmObjectBase.get<PosOrder>(this, 'orders') as RealmList<PosOrder>;
+  @override
+  set orders(covariant RealmList<PosOrder> value) =>
+      throw RealmUnsupportedSetError();
+
+  @override
   DateTime get createdAt =>
       RealmObjectBase.get<DateTime>(this, 'createdAt') as DateTime;
   @override
@@ -127,6 +137,7 @@ class Product extends $Product with RealmEntity, RealmObjectBase, RealmObject {
       'category': category.toEJson(),
       'uom': uom.toEJson(),
       'inventories': inventories.toEJson(),
+      'orders': orders.toEJson(),
       'createdAt': createdAt.toEJson(),
       'updatedAt': updatedAt.toEJson(),
     };
@@ -157,6 +168,7 @@ class Product extends $Product with RealmEntity, RealmObjectBase, RealmObject {
           category: fromEJson(ejson['category']),
           uom: fromEJson(ejson['uom']),
           inventories: fromEJson(ejson['inventories']),
+          orders: fromEJson(ejson['orders']),
         ),
       _ => raiseInvalidEJson(ejson),
     };
@@ -178,6 +190,8 @@ class Product extends $Product with RealmEntity, RealmObjectBase, RealmObject {
           optional: true, linkTarget: 'Uom'),
       SchemaProperty('inventories', RealmPropertyType.object,
           linkTarget: 'Inventory', collectionType: RealmCollectionType.list),
+      SchemaProperty('orders', RealmPropertyType.object,
+          linkTarget: 'PosOrder', collectionType: RealmCollectionType.list),
       SchemaProperty('createdAt', RealmPropertyType.timestamp),
       SchemaProperty('updatedAt', RealmPropertyType.timestamp),
     ]);

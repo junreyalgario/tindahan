@@ -5,6 +5,7 @@ import 'package:tienda_pos/feature/pos/domain/entities/pos_order/pos_order_entit
 import 'package:tienda_pos/feature/pos/domain/entities/pos_transaction/pos_transaction_status.dart';
 
 part 'pos_transaction_entity.freezed.dart';
+part 'pos_transaction_entity.g.dart';
 
 @freezed
 class PosTransactionEntity with _$PosTransactionEntity {
@@ -13,11 +14,15 @@ class PosTransactionEntity with _$PosTransactionEntity {
     @Default([]) List<PosOrderEntity> orders,
     @Default(0) double totalQuantity,
     @Default(0) double totalAmount,
-    @Default(0) double amountReceived,
+    @Default(0) double vat,
     @Default(0) double payable,
+    @Default(0) double amountReceived,
     @Default(0) double change,
     @Default(PosTransactionStatus.pending) PosTransactionStatus status,
     @Default(null) DateTime? createdAt,
     @Default(null) DateTime? updatedAt,
   }) = _PosTransactionEntity;
+
+  factory PosTransactionEntity.fromJson(Map<String, dynamic> json) =>
+      _$PosTransactionEntityFromJson(json);
 }

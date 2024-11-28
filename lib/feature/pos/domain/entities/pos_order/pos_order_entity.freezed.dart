@@ -14,6 +14,10 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
+PosOrderEntity _$PosOrderEntityFromJson(Map<String, dynamic> json) {
+  return _PosOrderEntity.fromJson(json);
+}
+
 /// @nodoc
 mixin _$PosOrderEntity {
   int get id => throw _privateConstructorUsedError;
@@ -21,8 +25,12 @@ mixin _$PosOrderEntity {
   double get price => throw _privateConstructorUsedError;
   double get quantity => throw _privateConstructorUsedError;
   double get amount => throw _privateConstructorUsedError;
+  PosTransactionEntity? get transaction => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
+
+  /// Serializes this PosOrderEntity to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of PosOrderEntity
   /// with the given fields replaced by the non-null parameter values.
@@ -43,10 +51,12 @@ abstract class $PosOrderEntityCopyWith<$Res> {
       double price,
       double quantity,
       double amount,
+      PosTransactionEntity? transaction,
       DateTime? createdAt,
       DateTime? updatedAt});
 
   $ProductEntityCopyWith<$Res> get product;
+  $PosTransactionEntityCopyWith<$Res>? get transaction;
 }
 
 /// @nodoc
@@ -69,6 +79,7 @@ class _$PosOrderEntityCopyWithImpl<$Res, $Val extends PosOrderEntity>
     Object? price = null,
     Object? quantity = null,
     Object? amount = null,
+    Object? transaction = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
@@ -93,6 +104,10 @@ class _$PosOrderEntityCopyWithImpl<$Res, $Val extends PosOrderEntity>
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
               as double,
+      transaction: freezed == transaction
+          ? _value.transaction
+          : transaction // ignore: cast_nullable_to_non_nullable
+              as PosTransactionEntity?,
       createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -113,6 +128,20 @@ class _$PosOrderEntityCopyWithImpl<$Res, $Val extends PosOrderEntity>
       return _then(_value.copyWith(product: value) as $Val);
     });
   }
+
+  /// Create a copy of PosOrderEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $PosTransactionEntityCopyWith<$Res>? get transaction {
+    if (_value.transaction == null) {
+      return null;
+    }
+
+    return $PosTransactionEntityCopyWith<$Res>(_value.transaction!, (value) {
+      return _then(_value.copyWith(transaction: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -129,11 +158,14 @@ abstract class _$$PosOrderEntityImplCopyWith<$Res>
       double price,
       double quantity,
       double amount,
+      PosTransactionEntity? transaction,
       DateTime? createdAt,
       DateTime? updatedAt});
 
   @override
   $ProductEntityCopyWith<$Res> get product;
+  @override
+  $PosTransactionEntityCopyWith<$Res>? get transaction;
 }
 
 /// @nodoc
@@ -154,6 +186,7 @@ class __$$PosOrderEntityImplCopyWithImpl<$Res>
     Object? price = null,
     Object? quantity = null,
     Object? amount = null,
+    Object? transaction = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
@@ -178,6 +211,10 @@ class __$$PosOrderEntityImplCopyWithImpl<$Res>
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
               as double,
+      transaction: freezed == transaction
+          ? _value.transaction
+          : transaction // ignore: cast_nullable_to_non_nullable
+              as PosTransactionEntity?,
       createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -191,7 +228,7 @@ class __$$PosOrderEntityImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$PosOrderEntityImpl implements _PosOrderEntity {
   const _$PosOrderEntityImpl(
       {this.id = 0,
@@ -199,8 +236,12 @@ class _$PosOrderEntityImpl implements _PosOrderEntity {
       this.price = 0,
       this.quantity = 0,
       this.amount = 0,
+      this.transaction = null,
       this.createdAt = null,
       this.updatedAt = null});
+
+  factory _$PosOrderEntityImpl.fromJson(Map<String, dynamic> json) =>
+      _$$PosOrderEntityImplFromJson(json);
 
   @override
   @JsonKey()
@@ -219,6 +260,9 @@ class _$PosOrderEntityImpl implements _PosOrderEntity {
   final double amount;
   @override
   @JsonKey()
+  final PosTransactionEntity? transaction;
+  @override
+  @JsonKey()
   final DateTime? createdAt;
   @override
   @JsonKey()
@@ -226,7 +270,7 @@ class _$PosOrderEntityImpl implements _PosOrderEntity {
 
   @override
   String toString() {
-    return 'PosOrderEntity(id: $id, product: $product, price: $price, quantity: $quantity, amount: $amount, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'PosOrderEntity(id: $id, product: $product, price: $price, quantity: $quantity, amount: $amount, transaction: $transaction, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -240,15 +284,18 @@ class _$PosOrderEntityImpl implements _PosOrderEntity {
             (identical(other.quantity, quantity) ||
                 other.quantity == quantity) &&
             (identical(other.amount, amount) || other.amount == amount) &&
+            (identical(other.transaction, transaction) ||
+                other.transaction == transaction) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, product, price, quantity, amount, createdAt, updatedAt);
+  int get hashCode => Object.hash(runtimeType, id, product, price, quantity,
+      amount, transaction, createdAt, updatedAt);
 
   /// Create a copy of PosOrderEntity
   /// with the given fields replaced by the non-null parameter values.
@@ -258,6 +305,13 @@ class _$PosOrderEntityImpl implements _PosOrderEntity {
   _$$PosOrderEntityImplCopyWith<_$PosOrderEntityImpl> get copyWith =>
       __$$PosOrderEntityImplCopyWithImpl<_$PosOrderEntityImpl>(
           this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$PosOrderEntityImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _PosOrderEntity implements PosOrderEntity {
@@ -267,8 +321,12 @@ abstract class _PosOrderEntity implements PosOrderEntity {
       final double price,
       final double quantity,
       final double amount,
+      final PosTransactionEntity? transaction,
       final DateTime? createdAt,
       final DateTime? updatedAt}) = _$PosOrderEntityImpl;
+
+  factory _PosOrderEntity.fromJson(Map<String, dynamic> json) =
+      _$PosOrderEntityImpl.fromJson;
 
   @override
   int get id;
@@ -280,6 +338,8 @@ abstract class _PosOrderEntity implements PosOrderEntity {
   double get quantity;
   @override
   double get amount;
+  @override
+  PosTransactionEntity? get transaction;
   @override
   DateTime? get createdAt;
   @override

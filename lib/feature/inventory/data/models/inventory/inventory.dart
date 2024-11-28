@@ -2,6 +2,7 @@
 
 import 'package:realm/realm.dart';
 import 'package:tienda_pos/feature/inventory/data/models/product/product.dart';
+import 'package:tienda_pos/feature/inventory/domain/entities/product/product_entity.dart';
 
 part 'inventory.realm.dart';
 
@@ -35,8 +36,9 @@ class $Inventory {
       json['stocks'],
       DateTime.parse(json['createdAt']),
       DateTime.parse(json['updatedAt']),
-      product:
-          json['product'] != null ? $Product.fromJson(json['product']) : null,
+      product: json['product'] != null
+          ? $Product.fromJson((json['product'] as ProductEntity).toJson())
+          : null,
     );
   }
 }

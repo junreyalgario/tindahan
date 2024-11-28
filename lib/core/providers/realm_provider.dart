@@ -4,12 +4,16 @@ import 'package:tienda_pos/feature/inventory/data/models/category/category.dart'
 import 'package:tienda_pos/feature/inventory/data/models/inventory/inventory.dart';
 import 'package:tienda_pos/feature/inventory/data/models/product/product.dart';
 import 'package:tienda_pos/feature/inventory/data/models/uom/uom.dart';
+import 'package:tienda_pos/feature/pos/data/models/pos_order/pos_order.dart';
+import 'package:tienda_pos/feature/pos/data/models/pos_transaction/pos_transaction.dart';
 
 final _realmSchemas = [
   Category.schema,
   Product.schema,
   Uom.schema,
   Inventory.schema,
+  PosOrder.schema,
+  PosTransaction.schema,
 ];
 
 // Define the Realm provider for DI

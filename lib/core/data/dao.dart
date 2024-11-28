@@ -8,9 +8,9 @@ abstract class Dao<Model extends RealmObject> {
 
   int getNextId();
 
-  void update(Model model);
+  void update(Model model) {}
 
-  void delete(int id);
+  void delete(int id) {}
 
   @protected
   Model? getLastInserted() {
@@ -20,6 +20,12 @@ abstract class Dao<Model extends RealmObject> {
   void save(Model model) {
     _realm.write(() {
       _realm.add(model);
+    });
+  }
+
+  void saveAll(List<Model> models) {
+    _realm.write(() {
+      _realm.addAll(models);
     });
   }
 

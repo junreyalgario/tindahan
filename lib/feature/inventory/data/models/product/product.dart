@@ -3,6 +3,10 @@ import 'package:tienda_pos/core/utils/logger.dart';
 import 'package:tienda_pos/feature/inventory/data/models/category/category.dart';
 import 'package:tienda_pos/feature/inventory/data/models/inventory/inventory.dart';
 import 'package:tienda_pos/feature/inventory/data/models/uom/uom.dart';
+import 'package:tienda_pos/feature/inventory/domain/entities/category/category_entity.dart';
+import 'package:tienda_pos/feature/inventory/domain/entities/inventory/inventory_entity.dart';
+import 'package:tienda_pos/feature/inventory/domain/entities/uom/uom_entity.dart';
+import 'package:tienda_pos/feature/pos/data/models/pos_order/pos_order.dart';
 
 part 'product.realm.dart';
 
@@ -18,6 +22,7 @@ class $Product {
   late $Category? category;
   late $Uom? uom;
   late List<$Inventory> inventories;
+  late List<$PosOrder> orders;
   late DateTime createdAt;
   late DateTime updatedAt;
 
@@ -35,6 +40,8 @@ class $Product {
       'inventories': inventories
           .map((inventory) => inventory.toJson(serializeProduct: false))
           .toList(),
+      'orders':
+          orders.map((order) => order.toJson(serializeProduct: false)).toList(),
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
     };
@@ -52,11 +59,14 @@ class $Product {
       DateTime.parse(json['updatedAt']),
       photo: json['photo'],
       category: json['category'] != null
-          ? $Category.fromJson(json['category'])
+          ? $Category.fromJson((json['category'] as CategoryEntity).toJson())
           : null,
-      uom: json['uom'] != null ? $Uom.fromJson(json['uom']) : null,
+      uom: json['uom'] != null
+          ? $Uom.fromJson((json['uom'] as UomEntity).toJson())
+          : null,
       inventories: (json['inventories'] as List)
-          .map((inventory) => $Inventory.fromJson(inventory))
+          .map((inventory) =>
+              $Inventory.fromJson((inventory as InventoryEntity).toJson()))
           .toList(),
     );
   }

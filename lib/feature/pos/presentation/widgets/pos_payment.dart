@@ -1,7 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
+import 'package:tienda_pos/core/state/data_state.dart';
 import 'package:tienda_pos/core/styles/button_custom_styles.dart';
 import 'package:tienda_pos/core/styles/text_field_styles.dart';
 import 'package:tienda_pos/core/widgets/dialog.dart';
@@ -131,16 +134,23 @@ class _PosPaymentState extends ConsumerState<PosPayment> {
 
                           if (amounReceived >= widget.amountPayable) {
                             // Process payment and save transaction
-                            double change = ref
+                            DataState<double> result = await ref
                                 .read(paymentNotifierProvider.notifier)
                                 .processPayment(amounReceived);
 
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                            _showChange(
-                                payable: widget.amountPayable,
-                                amountReceived: amounReceived,
-                                change: change);
+                            if (result.isSuccess) {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                              _showChange(
+                                  payable: widget.amountPayable,
+                                  amountReceived: amounReceived,
+                                  change: result.data!);
+                            } else {
+                              showMessageDialog(
+                                  context: context,
+                                  title: 'Payment Failed',
+                                  message: result.error!);
+                            }
                           } else {
                             showMessageDialog(
                                 context: context,

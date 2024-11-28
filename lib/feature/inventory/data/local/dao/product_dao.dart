@@ -34,22 +34,34 @@ class ProductDao extends Dao<Product> {
 
   @override
   void update(Product model) {
-    _realm.write(() {
-      final Product? product =
-          _realm.query<Product>('id == \$0', [model.id]).firstOrNull;
+    final Product? product = getById(model.id);
 
-      if (product != null) {
+    if (product != null) {
+      _realm.write(() {
         product.name = model.name;
         product.price = model.price;
         product.lowStockLevel = model.lowStockLevel;
         product.category = model.category;
         product.uom = model.uom;
         product.inventories = model.inventories;
-      } else {
-        Log.error('Failed to update product: ID not found (${model.id})');
-        throw Exception('Failed to update product: ID not found (${model.id})');
-      }
-    });
+      });
+    } else {
+      Log.error('Failed to update product: ID not found (${model.id})');
+      throw Exception('Failed to update product: ID not found (${model.id})');
+    }
+  }
+
+  void updateStocksOnHand(Product model, double stockOnHand) {
+    final Product? product = getById(model.id);
+
+    if (product != null) {
+      _realm.write(() {
+        product.stockOnHand = stockOnHand;
+      });
+    } else {
+      Log.error('Failed to update product: ID not found (${model.id})');
+      throw Exception('Failed to update product: ID not found (${model.id})');
+    }
   }
 }
 

@@ -14,18 +14,26 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
+PosTransactionEntity _$PosTransactionEntityFromJson(Map<String, dynamic> json) {
+  return _PosTransactionEntity.fromJson(json);
+}
+
 /// @nodoc
 mixin _$PosTransactionEntity {
   int get id => throw _privateConstructorUsedError;
   List<PosOrderEntity> get orders => throw _privateConstructorUsedError;
   double get totalQuantity => throw _privateConstructorUsedError;
   double get totalAmount => throw _privateConstructorUsedError;
-  double get amountReceived => throw _privateConstructorUsedError;
+  double get vat => throw _privateConstructorUsedError;
   double get payable => throw _privateConstructorUsedError;
+  double get amountReceived => throw _privateConstructorUsedError;
   double get change => throw _privateConstructorUsedError;
   PosTransactionStatus get status => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
+
+  /// Serializes this PosTransactionEntity to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of PosTransactionEntity
   /// with the given fields replaced by the non-null parameter values.
@@ -45,8 +53,9 @@ abstract class $PosTransactionEntityCopyWith<$Res> {
       List<PosOrderEntity> orders,
       double totalQuantity,
       double totalAmount,
-      double amountReceived,
+      double vat,
       double payable,
+      double amountReceived,
       double change,
       PosTransactionStatus status,
       DateTime? createdAt,
@@ -73,8 +82,9 @@ class _$PosTransactionEntityCopyWithImpl<$Res,
     Object? orders = null,
     Object? totalQuantity = null,
     Object? totalAmount = null,
-    Object? amountReceived = null,
+    Object? vat = null,
     Object? payable = null,
+    Object? amountReceived = null,
     Object? change = null,
     Object? status = null,
     Object? createdAt = freezed,
@@ -97,13 +107,17 @@ class _$PosTransactionEntityCopyWithImpl<$Res,
           ? _value.totalAmount
           : totalAmount // ignore: cast_nullable_to_non_nullable
               as double,
-      amountReceived: null == amountReceived
-          ? _value.amountReceived
-          : amountReceived // ignore: cast_nullable_to_non_nullable
+      vat: null == vat
+          ? _value.vat
+          : vat // ignore: cast_nullable_to_non_nullable
               as double,
       payable: null == payable
           ? _value.payable
           : payable // ignore: cast_nullable_to_non_nullable
+              as double,
+      amountReceived: null == amountReceived
+          ? _value.amountReceived
+          : amountReceived // ignore: cast_nullable_to_non_nullable
               as double,
       change: null == change
           ? _value.change
@@ -138,8 +152,9 @@ abstract class _$$PosTransactionEntityImplCopyWith<$Res>
       List<PosOrderEntity> orders,
       double totalQuantity,
       double totalAmount,
-      double amountReceived,
+      double vat,
       double payable,
+      double amountReceived,
       double change,
       PosTransactionStatus status,
       DateTime? createdAt,
@@ -163,8 +178,9 @@ class __$$PosTransactionEntityImplCopyWithImpl<$Res>
     Object? orders = null,
     Object? totalQuantity = null,
     Object? totalAmount = null,
-    Object? amountReceived = null,
+    Object? vat = null,
     Object? payable = null,
+    Object? amountReceived = null,
     Object? change = null,
     Object? status = null,
     Object? createdAt = freezed,
@@ -187,13 +203,17 @@ class __$$PosTransactionEntityImplCopyWithImpl<$Res>
           ? _value.totalAmount
           : totalAmount // ignore: cast_nullable_to_non_nullable
               as double,
-      amountReceived: null == amountReceived
-          ? _value.amountReceived
-          : amountReceived // ignore: cast_nullable_to_non_nullable
+      vat: null == vat
+          ? _value.vat
+          : vat // ignore: cast_nullable_to_non_nullable
               as double,
       payable: null == payable
           ? _value.payable
           : payable // ignore: cast_nullable_to_non_nullable
+              as double,
+      amountReceived: null == amountReceived
+          ? _value.amountReceived
+          : amountReceived // ignore: cast_nullable_to_non_nullable
               as double,
       change: null == change
           ? _value.change
@@ -216,20 +236,24 @@ class __$$PosTransactionEntityImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$PosTransactionEntityImpl implements _PosTransactionEntity {
   const _$PosTransactionEntityImpl(
       {this.id = 0,
       final List<PosOrderEntity> orders = const [],
       this.totalQuantity = 0,
       this.totalAmount = 0,
-      this.amountReceived = 0,
+      this.vat = 0,
       this.payable = 0,
+      this.amountReceived = 0,
       this.change = 0,
       this.status = PosTransactionStatus.pending,
       this.createdAt = null,
       this.updatedAt = null})
       : _orders = orders;
+
+  factory _$PosTransactionEntityImpl.fromJson(Map<String, dynamic> json) =>
+      _$$PosTransactionEntityImplFromJson(json);
 
   @override
   @JsonKey()
@@ -251,10 +275,13 @@ class _$PosTransactionEntityImpl implements _PosTransactionEntity {
   final double totalAmount;
   @override
   @JsonKey()
-  final double amountReceived;
+  final double vat;
   @override
   @JsonKey()
   final double payable;
+  @override
+  @JsonKey()
+  final double amountReceived;
   @override
   @JsonKey()
   final double change;
@@ -270,7 +297,7 @@ class _$PosTransactionEntityImpl implements _PosTransactionEntity {
 
   @override
   String toString() {
-    return 'PosTransactionEntity(id: $id, orders: $orders, totalQuantity: $totalQuantity, totalAmount: $totalAmount, amountReceived: $amountReceived, payable: $payable, change: $change, status: $status, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'PosTransactionEntity(id: $id, orders: $orders, totalQuantity: $totalQuantity, totalAmount: $totalAmount, vat: $vat, payable: $payable, amountReceived: $amountReceived, change: $change, status: $status, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -284,9 +311,10 @@ class _$PosTransactionEntityImpl implements _PosTransactionEntity {
                 other.totalQuantity == totalQuantity) &&
             (identical(other.totalAmount, totalAmount) ||
                 other.totalAmount == totalAmount) &&
+            (identical(other.vat, vat) || other.vat == vat) &&
+            (identical(other.payable, payable) || other.payable == payable) &&
             (identical(other.amountReceived, amountReceived) ||
                 other.amountReceived == amountReceived) &&
-            (identical(other.payable, payable) || other.payable == payable) &&
             (identical(other.change, change) || other.change == change) &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.createdAt, createdAt) ||
@@ -295,6 +323,7 @@ class _$PosTransactionEntityImpl implements _PosTransactionEntity {
                 other.updatedAt == updatedAt));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -302,8 +331,9 @@ class _$PosTransactionEntityImpl implements _PosTransactionEntity {
       const DeepCollectionEquality().hash(_orders),
       totalQuantity,
       totalAmount,
-      amountReceived,
+      vat,
       payable,
+      amountReceived,
       change,
       status,
       createdAt,
@@ -318,6 +348,13 @@ class _$PosTransactionEntityImpl implements _PosTransactionEntity {
       get copyWith =>
           __$$PosTransactionEntityImplCopyWithImpl<_$PosTransactionEntityImpl>(
               this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$PosTransactionEntityImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _PosTransactionEntity implements PosTransactionEntity {
@@ -326,12 +363,16 @@ abstract class _PosTransactionEntity implements PosTransactionEntity {
       final List<PosOrderEntity> orders,
       final double totalQuantity,
       final double totalAmount,
-      final double amountReceived,
+      final double vat,
       final double payable,
+      final double amountReceived,
       final double change,
       final PosTransactionStatus status,
       final DateTime? createdAt,
       final DateTime? updatedAt}) = _$PosTransactionEntityImpl;
+
+  factory _PosTransactionEntity.fromJson(Map<String, dynamic> json) =
+      _$PosTransactionEntityImpl.fromJson;
 
   @override
   int get id;
@@ -342,9 +383,11 @@ abstract class _PosTransactionEntity implements PosTransactionEntity {
   @override
   double get totalAmount;
   @override
-  double get amountReceived;
+  double get vat;
   @override
   double get payable;
+  @override
+  double get amountReceived;
   @override
   double get change;
   @override
