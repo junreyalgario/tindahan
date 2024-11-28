@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:realm/realm.dart';
 import 'package:tienda_pos/core/state/data_state.dart';
 import 'package:tienda_pos/core/utils/logger.dart';

@@ -3,7 +3,6 @@
 import 'package:realm/realm.dart';
 import 'package:tienda_pos/feature/pos/data/models/pos_order/pos_order.dart';
 import 'package:tienda_pos/feature/pos/domain/entities/pos_order/pos_order_entity.dart';
-import 'package:tienda_pos/feature/pos/domain/entities/pos_transaction/pos_transaction_status.dart';
 
 part 'pos_transaction.realm.dart';
 

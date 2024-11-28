@@ -5,11 +5,7 @@ import 'package:tienda_pos/core/providers/realm_provider.dart';
 import 'package:tienda_pos/feature/inventory/data/models/inventory/inventory.dart';
 
 class InventoryDao extends Dao<Inventory> {
-  final Realm _realm;
-
-  InventoryDao({required Realm realm})
-      : _realm = realm,
-        super(realm);
+  InventoryDao({required Realm realm}) : super(realm);
 
   @override
   void delete(int id) {

@@ -2,7 +2,6 @@ import 'package:realm/realm.dart';
 import 'package:tienda_pos/core/state/data_state.dart';
 import 'package:tienda_pos/core/utils/logger.dart';
 import 'package:tienda_pos/feature/inventory/data/local/dao/product_dao.dart';
-import 'package:tienda_pos/feature/inventory/data/models/product/product.dart';
 import 'package:tienda_pos/feature/pos/data/local/dao/pos_order_dao.dart';
 import 'package:tienda_pos/feature/pos/data/local/dao/pos_transaction_dao.dart';
 import 'package:tienda_pos/feature/pos/data/models/pos_order/pos_order.dart';

@@ -1,5 +1,4 @@
 import 'package:realm/realm.dart';
-import 'package:tienda_pos/core/utils/logger.dart';
 import 'package:tienda_pos/feature/inventory/data/models/category/category.dart';
 import 'package:tienda_pos/feature/inventory/data/models/inventory/inventory.dart';
 import 'package:tienda_pos/feature/inventory/data/models/uom/uom.dart';

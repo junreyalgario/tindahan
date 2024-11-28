@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
 import 'package:tienda_pos/core/router/routes.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/product/product_entity.dart';
-import 'package:tienda_pos/feature/inventory/inventory.dart';
 
 class ProductItem extends StatefulWidget {
   const ProductItem({super.key, required this.productEntity});

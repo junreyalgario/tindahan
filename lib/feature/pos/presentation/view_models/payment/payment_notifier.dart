@@ -1,10 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/core/state/data_state.dart';
-import 'package:tienda_pos/core/utils/logger.dart';
 import 'package:tienda_pos/feature/pos/domain/entities/pos_order/pos_order_entity.dart';
 import 'package:tienda_pos/feature/pos/domain/entities/pos_transaction/pos_transaction_entity.dart';
 import 'package:tienda_pos/feature/pos/domain/entities/pos_transaction/pos_transaction_status.dart';
-import 'package:tienda_pos/feature/pos/domain/usecases/pos_order_usecase.dart';
 import 'package:tienda_pos/feature/pos/domain/usecases/pos_transaction_usecase.dart';
 import 'package:tienda_pos/feature/pos/presentation/view_models/cart/cart_notifier.dart';
 import 'package:tienda_pos/feature/pos/presentation/view_models/cart/cart_state.dart';
