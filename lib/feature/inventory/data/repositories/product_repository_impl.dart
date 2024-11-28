@@ -117,4 +117,9 @@ class ProductRepositoryImpl extends ProductRepository {
     // TODO: implement update
     throw UnimplementedError();
   }
+
+  @override
+  Future<DataState<bool>> insertAll(List<ProductEntity> entities) async {
+    return DataState.success(true);
+  }
 }

@@ -1,0 +1,4 @@
+enum PosTransactionStatus {
+  pending,
+  completed,
+}

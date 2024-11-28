@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/product/product_entity.dart';
-import 'package:tienda_pos/feature/pos/domain/entities/pos_item/pos_item_entity.dart';
+import 'package:tienda_pos/feature/pos/domain/entities/pos_order/pos_order_entity.dart';
 
 class PosItemCard extends StatelessWidget {
   const PosItemCard({
@@ -10,10 +10,10 @@ class PosItemCard extends StatelessWidget {
     required this.onTap,
   });
 
-  final PosItemEntity posItem;
+  final PosOrderEntity posItem;
   final Function(ProductEntity productEntity) onTap;
 
-  bool get _showOrderCount => posItem.orderCount > 0;
+  bool get _showOrderCount => posItem.quantity > 0;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,7 @@ class PosItemCard extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                posItem.orderCount.toStringAsFixed(1),
+                                posItem.quantity.toStringAsFixed(1),
                                 style: const TextStyle(
                                   fontSize: 40,
                                   fontWeight: FontWeight.bold,
@@ -63,7 +63,7 @@ class PosItemCard extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                posItem.product!.uom!.name!,
+                                posItem.product.uom!.name!,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                   fontSize: 12,
@@ -78,7 +78,7 @@ class PosItemCard extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                posItem.product!.name!,
+                posItem.product.name!,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   fontSize: 15,
@@ -90,7 +90,7 @@ class PosItemCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    '₱${posItem.product!.price!.toStringAsFixed(2)}',
+                    '₱${posItem.product.price!.toStringAsFixed(2)}',
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -99,7 +99,7 @@ class PosItemCard extends StatelessWidget {
                   ),
                   const Spacer(),
                   Text(
-                    '${posItem.product!.stockOnHand} ${posItem.product!.uom!.symbol}',
+                    '${posItem.product.stockOnHand} ${posItem.product.uom!.symbol}',
                     style: const TextStyle(
                       fontSize: 12,
                       color: AppColors.primary,
@@ -112,7 +112,7 @@ class PosItemCard extends StatelessWidget {
           ),
         ),
         onTap: () {
-          onTap(posItem.product!);
+          onTap(posItem.product);
         },
       ),
     );

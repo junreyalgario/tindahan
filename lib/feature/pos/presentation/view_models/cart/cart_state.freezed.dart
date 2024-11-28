@@ -16,7 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$CartState {
-  Map<String, PosItemEntity> get posItems => throw _privateConstructorUsedError;
+  Map<String, PosOrderEntity> get posItems =>
+      throw _privateConstructorUsedError;
   double get totalqty => throw _privateConstructorUsedError;
   double get grandTotalAmount => throw _privateConstructorUsedError;
 
@@ -33,7 +34,7 @@ abstract class $CartStateCopyWith<$Res> {
       _$CartStateCopyWithImpl<$Res, CartState>;
   @useResult
   $Res call(
-      {Map<String, PosItemEntity> posItems,
+      {Map<String, PosOrderEntity> posItems,
       double totalqty,
       double grandTotalAmount});
 }
@@ -61,7 +62,7 @@ class _$CartStateCopyWithImpl<$Res, $Val extends CartState>
       posItems: null == posItems
           ? _value.posItems
           : posItems // ignore: cast_nullable_to_non_nullable
-              as Map<String, PosItemEntity>,
+              as Map<String, PosOrderEntity>,
       totalqty: null == totalqty
           ? _value.totalqty
           : totalqty // ignore: cast_nullable_to_non_nullable
@@ -83,7 +84,7 @@ abstract class _$$CartStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {Map<String, PosItemEntity> posItems,
+      {Map<String, PosOrderEntity> posItems,
       double totalqty,
       double grandTotalAmount});
 }
@@ -109,7 +110,7 @@ class __$$CartStateImplCopyWithImpl<$Res>
       posItems: null == posItems
           ? _value._posItems
           : posItems // ignore: cast_nullable_to_non_nullable
-              as Map<String, PosItemEntity>,
+              as Map<String, PosOrderEntity>,
       totalqty: null == totalqty
           ? _value.totalqty
           : totalqty // ignore: cast_nullable_to_non_nullable
@@ -126,15 +127,15 @@ class __$$CartStateImplCopyWithImpl<$Res>
 
 class _$CartStateImpl with DiagnosticableTreeMixin implements _CartState {
   const _$CartStateImpl(
-      {final Map<String, PosItemEntity> posItems = const {},
+      {final Map<String, PosOrderEntity> posItems = const {},
       this.totalqty = 0,
       this.grandTotalAmount = 0})
       : _posItems = posItems;
 
-  final Map<String, PosItemEntity> _posItems;
+  final Map<String, PosOrderEntity> _posItems;
   @override
   @JsonKey()
-  Map<String, PosItemEntity> get posItems {
+  Map<String, PosOrderEntity> get posItems {
     if (_posItems is EqualUnmodifiableMapView) return _posItems;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableMapView(_posItems);
@@ -192,12 +193,12 @@ class _$CartStateImpl with DiagnosticableTreeMixin implements _CartState {
 
 abstract class _CartState implements CartState {
   const factory _CartState(
-      {final Map<String, PosItemEntity> posItems,
+      {final Map<String, PosOrderEntity> posItems,
       final double totalqty,
       final double grandTotalAmount}) = _$CartStateImpl;
 
   @override
-  Map<String, PosItemEntity> get posItems;
+  Map<String, PosOrderEntity> get posItems;
   @override
   double get totalqty;
   @override

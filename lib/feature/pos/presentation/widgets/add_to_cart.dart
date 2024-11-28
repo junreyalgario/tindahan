@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
 import 'package:tienda_pos/core/styles/button_custom_styles.dart';
 import 'package:tienda_pos/core/styles/text_field_styles.dart';
-import 'package:tienda_pos/feature/pos/domain/entities/pos_item/pos_item_entity.dart';
+import 'package:tienda_pos/feature/pos/domain/entities/pos_order/pos_order_entity.dart';
 import 'package:tienda_pos/feature/pos/presentation/view_models/pos_item/pos_item_notifier.dart';
 
 class AddToCart extends ConsumerStatefulWidget {
@@ -13,7 +13,7 @@ class AddToCart extends ConsumerStatefulWidget {
     required this.posItem,
   });
 
-  final PosItemEntity posItem;
+  final PosOrderEntity posItem;
 
   @override
   ConsumerState<AddToCart> createState() => _AddToCartState();
@@ -26,11 +26,10 @@ class _AddToCartState extends ConsumerState<AddToCart> {
   @override
   void initState() {
     super.initState();
-    if (widget.posItem.orderCount > 0) {
-      _qtyController.text = widget.posItem.orderCount.toString();
-      _priceChangeController.text = widget.posItem.priceChange > 0
-          ? widget.posItem.priceChange.toString()
-          : '';
+    if (widget.posItem.quantity > 0) {
+      _qtyController.text = widget.posItem.quantity.toString();
+      _priceChangeController.text =
+          widget.posItem.price > 0 ? widget.posItem.price.toString() : '';
     }
   }
 
@@ -53,7 +52,7 @@ class _AddToCartState extends ConsumerState<AddToCart> {
             children: [
               const Text('Product name',
                   style: TextStyle(fontWeight: FontWeight.bold)),
-              Text(widget.posItem.product!.name!,
+              Text(widget.posItem.product.name!,
                   style: const TextStyle(fontWeight: FontWeight.bold)),
             ],
           ),
@@ -67,7 +66,7 @@ class _AddToCartState extends ConsumerState<AddToCart> {
               const Text('Stocks',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               Text(
-                  '${widget.posItem.product!.stockOnHand} ${widget.posItem.product!.uom?.symbol!}',
+                  '${widget.posItem.product.stockOnHand} ${widget.posItem.product.uom?.symbol!}',
                   style: const TextStyle(fontWeight: FontWeight.bold)),
             ],
           ),
@@ -81,7 +80,7 @@ class _AddToCartState extends ConsumerState<AddToCart> {
               const Text('Price',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               Text(
-                  '₱${widget.posItem.product!.price!.toStringAsFixed(2)}/${widget.posItem.product!.uom?.symbol!}',
+                  '₱${widget.posItem.product.price!.toStringAsFixed(2)}/${widget.posItem.product.uom?.symbol!}',
                   style: const TextStyle(fontWeight: FontWeight.bold)),
             ],
           ),
@@ -96,7 +95,7 @@ class _AddToCartState extends ConsumerState<AddToCart> {
             ),
             alignment: Alignment.center,
             child: Text(
-              '₱${ref.watch(posItemNotifierProvider(widget.posItem)).subTotalAmount.toStringAsFixed(2)}',
+              '₱${ref.watch(posItemNotifierProvider(widget.posItem)).amount.toStringAsFixed(2)}',
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,

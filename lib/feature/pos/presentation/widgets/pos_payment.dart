@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
 import 'package:tienda_pos/core/styles/button_custom_styles.dart';
 import 'package:tienda_pos/core/styles/text_field_styles.dart';
-import 'package:tienda_pos/core/utils/logger.dart';
 import 'package:tienda_pos/core/widgets/dialog.dart';
 import 'package:tienda_pos/feature/pos/presentation/view_models/payment/payment_notifier.dart';
 import 'package:tienda_pos/feature/pos/presentation/widgets/pos_bottom_sheet.dart';

@@ -6,7 +6,7 @@ import 'package:tienda_pos/feature/inventory/data/models/category/category.dart'
 import 'package:tienda_pos/feature/inventory/domain/entities/category/category_entity.dart';
 import 'package:tienda_pos/feature/inventory/domain/repositories/category_repository.dart';
 
-class CategoryRepositoryImpl extends CategoryRepository {
+class CategoryRepositoryImpl implements CategoryRepository {
   final CategoryDao _categoryDao;
 
   CategoryRepositoryImpl({required CategoryDao categoryDao})
@@ -96,5 +96,10 @@ class CategoryRepositoryImpl extends CategoryRepository {
   @override
   Future<DataState<List<CategoryEntity>>> search(String query) async {
     return DataState.success([]);
+  }
+
+  @override
+  Future<DataState<bool>> insertAll(List<CategoryEntity> entities) async {
+    return DataState.success(true);
   }
 }

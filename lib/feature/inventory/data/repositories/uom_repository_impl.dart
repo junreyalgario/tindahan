@@ -98,4 +98,9 @@ class UomRepositoryImpl implements UomRepository {
       return DataState.error(e.toString());
     }
   }
+
+  @override
+  Future<DataState<bool>> insertAll(List<UomEntity> entities) async {
+    return DataState.success(true);
+  }
 }

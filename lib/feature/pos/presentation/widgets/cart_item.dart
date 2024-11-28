@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
 import 'package:tienda_pos/core/widgets/dialog.dart';
-import 'package:tienda_pos/feature/pos/domain/entities/pos_item/pos_item_entity.dart';
+import 'package:tienda_pos/feature/pos/domain/entities/pos_order/pos_order_entity.dart';
 import 'package:tienda_pos/feature/pos/presentation/view_models/cart/cart_notifier.dart';
 import 'package:tienda_pos/feature/pos/presentation/view_models/pos_item/pos_item_notifier.dart';
 import 'package:tienda_pos/feature/pos/presentation/widgets/add_to_cart_dialog.dart';
 
 class CartItem extends ConsumerStatefulWidget {
-  final PosItemEntity posItem;
+  final PosOrderEntity posItem;
 
   const CartItem({super.key, required this.posItem});
 
@@ -47,7 +47,7 @@ class _CartItemState extends ConsumerState<CartItem> {
                   const SizedBox(width: 4),
                   Expanded(
                     child: Text(
-                      widget.posItem.product!.name!,
+                      widget.posItem.product.name!,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
@@ -70,7 +70,7 @@ class _CartItemState extends ConsumerState<CartItem> {
                   ),
                   onTap: () {
                     cartNotifier.editQuantity(
-                        widget.posItem.product!.id!, CartOperation.subtract);
+                        widget.posItem.product.id!, CartOperation.subtract);
                   },
                 ),
                 InkWell(
@@ -78,7 +78,7 @@ class _CartItemState extends ConsumerState<CartItem> {
                     width: 40,
                     alignment: Alignment.center,
                     child: Text(
-                      widget.posItem.orderCount.toStringAsFixed(1),
+                      widget.posItem.quantity.toStringAsFixed(1),
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 16),
                     ),
@@ -102,7 +102,7 @@ class _CartItemState extends ConsumerState<CartItem> {
                   ),
                   onTap: () {
                     cartNotifier.editQuantity(
-                        widget.posItem.product!.id!, CartOperation.add);
+                        widget.posItem.product.id!, CartOperation.add);
                   },
                 ),
               ],
@@ -114,7 +114,7 @@ class _CartItemState extends ConsumerState<CartItem> {
             child: Row(
               children: [
                 Text(
-                  '₱${widget.posItem.subTotalAmount.toStringAsFixed(2)}',
+                  '₱${widget.posItem.amount.toStringAsFixed(2)}',
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 16),
                 ),
@@ -128,14 +128,14 @@ class _CartItemState extends ConsumerState<CartItem> {
               onPressed: () {
                 showConfirmDialog(
                     context: context,
-                    title: widget.posItem.product!.name!,
+                    title: widget.posItem.product.name!,
                     message: 'Remove item?',
                     confirmText: 'Remove',
                     confirmColor: AppColors.danger,
                     onConfirm: () {
                       ref
                           .read(cartNotifierProvider.notifier)
-                          .removeItem(widget.posItem.product!.id!);
+                          .removeItem(widget.posItem.product.id!);
                     });
               },
             ),

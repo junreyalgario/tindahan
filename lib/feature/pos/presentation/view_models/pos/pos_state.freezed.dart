@@ -16,9 +16,9 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$PosState {
-  List<PosItemEntity> get allItems => throw _privateConstructorUsedError;
-  List<PosItemEntity> get items => throw _privateConstructorUsedError;
-  List<PosItemEntity> get originalItems => throw _privateConstructorUsedError;
+  List<PosOrderEntity> get allItems => throw _privateConstructorUsedError;
+  List<PosOrderEntity> get items => throw _privateConstructorUsedError;
+  List<PosOrderEntity> get originalItems => throw _privateConstructorUsedError;
 
   /// Create a copy of PosState
   /// with the given fields replaced by the non-null parameter values.
@@ -33,9 +33,9 @@ abstract class $PosStateCopyWith<$Res> {
       _$PosStateCopyWithImpl<$Res, PosState>;
   @useResult
   $Res call(
-      {List<PosItemEntity> allItems,
-      List<PosItemEntity> items,
-      List<PosItemEntity> originalItems});
+      {List<PosOrderEntity> allItems,
+      List<PosOrderEntity> items,
+      List<PosOrderEntity> originalItems});
 }
 
 /// @nodoc
@@ -61,15 +61,15 @@ class _$PosStateCopyWithImpl<$Res, $Val extends PosState>
       allItems: null == allItems
           ? _value.allItems
           : allItems // ignore: cast_nullable_to_non_nullable
-              as List<PosItemEntity>,
+              as List<PosOrderEntity>,
       items: null == items
           ? _value.items
           : items // ignore: cast_nullable_to_non_nullable
-              as List<PosItemEntity>,
+              as List<PosOrderEntity>,
       originalItems: null == originalItems
           ? _value.originalItems
           : originalItems // ignore: cast_nullable_to_non_nullable
-              as List<PosItemEntity>,
+              as List<PosOrderEntity>,
     ) as $Val);
   }
 }
@@ -83,9 +83,9 @@ abstract class _$$PosStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {List<PosItemEntity> allItems,
-      List<PosItemEntity> items,
-      List<PosItemEntity> originalItems});
+      {List<PosOrderEntity> allItems,
+      List<PosOrderEntity> items,
+      List<PosOrderEntity> originalItems});
 }
 
 /// @nodoc
@@ -109,15 +109,15 @@ class __$$PosStateImplCopyWithImpl<$Res>
       allItems: null == allItems
           ? _value._allItems
           : allItems // ignore: cast_nullable_to_non_nullable
-              as List<PosItemEntity>,
+              as List<PosOrderEntity>,
       items: null == items
           ? _value._items
           : items // ignore: cast_nullable_to_non_nullable
-              as List<PosItemEntity>,
+              as List<PosOrderEntity>,
       originalItems: null == originalItems
           ? _value._originalItems
           : originalItems // ignore: cast_nullable_to_non_nullable
-              as List<PosItemEntity>,
+              as List<PosOrderEntity>,
     ));
   }
 }
@@ -126,35 +126,35 @@ class __$$PosStateImplCopyWithImpl<$Res>
 
 class _$PosStateImpl with DiagnosticableTreeMixin implements _PosState {
   const _$PosStateImpl(
-      {final List<PosItemEntity> allItems = const [],
-      final List<PosItemEntity> items = const [],
-      final List<PosItemEntity> originalItems = const []})
+      {final List<PosOrderEntity> allItems = const [],
+      final List<PosOrderEntity> items = const [],
+      final List<PosOrderEntity> originalItems = const []})
       : _allItems = allItems,
         _items = items,
         _originalItems = originalItems;
 
-  final List<PosItemEntity> _allItems;
+  final List<PosOrderEntity> _allItems;
   @override
   @JsonKey()
-  List<PosItemEntity> get allItems {
+  List<PosOrderEntity> get allItems {
     if (_allItems is EqualUnmodifiableListView) return _allItems;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_allItems);
   }
 
-  final List<PosItemEntity> _items;
+  final List<PosOrderEntity> _items;
   @override
   @JsonKey()
-  List<PosItemEntity> get items {
+  List<PosOrderEntity> get items {
     if (_items is EqualUnmodifiableListView) return _items;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_items);
   }
 
-  final List<PosItemEntity> _originalItems;
+  final List<PosOrderEntity> _originalItems;
   @override
   @JsonKey()
-  List<PosItemEntity> get originalItems {
+  List<PosOrderEntity> get originalItems {
     if (_originalItems is EqualUnmodifiableListView) return _originalItems;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_originalItems);
@@ -204,16 +204,16 @@ class _$PosStateImpl with DiagnosticableTreeMixin implements _PosState {
 
 abstract class _PosState implements PosState {
   const factory _PosState(
-      {final List<PosItemEntity> allItems,
-      final List<PosItemEntity> items,
-      final List<PosItemEntity> originalItems}) = _$PosStateImpl;
+      {final List<PosOrderEntity> allItems,
+      final List<PosOrderEntity> items,
+      final List<PosOrderEntity> originalItems}) = _$PosStateImpl;
 
   @override
-  List<PosItemEntity> get allItems;
+  List<PosOrderEntity> get allItems;
   @override
-  List<PosItemEntity> get items;
+  List<PosOrderEntity> get items;
   @override
-  List<PosItemEntity> get originalItems;
+  List<PosOrderEntity> get originalItems;
 
   /// Create a copy of PosState
   /// with the given fields replaced by the non-null parameter values.

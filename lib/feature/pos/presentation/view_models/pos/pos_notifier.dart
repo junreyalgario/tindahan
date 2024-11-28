@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/category/category_entity.dart';
-import 'package:tienda_pos/feature/pos/domain/entities/pos_item/pos_item_entity.dart';
+import 'package:tienda_pos/feature/pos/domain/entities/pos_order/pos_order_entity.dart';
 import 'package:tienda_pos/feature/pos/domain/usecases/pos_usecase.dart';
 import 'package:tienda_pos/feature/pos/presentation/view_models/cart/cart_notifier.dart';
 import 'package:tienda_pos/feature/pos/presentation/view_models/cart/cart_state.dart';
@@ -47,11 +47,11 @@ class PosNotifier extends StateNotifier<PosState> {
   }
 
   // Called when a POS item changes, updates the state with the modified item
-  void onPosItemChange(PosItemEntity posItem) {
+  void onPosItemChange(PosOrderEntity posItem) {
     // Helper function to update items based on the product ID
-    List<PosItemEntity> updateItems(List<PosItemEntity> originalItems) {
+    List<PosOrderEntity> updateItems(List<PosOrderEntity> originalItems) {
       return originalItems.map((item) {
-        return item.product!.id! == posItem.product!.id! ? posItem : item;
+        return item.product.id! == posItem.product.id! ? posItem : item;
       }).toList();
     }
 
@@ -67,18 +67,18 @@ class PosNotifier extends StateNotifier<PosState> {
   // Responds to changes in the cart state, adjusting the POS items based on the cart content
   void _onCartStateChanged(CartState cartState) {
     // Helper function to update items based on the cart state
-    List<PosItemEntity> updateItems(List<PosItemEntity> originalItems) {
+    List<PosOrderEntity> updateItems(List<PosOrderEntity> originalItems) {
       return originalItems.map((item) {
-        final String key = item.product!.id.toString();
+        final String key = item.product.id.toString();
         return cartState.posItems.containsKey(key)
             ? cartState.posItems[key]!
-            : item.copyWith(orderCount: 0, subTotalAmount: 0);
+            : item.copyWith(quantity: 0, amount: 0);
       }).toList();
     }
 
     // Update all items in the state based on the cart state
     final updatedAllItems = updateItems(state.allItems);
-    late List<PosItemEntity> updatedItems;
+    late List<PosOrderEntity> updatedItems;
 
     // Get the active category to filter the items if necessary
     CategoryEntity? activeCategory = _categoryNotifier.getActiveCategory();
@@ -127,14 +127,14 @@ class PosNotifier extends StateNotifier<PosState> {
     }
 
     // Filter items based on the search query
-    List<PosItemEntity> items = state.originalItems.where((item) {
+    List<PosOrderEntity> items = state.originalItems.where((item) {
       query = query.toLowerCase();
       // Check if the product or its attributes match the search query
-      return item.product!.name!.toLowerCase().contains(query) ||
-          item.product!.category!.name!.toLowerCase().contains(query) ||
-          item.product!.price!.toString().toLowerCase().contains(query) ||
-          item.product!.uom!.name!.toLowerCase().contains(query) ||
-          item.product!.uom!.symbol!.toLowerCase().contains(query);
+      return item.product.name!.toLowerCase().contains(query) ||
+          item.product.category!.name!.toLowerCase().contains(query) ||
+          item.product.price!.toString().toLowerCase().contains(query) ||
+          item.product.uom!.name!.toLowerCase().contains(query) ||
+          item.product.uom!.symbol!.toLowerCase().contains(query);
     }).toList();
 
     // Update the state with the filtered items
@@ -142,16 +142,16 @@ class PosNotifier extends StateNotifier<PosState> {
   }
 
   // Filters items based on the active category (e.g., show only items belonging to a category)
-  List<PosItemEntity> _getFilteredItems(CategoryEntity activeCategory) {
+  List<PosOrderEntity> _getFilteredItems(CategoryEntity activeCategory) {
     return state.allItems.where((item) {
       if (activeCategory.id == 0) {
         return true; // Show all items if category ID is 0
       }
       if (activeCategory.id == -1) {
-        return item.orderCount >
+        return item.quantity >
             0; // Show ordered items only if category ID is -1
       }
-      return item.product!.category!.id ==
+      return item.product.category!.id ==
           activeCategory.id; // Filter by specific category
     }).toList();
   }

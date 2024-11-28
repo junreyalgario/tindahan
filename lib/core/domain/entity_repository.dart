@@ -13,6 +13,14 @@ abstract class EntityRepository<Entity> {
   /// - [entity]: The entity to be inserted.
   Future<DataState<bool>> insert(Entity entity);
 
+  /// Inserts multiple entities into the data store.
+  ///
+  /// Returns a [DataState] containing a `bool` indicating whether the operation
+  /// was successful.
+  ///
+  /// - [entities]: The list of entities to be inserted.
+  Future<DataState<bool>> insertAll(List<Entity> entities);
+
   /// Updates an existing entity in the data store.
   ///
   /// Returns a [DataState] containing a `bool` that indicates whether the operation
