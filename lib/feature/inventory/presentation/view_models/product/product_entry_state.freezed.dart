@@ -18,6 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$ProductEntryState {
   ProductEntity get product => throw _privateConstructorUsedError;
   InventoryEntity get inventory => throw _privateConstructorUsedError;
+  InventoryTransactionEntity get transaction =>
+      throw _privateConstructorUsedError;
   List<CategoryEntity> get categories => throw _privateConstructorUsedError;
   List<UomEntity> get uomList => throw _privateConstructorUsedError;
 
@@ -37,11 +39,13 @@ abstract class $ProductEntryStateCopyWith<$Res> {
   $Res call(
       {ProductEntity product,
       InventoryEntity inventory,
+      InventoryTransactionEntity transaction,
       List<CategoryEntity> categories,
       List<UomEntity> uomList});
 
   $ProductEntityCopyWith<$Res> get product;
   $InventoryEntityCopyWith<$Res> get inventory;
+  $InventoryTransactionEntityCopyWith<$Res> get transaction;
 }
 
 /// @nodoc
@@ -61,6 +65,7 @@ class _$ProductEntryStateCopyWithImpl<$Res, $Val extends ProductEntryState>
   $Res call({
     Object? product = null,
     Object? inventory = null,
+    Object? transaction = null,
     Object? categories = null,
     Object? uomList = null,
   }) {
@@ -73,6 +78,10 @@ class _$ProductEntryStateCopyWithImpl<$Res, $Val extends ProductEntryState>
           ? _value.inventory
           : inventory // ignore: cast_nullable_to_non_nullable
               as InventoryEntity,
+      transaction: null == transaction
+          ? _value.transaction
+          : transaction // ignore: cast_nullable_to_non_nullable
+              as InventoryTransactionEntity,
       categories: null == categories
           ? _value.categories
           : categories // ignore: cast_nullable_to_non_nullable
@@ -103,6 +112,17 @@ class _$ProductEntryStateCopyWithImpl<$Res, $Val extends ProductEntryState>
       return _then(_value.copyWith(inventory: value) as $Val);
     });
   }
+
+  /// Create a copy of ProductEntryState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $InventoryTransactionEntityCopyWith<$Res> get transaction {
+    return $InventoryTransactionEntityCopyWith<$Res>(_value.transaction,
+        (value) {
+      return _then(_value.copyWith(transaction: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -116,6 +136,7 @@ abstract class _$$ProductEntryStateImplCopyWith<$Res>
   $Res call(
       {ProductEntity product,
       InventoryEntity inventory,
+      InventoryTransactionEntity transaction,
       List<CategoryEntity> categories,
       List<UomEntity> uomList});
 
@@ -123,6 +144,8 @@ abstract class _$$ProductEntryStateImplCopyWith<$Res>
   $ProductEntityCopyWith<$Res> get product;
   @override
   $InventoryEntityCopyWith<$Res> get inventory;
+  @override
+  $InventoryTransactionEntityCopyWith<$Res> get transaction;
 }
 
 /// @nodoc
@@ -140,6 +163,7 @@ class __$$ProductEntryStateImplCopyWithImpl<$Res>
   $Res call({
     Object? product = null,
     Object? inventory = null,
+    Object? transaction = null,
     Object? categories = null,
     Object? uomList = null,
   }) {
@@ -152,6 +176,10 @@ class __$$ProductEntryStateImplCopyWithImpl<$Res>
           ? _value.inventory
           : inventory // ignore: cast_nullable_to_non_nullable
               as InventoryEntity,
+      transaction: null == transaction
+          ? _value.transaction
+          : transaction // ignore: cast_nullable_to_non_nullable
+              as InventoryTransactionEntity,
       categories: null == categories
           ? _value._categories
           : categories // ignore: cast_nullable_to_non_nullable
@@ -170,6 +198,7 @@ class _$ProductEntryStateImpl implements _ProductEntryState {
   const _$ProductEntryStateImpl(
       {this.product = const ProductEntity(),
       this.inventory = const InventoryEntity(),
+      this.transaction = const InventoryTransactionEntity(),
       final List<CategoryEntity> categories = const [],
       final List<UomEntity> uomList = const []})
       : _categories = categories,
@@ -181,6 +210,9 @@ class _$ProductEntryStateImpl implements _ProductEntryState {
   @override
   @JsonKey()
   final InventoryEntity inventory;
+  @override
+  @JsonKey()
+  final InventoryTransactionEntity transaction;
   final List<CategoryEntity> _categories;
   @override
   @JsonKey()
@@ -201,7 +233,7 @@ class _$ProductEntryStateImpl implements _ProductEntryState {
 
   @override
   String toString() {
-    return 'ProductEntryState(product: $product, inventory: $inventory, categories: $categories, uomList: $uomList)';
+    return 'ProductEntryState(product: $product, inventory: $inventory, transaction: $transaction, categories: $categories, uomList: $uomList)';
   }
 
   @override
@@ -212,6 +244,8 @@ class _$ProductEntryStateImpl implements _ProductEntryState {
             (identical(other.product, product) || other.product == product) &&
             (identical(other.inventory, inventory) ||
                 other.inventory == inventory) &&
+            (identical(other.transaction, transaction) ||
+                other.transaction == transaction) &&
             const DeepCollectionEquality()
                 .equals(other._categories, _categories) &&
             const DeepCollectionEquality().equals(other._uomList, _uomList));
@@ -222,6 +256,7 @@ class _$ProductEntryStateImpl implements _ProductEntryState {
       runtimeType,
       product,
       inventory,
+      transaction,
       const DeepCollectionEquality().hash(_categories),
       const DeepCollectionEquality().hash(_uomList));
 
@@ -239,6 +274,7 @@ abstract class _ProductEntryState implements ProductEntryState {
   const factory _ProductEntryState(
       {final ProductEntity product,
       final InventoryEntity inventory,
+      final InventoryTransactionEntity transaction,
       final List<CategoryEntity> categories,
       final List<UomEntity> uomList}) = _$ProductEntryStateImpl;
 
@@ -246,6 +282,8 @@ abstract class _ProductEntryState implements ProductEntryState {
   ProductEntity get product;
   @override
   InventoryEntity get inventory;
+  @override
+  InventoryTransactionEntity get transaction;
   @override
   List<CategoryEntity> get categories;
   @override

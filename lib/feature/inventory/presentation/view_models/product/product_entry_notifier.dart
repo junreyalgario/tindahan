@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/core/state/data_state.dart';
+import 'package:tienda_pos/core/utils/logger.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/category/category_entity.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/inventory/inventory_entity.dart';
+import 'package:tienda_pos/feature/inventory/domain/entities/inventory_transaction/inventory_transaction_entity.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/product/product_entity.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/uom/uom_entity.dart';
 import 'package:tienda_pos/feature/inventory/domain/usecases/category_usecase.dart';
@@ -50,7 +52,12 @@ class ProductEntryNotifier extends StateNotifier<ProductEntryState> {
 
   // Sets the product in the state with the provided ProductEntity.
   void setProduct(ProductEntity productEntity) {
-    state = state.copyWith(product: productEntity);
+    state = state.copyWith(
+        product: productEntity,
+        inventory: productEntity.inventory ?? const InventoryEntity(),
+        transaction: productEntity.inventory != null
+            ? productEntity.inventory!.transactions.last
+            : const InventoryTransactionEntity());
   }
 
   // Generic method for updating product data in the state.
@@ -69,9 +76,41 @@ class ProductEntryNotifier extends StateNotifier<ProductEntryState> {
     _updateProduct((product) => product.copyWith(category: categoryEntity));
   }
 
+  void _updateTransaction(
+      InventoryTransactionEntity Function(
+              InventoryTransactionEntity transaction)
+          updater) {
+    state = state.copyWith(transaction: updater(state.transaction));
+  }
+
+  void setProductCategoryByName(String categoryName) {
+    CategoryEntity category = state.categories.firstWhere(
+      (CategoryEntity category) =>
+          category.name!.toLowerCase().trim() ==
+          categoryName.toLowerCase().trim(),
+      orElse: () => const CategoryEntity(),
+    );
+
+    if (category.id != null) {
+      _updateProduct((product) => product.copyWith(category: category));
+    }
+  }
+
   // Sets the product UOM (unit of measure) by updating the product entity.
   void setProductUom(UomEntity? uomEntity) {
     _updateProduct((product) => product.copyWith(uom: uomEntity));
+  }
+
+  void setProductUomByName(String name) {
+    UomEntity uom = state.uomList.firstWhere(
+      (UomEntity uom) =>
+          uom.name!.toLowerCase().trim() == name.toLowerCase().trim(),
+      orElse: () => const UomEntity(),
+    );
+
+    if (uom.id != null) {
+      _updateProduct((product) => product.copyWith(uom: uom));
+    }
   }
 
   // Sets the product name by updating the product entity.
@@ -85,26 +124,37 @@ class ProductEntryNotifier extends StateNotifier<ProductEntryState> {
   }
 
   // Sets the product's low stock level by updating the product entity.
-  void setProductLowStockLevel(double? lowStockLevel) {
-    _updateProduct((product) => product.copyWith(lowStockLevel: lowStockLevel));
+  void setProductLowStockLevel(double lowStockLevel) {
+    _updateInventory((inventory) => inventory.copyWith());
   }
 
   // Sets the product cost by updating the inventory entity.
-  void setProductCost(double? cost) {
-    _updateInventory((inventory) => inventory.copyWith(cost: cost));
+  void setProductCost(double cost) {
+    _updateTransaction(
+        (transaction) => transaction.copyWith(costPerUnit: cost));
   }
 
   // Sets the product stock quantity by updating the inventory entity.
-  void setProductStocks(double? stocks) {
-    _updateInventory((inventory) => inventory.copyWith(stocks: stocks));
+  void setProductStocks(double quantity) {
+    _updateTransaction(
+        (transaction) => transaction.copyWith(quantity: quantity));
   }
 
   // Saves the product and its inventory data to the repository.
   Future<DataState<bool>> save() async {
+    DataState<bool> result;
+
     state = state.copyWith(
-        product: state.product.copyWith(inventoryList: [state.inventory]));
-    return _productUsecase
-        .insert(state.product); // Inserts the product and inventory.
+        product: state.product.copyWith(
+            inventory:
+                state.inventory.copyWith(transactions: [state.transaction])));
+
+    if (state.product.id != null) {
+      result = await _productUsecase.update(state.product);
+    } else {
+      result = await _productUsecase.insert(state.product);
+    }
+    return result;
   }
 }
 

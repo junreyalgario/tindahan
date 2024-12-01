@@ -11,18 +11,27 @@ class Inventory extends $Inventory
     with RealmEntity, RealmObjectBase, RealmObject {
   Inventory(
     int id,
-    double cost,
-    double stocks,
+    double currentCost,
+    double wac,
+    double stockLevel,
+    double reorderLevel,
+    DateTime lastStockUpdate,
     DateTime createdAt,
     DateTime updatedAt, {
     Product? product,
+    Iterable<InventoryTransaction> transactions = const [],
   }) {
     RealmObjectBase.set(this, 'id', id);
-    RealmObjectBase.set(this, 'cost', cost);
-    RealmObjectBase.set(this, 'stocks', stocks);
-    RealmObjectBase.set(this, 'product', product);
+    RealmObjectBase.set(this, 'currentCost', currentCost);
+    RealmObjectBase.set(this, 'wac', wac);
+    RealmObjectBase.set(this, 'stockLevel', stockLevel);
+    RealmObjectBase.set(this, 'reorderLevel', reorderLevel);
+    RealmObjectBase.set(this, 'lastStockUpdate', lastStockUpdate);
     RealmObjectBase.set(this, 'createdAt', createdAt);
     RealmObjectBase.set(this, 'updatedAt', updatedAt);
+    RealmObjectBase.set(this, 'product', product);
+    RealmObjectBase.set<RealmList<InventoryTransaction>>(
+        this, 'transactions', RealmList<InventoryTransaction>(transactions));
   }
 
   Inventory._();
@@ -33,21 +42,37 @@ class Inventory extends $Inventory
   set id(int value) => RealmObjectBase.set(this, 'id', value);
 
   @override
-  double get cost => RealmObjectBase.get<double>(this, 'cost') as double;
+  double get currentCost =>
+      RealmObjectBase.get<double>(this, 'currentCost') as double;
   @override
-  set cost(double value) => RealmObjectBase.set(this, 'cost', value);
+  set currentCost(double value) =>
+      RealmObjectBase.set(this, 'currentCost', value);
 
   @override
-  double get stocks => RealmObjectBase.get<double>(this, 'stocks') as double;
+  double get wac => RealmObjectBase.get<double>(this, 'wac') as double;
   @override
-  set stocks(double value) => RealmObjectBase.set(this, 'stocks', value);
+  set wac(double value) => RealmObjectBase.set(this, 'wac', value);
 
   @override
-  Product? get product =>
-      RealmObjectBase.get<Product>(this, 'product') as Product?;
+  double get stockLevel =>
+      RealmObjectBase.get<double>(this, 'stockLevel') as double;
   @override
-  set product(covariant Product? value) =>
-      RealmObjectBase.set(this, 'product', value);
+  set stockLevel(double value) =>
+      RealmObjectBase.set(this, 'stockLevel', value);
+
+  @override
+  double get reorderLevel =>
+      RealmObjectBase.get<double>(this, 'reorderLevel') as double;
+  @override
+  set reorderLevel(double value) =>
+      RealmObjectBase.set(this, 'reorderLevel', value);
+
+  @override
+  DateTime get lastStockUpdate =>
+      RealmObjectBase.get<DateTime>(this, 'lastStockUpdate') as DateTime;
+  @override
+  set lastStockUpdate(DateTime value) =>
+      RealmObjectBase.set(this, 'lastStockUpdate', value);
 
   @override
   DateTime get createdAt =>
@@ -64,6 +89,21 @@ class Inventory extends $Inventory
       RealmObjectBase.set(this, 'updatedAt', value);
 
   @override
+  Product? get product =>
+      RealmObjectBase.get<Product>(this, 'product') as Product?;
+  @override
+  set product(covariant Product? value) =>
+      RealmObjectBase.set(this, 'product', value);
+
+  @override
+  RealmList<InventoryTransaction> get transactions =>
+      RealmObjectBase.get<InventoryTransaction>(this, 'transactions')
+          as RealmList<InventoryTransaction>;
+  @override
+  set transactions(covariant RealmList<InventoryTransaction> value) =>
+      throw RealmUnsupportedSetError();
+
+  @override
   Stream<RealmObjectChanges<Inventory>> get changes =>
       RealmObjectBase.getChanges<Inventory>(this);
 
@@ -77,11 +117,15 @@ class Inventory extends $Inventory
   EJsonValue toEJson() {
     return <String, dynamic>{
       'id': id.toEJson(),
-      'cost': cost.toEJson(),
-      'stocks': stocks.toEJson(),
-      'product': product.toEJson(),
+      'currentCost': currentCost.toEJson(),
+      'wac': wac.toEJson(),
+      'stockLevel': stockLevel.toEJson(),
+      'reorderLevel': reorderLevel.toEJson(),
+      'lastStockUpdate': lastStockUpdate.toEJson(),
       'createdAt': createdAt.toEJson(),
       'updatedAt': updatedAt.toEJson(),
+      'product': product.toEJson(),
+      'transactions': transactions.toEJson(),
     };
   }
 
@@ -91,18 +135,25 @@ class Inventory extends $Inventory
     return switch (ejson) {
       {
         'id': EJsonValue id,
-        'cost': EJsonValue cost,
-        'stocks': EJsonValue stocks,
+        'currentCost': EJsonValue currentCost,
+        'wac': EJsonValue wac,
+        'stockLevel': EJsonValue stockLevel,
+        'reorderLevel': EJsonValue reorderLevel,
+        'lastStockUpdate': EJsonValue lastStockUpdate,
         'createdAt': EJsonValue createdAt,
         'updatedAt': EJsonValue updatedAt,
       } =>
         Inventory(
           fromEJson(id),
-          fromEJson(cost),
-          fromEJson(stocks),
+          fromEJson(currentCost),
+          fromEJson(wac),
+          fromEJson(stockLevel),
+          fromEJson(reorderLevel),
+          fromEJson(lastStockUpdate),
           fromEJson(createdAt),
           fromEJson(updatedAt),
           product: fromEJson(ejson['product']),
+          transactions: fromEJson(ejson['transactions']),
         ),
       _ => raiseInvalidEJson(ejson),
     };
@@ -113,12 +164,18 @@ class Inventory extends $Inventory
     register(_toEJson, _fromEJson);
     return const SchemaObject(ObjectType.realmObject, Inventory, 'Inventory', [
       SchemaProperty('id', RealmPropertyType.int, primaryKey: true),
-      SchemaProperty('cost', RealmPropertyType.double),
-      SchemaProperty('stocks', RealmPropertyType.double),
-      SchemaProperty('product', RealmPropertyType.object,
-          optional: true, linkTarget: 'Product'),
+      SchemaProperty('currentCost', RealmPropertyType.double),
+      SchemaProperty('wac', RealmPropertyType.double),
+      SchemaProperty('stockLevel', RealmPropertyType.double),
+      SchemaProperty('reorderLevel', RealmPropertyType.double),
+      SchemaProperty('lastStockUpdate', RealmPropertyType.timestamp),
       SchemaProperty('createdAt', RealmPropertyType.timestamp),
       SchemaProperty('updatedAt', RealmPropertyType.timestamp),
+      SchemaProperty('product', RealmPropertyType.object,
+          optional: true, linkTarget: 'Product'),
+      SchemaProperty('transactions', RealmPropertyType.object,
+          linkTarget: 'InventoryTransaction',
+          collectionType: RealmCollectionType.list),
     ]);
   }();
 

@@ -25,24 +25,6 @@ class PosTransactionRepositoryImpl extends PosTransactionRepository {
         _productDao = productDao;
 
   @override
-  Future<DataState<bool>> delete(int id) {
-    // TODO: implement delete
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<DataState<PosTransactionEntity>> getById(int id) {
-    // TODO: implement getById
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<DataState<List<PosTransactionEntity>>> getList() {
-    // TODO: implement getList
-    throw UnimplementedError();
-  }
-
-  @override
   Future<DataState<bool>> insert(PosTransactionEntity entity) async {
     try {
       // Transform PosTransactionEntity to PosTransaction model
@@ -82,8 +64,8 @@ class PosTransactionRepositoryImpl extends PosTransactionRepository {
 
       // Update Product stocks on hand
       for (PosOrder order in posTransaction.orders) {
-        _productDao.updateStocksOnHand(
-            order.product!, order.product!.stockOnHand - order.quantity);
+        // _productDao.updateStocksOnHand(
+        //     order.product!, order.product!.stockOnHand - order.quantity);
       }
 
       return DataState.success(true);
@@ -91,23 +73,5 @@ class PosTransactionRepositoryImpl extends PosTransactionRepository {
       Log.error(e.toString(), stackTrace: stackTrace);
       return DataState.error(e.toString());
     }
-  }
-
-  @override
-  Future<DataState<bool>> insertAll(List<PosTransactionEntity> entities) {
-    // TODO: implement insertAll
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<DataState<List<PosTransactionEntity>>> search(String query) {
-    // TODO: implement search
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<DataState<bool>> update(PosTransactionEntity entity) {
-    // TODO: implement update
-    throw UnimplementedError();
   }
 }

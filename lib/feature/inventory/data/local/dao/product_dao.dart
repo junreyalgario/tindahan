@@ -40,23 +40,9 @@ class ProductDao extends Dao<Product> {
       _realm.write(() {
         product.name = model.name;
         product.price = model.price;
-        product.lowStockLevel = model.lowStockLevel;
         product.category = model.category;
         product.uom = model.uom;
-        product.inventories = model.inventories;
-      });
-    } else {
-      Log.error('Failed to update product: ID not found (${model.id})');
-      throw Exception('Failed to update product: ID not found (${model.id})');
-    }
-  }
-
-  void updateStocksOnHand(Product model, double stockOnHand) {
-    final Product? product = getById(model.id);
-
-    if (product != null) {
-      _realm.write(() {
-        product.stockOnHand = stockOnHand;
+        product.inventory = model.inventory;
       });
     } else {
       Log.error('Failed to update product: ID not found (${model.id})');

@@ -10,32 +10,27 @@ part of 'product.dart';
 class Product extends $Product with RealmEntity, RealmObjectBase, RealmObject {
   Product(
     int id,
+    String photo,
     String name,
     double price,
-    double lowStockLevel,
-    double stockOnHand,
     DateTime createdAt,
     DateTime updatedAt, {
-    String? photo,
     Category? category,
     Uom? uom,
-    Iterable<Inventory> inventories = const [],
+    Inventory? inventory,
     Iterable<PosOrder> orders = const [],
   }) {
     RealmObjectBase.set(this, 'id', id);
     RealmObjectBase.set(this, 'photo', photo);
     RealmObjectBase.set(this, 'name', name);
     RealmObjectBase.set(this, 'price', price);
-    RealmObjectBase.set(this, 'lowStockLevel', lowStockLevel);
-    RealmObjectBase.set(this, 'stockOnHand', stockOnHand);
-    RealmObjectBase.set(this, 'category', category);
-    RealmObjectBase.set(this, 'uom', uom);
-    RealmObjectBase.set<RealmList<Inventory>>(
-        this, 'inventories', RealmList<Inventory>(inventories));
-    RealmObjectBase.set<RealmList<PosOrder>>(
-        this, 'orders', RealmList<PosOrder>(orders));
     RealmObjectBase.set(this, 'createdAt', createdAt);
     RealmObjectBase.set(this, 'updatedAt', updatedAt);
+    RealmObjectBase.set(this, 'category', category);
+    RealmObjectBase.set(this, 'uom', uom);
+    RealmObjectBase.set(this, 'inventory', inventory);
+    RealmObjectBase.set<RealmList<PosOrder>>(
+        this, 'orders', RealmList<PosOrder>(orders));
   }
 
   Product._();
@@ -46,9 +41,9 @@ class Product extends $Product with RealmEntity, RealmObjectBase, RealmObject {
   set id(int value) => RealmObjectBase.set(this, 'id', value);
 
   @override
-  String? get photo => RealmObjectBase.get<String>(this, 'photo') as String?;
+  String get photo => RealmObjectBase.get<String>(this, 'photo') as String;
   @override
-  set photo(String? value) => RealmObjectBase.set(this, 'photo', value);
+  set photo(String value) => RealmObjectBase.set(this, 'photo', value);
 
   @override
   String get name => RealmObjectBase.get<String>(this, 'name') as String;
@@ -59,47 +54,6 @@ class Product extends $Product with RealmEntity, RealmObjectBase, RealmObject {
   double get price => RealmObjectBase.get<double>(this, 'price') as double;
   @override
   set price(double value) => RealmObjectBase.set(this, 'price', value);
-
-  @override
-  double get lowStockLevel =>
-      RealmObjectBase.get<double>(this, 'lowStockLevel') as double;
-  @override
-  set lowStockLevel(double value) =>
-      RealmObjectBase.set(this, 'lowStockLevel', value);
-
-  @override
-  double get stockOnHand =>
-      RealmObjectBase.get<double>(this, 'stockOnHand') as double;
-  @override
-  set stockOnHand(double value) =>
-      RealmObjectBase.set(this, 'stockOnHand', value);
-
-  @override
-  Category? get category =>
-      RealmObjectBase.get<Category>(this, 'category') as Category?;
-  @override
-  set category(covariant Category? value) =>
-      RealmObjectBase.set(this, 'category', value);
-
-  @override
-  Uom? get uom => RealmObjectBase.get<Uom>(this, 'uom') as Uom?;
-  @override
-  set uom(covariant Uom? value) => RealmObjectBase.set(this, 'uom', value);
-
-  @override
-  RealmList<Inventory> get inventories =>
-      RealmObjectBase.get<Inventory>(this, 'inventories')
-          as RealmList<Inventory>;
-  @override
-  set inventories(covariant RealmList<Inventory> value) =>
-      throw RealmUnsupportedSetError();
-
-  @override
-  RealmList<PosOrder> get orders =>
-      RealmObjectBase.get<PosOrder>(this, 'orders') as RealmList<PosOrder>;
-  @override
-  set orders(covariant RealmList<PosOrder> value) =>
-      throw RealmUnsupportedSetError();
 
   @override
   DateTime get createdAt =>
@@ -114,6 +68,32 @@ class Product extends $Product with RealmEntity, RealmObjectBase, RealmObject {
   @override
   set updatedAt(DateTime value) =>
       RealmObjectBase.set(this, 'updatedAt', value);
+
+  @override
+  Category? get category =>
+      RealmObjectBase.get<Category>(this, 'category') as Category?;
+  @override
+  set category(covariant Category? value) =>
+      RealmObjectBase.set(this, 'category', value);
+
+  @override
+  Uom? get uom => RealmObjectBase.get<Uom>(this, 'uom') as Uom?;
+  @override
+  set uom(covariant Uom? value) => RealmObjectBase.set(this, 'uom', value);
+
+  @override
+  Inventory? get inventory =>
+      RealmObjectBase.get<Inventory>(this, 'inventory') as Inventory?;
+  @override
+  set inventory(covariant Inventory? value) =>
+      RealmObjectBase.set(this, 'inventory', value);
+
+  @override
+  RealmList<PosOrder> get orders =>
+      RealmObjectBase.get<PosOrder>(this, 'orders') as RealmList<PosOrder>;
+  @override
+  set orders(covariant RealmList<PosOrder> value) =>
+      throw RealmUnsupportedSetError();
 
   @override
   Stream<RealmObjectChanges<Product>> get changes =>
@@ -132,14 +112,12 @@ class Product extends $Product with RealmEntity, RealmObjectBase, RealmObject {
       'photo': photo.toEJson(),
       'name': name.toEJson(),
       'price': price.toEJson(),
-      'lowStockLevel': lowStockLevel.toEJson(),
-      'stockOnHand': stockOnHand.toEJson(),
-      'category': category.toEJson(),
-      'uom': uom.toEJson(),
-      'inventories': inventories.toEJson(),
-      'orders': orders.toEJson(),
       'createdAt': createdAt.toEJson(),
       'updatedAt': updatedAt.toEJson(),
+      'category': category.toEJson(),
+      'uom': uom.toEJson(),
+      'inventory': inventory.toEJson(),
+      'orders': orders.toEJson(),
     };
   }
 
@@ -149,25 +127,22 @@ class Product extends $Product with RealmEntity, RealmObjectBase, RealmObject {
     return switch (ejson) {
       {
         'id': EJsonValue id,
+        'photo': EJsonValue photo,
         'name': EJsonValue name,
         'price': EJsonValue price,
-        'lowStockLevel': EJsonValue lowStockLevel,
-        'stockOnHand': EJsonValue stockOnHand,
         'createdAt': EJsonValue createdAt,
         'updatedAt': EJsonValue updatedAt,
       } =>
         Product(
           fromEJson(id),
+          fromEJson(photo),
           fromEJson(name),
           fromEJson(price),
-          fromEJson(lowStockLevel),
-          fromEJson(stockOnHand),
           fromEJson(createdAt),
           fromEJson(updatedAt),
-          photo: fromEJson(ejson['photo']),
           category: fromEJson(ejson['category']),
           uom: fromEJson(ejson['uom']),
-          inventories: fromEJson(ejson['inventories']),
+          inventory: fromEJson(ejson['inventory']),
           orders: fromEJson(ejson['orders']),
         ),
       _ => raiseInvalidEJson(ejson),
@@ -179,21 +154,19 @@ class Product extends $Product with RealmEntity, RealmObjectBase, RealmObject {
     register(_toEJson, _fromEJson);
     return const SchemaObject(ObjectType.realmObject, Product, 'Product', [
       SchemaProperty('id', RealmPropertyType.int, primaryKey: true),
-      SchemaProperty('photo', RealmPropertyType.string, optional: true),
+      SchemaProperty('photo', RealmPropertyType.string),
       SchemaProperty('name', RealmPropertyType.string),
       SchemaProperty('price', RealmPropertyType.double),
-      SchemaProperty('lowStockLevel', RealmPropertyType.double),
-      SchemaProperty('stockOnHand', RealmPropertyType.double),
+      SchemaProperty('createdAt', RealmPropertyType.timestamp),
+      SchemaProperty('updatedAt', RealmPropertyType.timestamp),
       SchemaProperty('category', RealmPropertyType.object,
           optional: true, linkTarget: 'Category'),
       SchemaProperty('uom', RealmPropertyType.object,
           optional: true, linkTarget: 'Uom'),
-      SchemaProperty('inventories', RealmPropertyType.object,
-          linkTarget: 'Inventory', collectionType: RealmCollectionType.list),
+      SchemaProperty('inventory', RealmPropertyType.object,
+          optional: true, linkTarget: 'Inventory'),
       SchemaProperty('orders', RealmPropertyType.object,
           linkTarget: 'PosOrder', collectionType: RealmCollectionType.list),
-      SchemaProperty('createdAt', RealmPropertyType.timestamp),
-      SchemaProperty('updatedAt', RealmPropertyType.timestamp),
     ]);
   }();
 

@@ -223,8 +223,7 @@ class _OumFormState extends ConsumerState<OumForm> {
                         final dataState = await uomNotifier.save();
 
                         if (dataState.isSuccess) {
-                          widget.onSuccess!(
-                              uomState.id != null ? uomState : null);
+                          widget.onSuccess!(uomState);
 
                           showTopSnackbar(
                               context: context,

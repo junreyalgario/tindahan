@@ -99,7 +99,7 @@ class PosItemCard extends StatelessWidget {
                   ),
                   const Spacer(),
                   Text(
-                    '${posItem.product.stockOnHand} ${posItem.product.uom!.symbol}',
+                    '${posItem.product.inventory!.stockLevel} ${posItem.product.uom!.symbol}',
                     style: const TextStyle(
                       fontSize: 12,
                       color: AppColors.primary,

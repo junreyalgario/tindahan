@@ -6,6 +6,7 @@ import 'package:tienda_pos/feature/inventory/domain/entities/category/category_e
 import 'package:tienda_pos/feature/inventory/domain/entities/inventory/inventory_entity.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/uom/uom_entity.dart';
 import 'package:tienda_pos/feature/pos/data/models/pos_order/pos_order.dart';
+import 'package:tienda_pos/feature/pos/domain/entities/pos_order/pos_order_entity.dart';
 
 part 'product.realm.dart';
 
@@ -13,17 +14,15 @@ part 'product.realm.dart';
 class $Product {
   @PrimaryKey()
   late int id;
-  String? photo;
+  late String photo;
   late String name;
   late double price;
-  late double lowStockLevel;
-  late double stockOnHand;
-  late $Category? category;
-  late $Uom? uom;
-  late List<$Inventory> inventories;
-  late List<$PosOrder> orders;
   late DateTime createdAt;
   late DateTime updatedAt;
+  late $Category? category;
+  late $Uom? uom;
+  late $Inventory? inventory;
+  late List<$PosOrder> orders;
 
   // Convert Realm object to JSON
   Map<String, dynamic> toJson() {
@@ -32,17 +31,13 @@ class $Product {
       'photo': photo,
       'name': name,
       'price': price,
-      'lowStockLevel': lowStockLevel,
-      'stockOnHand': stockOnHand,
-      'category': category?.toJson(),
-      'uom': uom?.toJson(),
-      'inventories': inventories
-          .map((inventory) => inventory.toJson(serializeProduct: false))
-          .toList(),
-      'orders':
-          orders.map((order) => order.toJson(serializeProduct: false)).toList(),
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
+      'category': category?.toJson(),
+      'uom': uom?.toJson(),
+      'inventory': inventory!.toJson(serializeProduct: false),
+      'orders':
+          orders.map((order) => order.toJson(serializeProduct: false)).toList(),
     };
   }
 
@@ -50,22 +45,22 @@ class $Product {
   static Product fromJson(Map<String, dynamic> json) {
     return Product(
       json['id'],
+      json['photo'],
       json['name'],
       json['price'],
-      json['lowStockLevel'],
-      json['stockOnHand'],
       DateTime.parse(json['createdAt']),
       DateTime.parse(json['updatedAt']),
-      photo: json['photo'],
       category: json['category'] != null
           ? $Category.fromJson((json['category'] as CategoryEntity).toJson())
           : null,
       uom: json['uom'] != null
           ? $Uom.fromJson((json['uom'] as UomEntity).toJson())
           : null,
-      inventories: (json['inventories'] as List)
-          .map((inventory) =>
-              $Inventory.fromJson((inventory as InventoryEntity).toJson()))
+      inventory:
+          $Inventory.fromJson((json['inventory'] as InventoryEntity).toJson()),
+      orders: (json['orders'] as List)
+          .map(
+              (order) => $PosOrder.fromJson((order as PosOrderEntity).toJson()))
           .toList(),
     );
   }

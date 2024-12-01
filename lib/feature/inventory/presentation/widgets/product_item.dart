@@ -4,9 +4,10 @@ import 'package:tienda_pos/core/router/routes.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/product/product_entity.dart';
 
 class ProductItem extends StatefulWidget {
-  const ProductItem({super.key, required this.productEntity});
+  const ProductItem({super.key, required this.productEntity, this.onUpdate});
 
   final ProductEntity productEntity;
+  final Function(dynamic)? onUpdate;
 
   @override
   State<ProductItem> createState() => _ProductItemState();
@@ -31,16 +32,20 @@ class _ProductItemState extends State<ProductItem> {
                 child: Image.network(
                   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRY_38OB-O3ct4_WTA4CLOW7rpDmuU8RkDVsQ&s',
                   width: 160,
-                  height: 190,
+                  height: 160,
                   fit: BoxFit.cover,
                 ),
               ),
-              onTap: () {
-                Navigator.pushNamed(
+              onTap: () async {
+                final result = await Navigator.pushNamed(
                   context,
                   InventoryRoutes.product_details,
                   arguments: widget.productEntity,
                 );
+
+                if (widget.onUpdate != null) {
+                  widget.onUpdate!(result);
+                }
               },
             ),
             const SizedBox(width: 16),
@@ -56,30 +61,29 @@ class _ProductItemState extends State<ProductItem> {
                           widget.productEntity.name!,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
-                            fontSize: 18,
+                            fontSize: 14,
                             fontWeight: FontWeight.bold,
                             color: AppColors.primary,
                           ),
                         ),
                       ),
-                      Text('(${widget.productEntity.uom!.symbol!})')
                     ],
                   ),
                   const Divider(thickness: 0.3),
                   Row(
                     children: [
-                      const Text('Cost Price:'),
-                      const SizedBox(width: 5),
+                      const Text('Current cost:'),
+                      const Spacer(),
                       Text(
-                          '₱${widget.productEntity.currentCost?.toStringAsFixed(2)}',
+                          '₱${widget.productEntity.inventory!.currentCost.toStringAsFixed(2)}',
                           style: const TextStyle(fontWeight: FontWeight.bold)),
                     ],
                   ),
                   const Divider(thickness: 0.3),
                   Row(
                     children: [
-                      const Text('Selling Price:'),
-                      const SizedBox(width: 5),
+                      const Text('Selling price:'),
+                      const Spacer(),
                       Text('₱${widget.productEntity.price?.toStringAsFixed(2)}',
                           style: const TextStyle(fontWeight: FontWeight.bold)),
                     ],
@@ -88,36 +92,39 @@ class _ProductItemState extends State<ProductItem> {
                   Row(
                     children: [
                       const Text('Stock count:'),
-                      const SizedBox(width: 5),
+                      const Spacer(),
                       Text(
-                          widget.productEntity.stockOnHand != null
-                              ? widget.productEntity.stockOnHand!
-                                  .toStringAsFixed(1)
-                              : '0.0',
-                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                        widget.productEntity.inventory!.stockLevel
+                            .toStringAsFixed(1),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(width: 2),
+                      Text(widget.productEntity.uom!.symbol!)
                     ],
                   ),
                   const Divider(thickness: 0.3),
-                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      IconButton(
-                        iconSize: 30,
-                        color: AppColors.danger,
-                        icon: const Icon(Icons.delete),
-                        onPressed: () {
+                      GestureDetector(
+                        child: const Icon(
+                          Icons.delete,
+                          color: AppColors.danger,
+                        ),
+                        onTap: () {
                           //
                         },
                       ),
-                      IconButton(
-                        iconSize: 30,
-                        color: AppColors.confirm,
-                        icon: const Icon(Icons.add_circle),
-                        onPressed: () {
+                      const SizedBox(width: 20),
+                      GestureDetector(
+                        child: const Icon(
+                          Icons.add_circle,
+                          color: AppColors.confirm,
+                        ),
+                        onTap: () {
                           //
                         },
-                      )
+                      ),
                     ],
                   )
                 ],

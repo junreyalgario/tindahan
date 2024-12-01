@@ -1,12 +1,11 @@
-import 'dart:developer';
-
 import 'package:tienda_pos/core/state/data_state.dart';
+import 'package:tienda_pos/core/utils/logger.dart';
 import 'package:tienda_pos/feature/inventory/data/local/dao/uom_dao.dart';
 import 'package:tienda_pos/feature/inventory/data/models/uom/uom.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/uom/uom_entity.dart';
 import 'package:tienda_pos/feature/inventory/domain/repositories/uom_repository.dart';
 
-class UomRepositoryImpl implements UomRepository {
+class UomRepositoryImpl extends UomRepository {
   final UomDao _uomDao;
 
   UomRepositoryImpl({required UomDao uomDao}) : _uomDao = uomDao;
@@ -16,8 +15,8 @@ class UomRepositoryImpl implements UomRepository {
     try {
       _uomDao.delete(id);
       return DataState.success(true);
-    } catch (e) {
-      log(e.toString());
+    } catch (e, stackTrace) {
+      Log.error(e.toString(), stackTrace: stackTrace);
       return DataState.error(e.toString());
     }
   }
@@ -32,8 +31,8 @@ class UomRepositoryImpl implements UomRepository {
       }
 
       return DataState.success(UomEntity.fromJson(uom.toJson()));
-    } catch (e) {
-      log(e.toString());
+    } catch (e, stackTrace) {
+      Log.error(e.toString(), stackTrace: stackTrace);
       return DataState.error(e.toString());
     }
   }
@@ -49,8 +48,8 @@ class UomRepositoryImpl implements UomRepository {
 
       return DataState.success(
           uomEntities..sort((a, b) => a.name!.compareTo(b.name!)));
-    } catch (e) {
-      log(e.toString());
+    } catch (e, stackTrace) {
+      Log.error(e.toString(), stackTrace: stackTrace);
       return DataState.error(e.toString());
     }
   }
@@ -67,15 +66,10 @@ class UomRepositoryImpl implements UomRepository {
       _uomDao.save($Uom.fromJson(entity.toJson()));
 
       return DataState.success(true);
-    } catch (e) {
-      log(e.toString());
+    } catch (e, stackTrace) {
+      Log.error(e.toString(), stackTrace: stackTrace);
       return DataState.error(e.toString());
     }
-  }
-
-  @override
-  Future<DataState<List<UomEntity>>> search(String query) async {
-    return DataState.success([]);
   }
 
   @override
@@ -93,14 +87,9 @@ class UomRepositoryImpl implements UomRepository {
       _uomDao.update(uom);
 
       return DataState.success(true);
-    } catch (e) {
-      log(e.toString());
+    } catch (e, stackTrace) {
+      Log.error(e.toString(), stackTrace: stackTrace);
       return DataState.error(e.toString());
     }
-  }
-
-  @override
-  Future<DataState<bool>> insertAll(List<UomEntity> entities) async {
-    return DataState.success(true);
   }
 }

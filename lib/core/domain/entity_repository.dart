@@ -11,7 +11,9 @@ abstract class EntityRepository<Entity> {
   /// was successful or not.
   ///
   /// - [entity]: The entity to be inserted.
-  Future<DataState<bool>> insert(Entity entity);
+  Future<DataState<bool>> insert(Entity entity) {
+    return Future.value(DataState.error('Repository insert not implemented'));
+  }
 
   /// Inserts multiple entities into the data store.
   ///
@@ -19,7 +21,10 @@ abstract class EntityRepository<Entity> {
   /// was successful.
   ///
   /// - [entities]: The list of entities to be inserted.
-  Future<DataState<bool>> insertAll(List<Entity> entities);
+  Future<DataState<bool>> insertAll(List<Entity> entities) {
+    return Future.value(
+        DataState.error('Repository insertAll not implemented'));
+  }
 
   /// Updates an existing entity in the data store.
   ///
@@ -27,7 +32,9 @@ abstract class EntityRepository<Entity> {
   /// was successful or not.
   ///
   /// - [entity]: The entity with updated values to be saved.
-  Future<DataState<bool>> update(Entity entity);
+  Future<DataState<bool>> update(Entity entity) {
+    return Future.value(DataState.error('Repository update not implemented'));
+  }
 
   /// Deletes an entity from the data store by its unique identifier.
   ///
@@ -35,13 +42,17 @@ abstract class EntityRepository<Entity> {
   /// was successful or not.
   ///
   /// - [id]: The unique identifier of the entity to be deleted.
-  Future<DataState<bool>> delete(int id);
+  Future<DataState<bool>> delete(int id) {
+    return Future.value(DataState.error('Repository delete not implemented'));
+  }
 
   /// Retrieves a list of all entities from the data store.
   ///
   /// Returns a [DataState] containing a `List` of [Entity] objects. If no entities are found,
   /// an empty list may be returned in a success state.
-  Future<DataState<List<Entity>>> getList();
+  Future<DataState<List<Entity>>> getList() {
+    return Future.value(DataState.error('Repository getList not implemented'));
+  }
 
   /// Retrieves a single entity from the data store by its unique identifier.
   ///
@@ -49,7 +60,9 @@ abstract class EntityRepository<Entity> {
   /// if the entity does not exist or the operation fails.
   ///
   /// - [id]: The unique identifier of the entity to retrieve.
-  Future<DataState<Entity>> getById(int id);
+  Future<DataState<Entity>> getById(int id) {
+    return Future.value(DataState.error('Repository getById not implemented'));
+  }
 
   /// Searches for entities in the data store that match a given query string.
   ///
@@ -57,5 +70,7 @@ abstract class EntityRepository<Entity> {
   /// search criteria. If no entities match, an empty list may be returned in a success state.
   ///
   /// - [query]: The query string used to filter or search for entities.
-  Future<DataState<List<Entity>>> search(String query);
+  Future<DataState<List<Entity>>> search(String query) {
+    return Future.value(DataState.error('Repository search not implemented'));
+  }
 }

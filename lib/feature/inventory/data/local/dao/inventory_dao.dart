@@ -2,10 +2,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:realm/realm.dart';
 import 'package:tienda_pos/core/data/dao.dart';
 import 'package:tienda_pos/core/providers/realm_provider.dart';
+import 'package:tienda_pos/core/utils/logger.dart';
 import 'package:tienda_pos/feature/inventory/data/models/inventory/inventory.dart';
 
 class InventoryDao extends Dao<Inventory> {
-  InventoryDao({required Realm realm}) : super(realm);
+  final Realm _realm;
+
+  InventoryDao({required Realm realm})
+      : _realm = realm,
+        super(realm);
 
   @override
   void delete(int id) {
@@ -20,7 +25,21 @@ class InventoryDao extends Dao<Inventory> {
 
   @override
   void update(Inventory model) {
-    // TODO: implement update
+    Inventory? inventory = getById(model.id);
+
+    if (inventory != null) {
+      _realm.write(() {
+        inventory.currentCost = model.currentCost;
+        inventory.wac = model.wac;
+        inventory.stockLevel = model.stockLevel;
+        inventory.reorderLevel = model.reorderLevel;
+        inventory.lastStockUpdate = model.lastStockUpdate;
+        inventory.updatedAt = model.updatedAt;
+      });
+    } else {
+      Log.error('Failed to update inventory: ID not found (${model.id})');
+      throw Exception('Failed to update inventory: ID not found (${model.id})');
+    }
   }
 }
 

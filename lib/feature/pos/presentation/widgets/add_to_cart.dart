@@ -66,7 +66,7 @@ class _AddToCartState extends ConsumerState<AddToCart> {
               const Text('Stocks',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               Text(
-                  '${widget.posItem.product.stockOnHand} ${widget.posItem.product.uom?.symbol!}',
+                  '${widget.posItem.product.inventory!.stockLevel} ${widget.posItem.product.uom?.symbol!}',
                   style: const TextStyle(fontWeight: FontWeight.bold)),
             ],
           ),

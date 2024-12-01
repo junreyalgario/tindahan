@@ -14,18 +14,13 @@ class ProductEntity with _$ProductEntity {
   const factory ProductEntity({
     @Default(null) int? id,
     @Default(null) String? photo,
-    @Default(null) CategoryEntity? category,
     @Default(null) String? name,
-    @Default(null) UomEntity? uom,
     @Default(null) double? price,
-    @Default(null) double? stockOnHand,
-    @Default(null) double? currentCost,
-    @Default(null) double? lowStockLevel,
-    @JsonKey(name: 'inventories')
-    @Default([])
-    List<InventoryEntity> inventoryList,
     @Default(null) DateTime? createdAt,
     @Default(null) DateTime? updatedAt,
+    @Default(null) CategoryEntity? category,
+    @Default(null) UomEntity? uom,
+    @Default(null) InventoryEntity? inventory,
   }) = _ProductEntity;
 
   factory ProductEntity.fromJson(Map<String, dynamic> json) =>

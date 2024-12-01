@@ -149,9 +149,7 @@ class _CategoryFormState extends ConsumerState<CategoryForm> {
 
                         if (dataState.isSuccess) {
                           if (widget.onSuccess != null) {
-                            widget.onSuccess!(categoryState.id != null
-                                ? categoryState
-                                : null);
+                            widget.onSuccess!(categoryState);
                           }
 
                           showTopSnackbar(

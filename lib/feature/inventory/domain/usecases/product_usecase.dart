@@ -1,7 +1,7 @@
 import 'package:tienda_pos/core/domain/entity_usecase.dart';
 import 'package:tienda_pos/core/state/data_state.dart';
 import 'package:tienda_pos/core/utils/logger.dart';
-import 'package:tienda_pos/feature/inventory/domain/entities/inventory/inventory_entity.dart';
+import 'package:tienda_pos/feature/inventory/domain/entities/inventory_transaction/inventory_transaction_entity.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/product/product_entity.dart';
 import 'package:tienda_pos/feature/inventory/domain/repositories/product_repository.dart';
 
@@ -22,37 +22,29 @@ class ProductUsecase extends EntityUsecase<ProductEntity> {
   }
 
   @override
-  Future<DataState<List<ProductEntity>>> getList() async {
-    try {
-      DataState<List<ProductEntity>> result =
-          await _productRepository.getList();
-
-      List<ProductEntity> updatedProducts = [];
-
-      if (result.isSuccess) {
-        updatedProducts = result.data!.map((ProductEntity product) {
-          InventoryEntity inventory = product.inventoryList.reduce(
-              (current, next) => current.id! > next.id! ? current : next);
-          return product.copyWith(currentCost: inventory.cost);
-        }).toList();
-      }
-
-      return DataState.success(updatedProducts);
-    } catch (e, stackTrace) {
-      Log.error(e.toString(), stackTrace: stackTrace);
-      return DataState.error('Error fetching product list.');
-    }
+  Future<DataState<List<ProductEntity>>> getList() {
+    return _productRepository.getList();
   }
 
   @override
   Future<DataState<bool>> insert(ProductEntity entity) {
-    double stockOnHand = 0;
-    for (InventoryEntity inventory in entity.inventoryList) {
-      stockOnHand += inventory.stocks!;
+    double stockLevel = 0;
+
+    for (InventoryTransactionEntity transaction
+        in entity.inventory!.transactions) {
+      stockLevel += transaction.quantity;
+      transaction = transaction.copyWith(
+        vendorName: transaction.vendorName ?? '',
+        trsansactionDate: DateTime.now(),
+        trsansactionType: InventoryTransactionType.restock.value,
+      );
     }
-    return _productRepository.insert(
-      entity.copyWith(stockOnHand: stockOnHand),
+
+    entity = entity.copyWith(
+      inventory: entity.inventory!.copyWith(stockLevel: stockLevel),
     );
+
+    return _productRepository.insert(entity);
   }
 
   @override

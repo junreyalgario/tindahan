@@ -1,12 +1,11 @@
-import 'dart:developer';
-
 import 'package:tienda_pos/core/state/data_state.dart';
+import 'package:tienda_pos/core/utils/logger.dart';
 import 'package:tienda_pos/feature/inventory/data/local/dao/category_dao.dart';
 import 'package:tienda_pos/feature/inventory/data/models/category/category.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/category/category_entity.dart';
 import 'package:tienda_pos/feature/inventory/domain/repositories/category_repository.dart';
 
-class CategoryRepositoryImpl implements CategoryRepository {
+class CategoryRepositoryImpl extends CategoryRepository {
   final CategoryDao _categoryDao;
 
   CategoryRepositoryImpl({required CategoryDao categoryDao})
@@ -24,8 +23,8 @@ class CategoryRepositoryImpl implements CategoryRepository {
       _categoryDao.save($Category.fromJson(entity.toJson()));
 
       return DataState.success(true);
-    } catch (e) {
-      log(e.toString());
+    } catch (e, stackTrace) {
+      Log.error(e.toString(), stackTrace: stackTrace);
       return DataState.error(e.toString());
     }
   }
@@ -43,8 +42,8 @@ class CategoryRepositoryImpl implements CategoryRepository {
       _categoryDao.update(category);
 
       return DataState.success(true);
-    } catch (e) {
-      log(e.toString());
+    } catch (e, stackTrace) {
+      Log.error(e.toString(), stackTrace: stackTrace);
       return DataState.error(e.toString());
     }
   }
@@ -54,8 +53,8 @@ class CategoryRepositoryImpl implements CategoryRepository {
     try {
       _categoryDao.delete(id);
       return DataState.success(true);
-    } catch (e) {
-      log(e.toString());
+    } catch (e, stackTrace) {
+      Log.error(e.toString(), stackTrace: stackTrace);
       return DataState.error(e.toString());
     }
   }
@@ -71,8 +70,8 @@ class CategoryRepositoryImpl implements CategoryRepository {
 
       return DataState.success(
           categoryEntities..sort((a, b) => a.name!.compareTo(b.name!)));
-    } catch (e) {
-      log(e.toString());
+    } catch (e, stackTrace) {
+      Log.error(e.toString(), stackTrace: stackTrace);
       return DataState.error(e.toString());
     }
   }
@@ -87,19 +86,9 @@ class CategoryRepositoryImpl implements CategoryRepository {
       }
 
       return DataState.success(const CategoryEntity());
-    } catch (e) {
-      log(e.toString());
+    } catch (e, stackTrace) {
+      Log.error(e.toString(), stackTrace: stackTrace);
       return DataState.error(e.toString());
     }
-  }
-
-  @override
-  Future<DataState<List<CategoryEntity>>> search(String query) async {
-    return DataState.success([]);
-  }
-
-  @override
-  Future<DataState<bool>> insertAll(List<CategoryEntity> entities) async {
-    return DataState.success(true);
   }
 }

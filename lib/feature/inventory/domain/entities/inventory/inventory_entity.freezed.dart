@@ -21,11 +21,16 @@ InventoryEntity _$InventoryEntityFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$InventoryEntity {
   int? get id => throw _privateConstructorUsedError;
-  ProductEntity? get productEntity => throw _privateConstructorUsedError;
-  double? get cost => throw _privateConstructorUsedError;
-  double? get stocks => throw _privateConstructorUsedError;
+  double get currentCost => throw _privateConstructorUsedError;
+  double get wac => throw _privateConstructorUsedError;
+  double get stockLevel => throw _privateConstructorUsedError;
+  double get reorderLevel => throw _privateConstructorUsedError;
+  DateTime? get lastStockUpdate => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
+  ProductEntity? get productEntity => throw _privateConstructorUsedError;
+  List<InventoryTransactionEntity> get transactions =>
+      throw _privateConstructorUsedError;
 
   /// Serializes this InventoryEntity to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -45,11 +50,15 @@ abstract class $InventoryEntityCopyWith<$Res> {
   @useResult
   $Res call(
       {int? id,
-      ProductEntity? productEntity,
-      double? cost,
-      double? stocks,
+      double currentCost,
+      double wac,
+      double stockLevel,
+      double reorderLevel,
+      DateTime? lastStockUpdate,
       DateTime? createdAt,
-      DateTime? updatedAt});
+      DateTime? updatedAt,
+      ProductEntity? productEntity,
+      List<InventoryTransactionEntity> transactions});
 
   $ProductEntityCopyWith<$Res>? get productEntity;
 }
@@ -70,29 +79,41 @@ class _$InventoryEntityCopyWithImpl<$Res, $Val extends InventoryEntity>
   @override
   $Res call({
     Object? id = freezed,
-    Object? productEntity = freezed,
-    Object? cost = freezed,
-    Object? stocks = freezed,
+    Object? currentCost = null,
+    Object? wac = null,
+    Object? stockLevel = null,
+    Object? reorderLevel = null,
+    Object? lastStockUpdate = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
+    Object? productEntity = freezed,
+    Object? transactions = null,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      productEntity: freezed == productEntity
-          ? _value.productEntity
-          : productEntity // ignore: cast_nullable_to_non_nullable
-              as ProductEntity?,
-      cost: freezed == cost
-          ? _value.cost
-          : cost // ignore: cast_nullable_to_non_nullable
-              as double?,
-      stocks: freezed == stocks
-          ? _value.stocks
-          : stocks // ignore: cast_nullable_to_non_nullable
-              as double?,
+      currentCost: null == currentCost
+          ? _value.currentCost
+          : currentCost // ignore: cast_nullable_to_non_nullable
+              as double,
+      wac: null == wac
+          ? _value.wac
+          : wac // ignore: cast_nullable_to_non_nullable
+              as double,
+      stockLevel: null == stockLevel
+          ? _value.stockLevel
+          : stockLevel // ignore: cast_nullable_to_non_nullable
+              as double,
+      reorderLevel: null == reorderLevel
+          ? _value.reorderLevel
+          : reorderLevel // ignore: cast_nullable_to_non_nullable
+              as double,
+      lastStockUpdate: freezed == lastStockUpdate
+          ? _value.lastStockUpdate
+          : lastStockUpdate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -101,6 +122,14 @@ class _$InventoryEntityCopyWithImpl<$Res, $Val extends InventoryEntity>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      productEntity: freezed == productEntity
+          ? _value.productEntity
+          : productEntity // ignore: cast_nullable_to_non_nullable
+              as ProductEntity?,
+      transactions: null == transactions
+          ? _value.transactions
+          : transactions // ignore: cast_nullable_to_non_nullable
+              as List<InventoryTransactionEntity>,
     ) as $Val);
   }
 
@@ -129,11 +158,15 @@ abstract class _$$InventoryEntityImplCopyWith<$Res>
   @useResult
   $Res call(
       {int? id,
-      ProductEntity? productEntity,
-      double? cost,
-      double? stocks,
+      double currentCost,
+      double wac,
+      double stockLevel,
+      double reorderLevel,
+      DateTime? lastStockUpdate,
       DateTime? createdAt,
-      DateTime? updatedAt});
+      DateTime? updatedAt,
+      ProductEntity? productEntity,
+      List<InventoryTransactionEntity> transactions});
 
   @override
   $ProductEntityCopyWith<$Res>? get productEntity;
@@ -153,29 +186,41 @@ class __$$InventoryEntityImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? productEntity = freezed,
-    Object? cost = freezed,
-    Object? stocks = freezed,
+    Object? currentCost = null,
+    Object? wac = null,
+    Object? stockLevel = null,
+    Object? reorderLevel = null,
+    Object? lastStockUpdate = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
+    Object? productEntity = freezed,
+    Object? transactions = null,
   }) {
     return _then(_$InventoryEntityImpl(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      productEntity: freezed == productEntity
-          ? _value.productEntity
-          : productEntity // ignore: cast_nullable_to_non_nullable
-              as ProductEntity?,
-      cost: freezed == cost
-          ? _value.cost
-          : cost // ignore: cast_nullable_to_non_nullable
-              as double?,
-      stocks: freezed == stocks
-          ? _value.stocks
-          : stocks // ignore: cast_nullable_to_non_nullable
-              as double?,
+      currentCost: null == currentCost
+          ? _value.currentCost
+          : currentCost // ignore: cast_nullable_to_non_nullable
+              as double,
+      wac: null == wac
+          ? _value.wac
+          : wac // ignore: cast_nullable_to_non_nullable
+              as double,
+      stockLevel: null == stockLevel
+          ? _value.stockLevel
+          : stockLevel // ignore: cast_nullable_to_non_nullable
+              as double,
+      reorderLevel: null == reorderLevel
+          ? _value.reorderLevel
+          : reorderLevel // ignore: cast_nullable_to_non_nullable
+              as double,
+      lastStockUpdate: freezed == lastStockUpdate
+          ? _value.lastStockUpdate
+          : lastStockUpdate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -184,6 +229,14 @@ class __$$InventoryEntityImplCopyWithImpl<$Res>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      productEntity: freezed == productEntity
+          ? _value.productEntity
+          : productEntity // ignore: cast_nullable_to_non_nullable
+              as ProductEntity?,
+      transactions: null == transactions
+          ? _value._transactions
+          : transactions // ignore: cast_nullable_to_non_nullable
+              as List<InventoryTransactionEntity>,
     ));
   }
 }
@@ -193,11 +246,16 @@ class __$$InventoryEntityImplCopyWithImpl<$Res>
 class _$InventoryEntityImpl implements _InventoryEntity {
   const _$InventoryEntityImpl(
       {this.id = null,
-      this.productEntity = null,
-      this.cost = null,
-      this.stocks = null,
+      this.currentCost = 0,
+      this.wac = 0,
+      this.stockLevel = 0,
+      this.reorderLevel = 0,
+      this.lastStockUpdate = null,
       this.createdAt = null,
-      this.updatedAt = null});
+      this.updatedAt = null,
+      this.productEntity = null,
+      final List<InventoryTransactionEntity> transactions = const []})
+      : _transactions = transactions;
 
   factory _$InventoryEntityImpl.fromJson(Map<String, dynamic> json) =>
       _$$InventoryEntityImplFromJson(json);
@@ -207,23 +265,40 @@ class _$InventoryEntityImpl implements _InventoryEntity {
   final int? id;
   @override
   @JsonKey()
-  final ProductEntity? productEntity;
+  final double currentCost;
   @override
   @JsonKey()
-  final double? cost;
+  final double wac;
   @override
   @JsonKey()
-  final double? stocks;
+  final double stockLevel;
+  @override
+  @JsonKey()
+  final double reorderLevel;
+  @override
+  @JsonKey()
+  final DateTime? lastStockUpdate;
   @override
   @JsonKey()
   final DateTime? createdAt;
   @override
   @JsonKey()
   final DateTime? updatedAt;
+  @override
+  @JsonKey()
+  final ProductEntity? productEntity;
+  final List<InventoryTransactionEntity> _transactions;
+  @override
+  @JsonKey()
+  List<InventoryTransactionEntity> get transactions {
+    if (_transactions is EqualUnmodifiableListView) return _transactions;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_transactions);
+  }
 
   @override
   String toString() {
-    return 'InventoryEntity(id: $id, productEntity: $productEntity, cost: $cost, stocks: $stocks, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'InventoryEntity(id: $id, currentCost: $currentCost, wac: $wac, stockLevel: $stockLevel, reorderLevel: $reorderLevel, lastStockUpdate: $lastStockUpdate, createdAt: $createdAt, updatedAt: $updatedAt, productEntity: $productEntity, transactions: $transactions)';
   }
 
   @override
@@ -232,20 +307,39 @@ class _$InventoryEntityImpl implements _InventoryEntity {
         (other.runtimeType == runtimeType &&
             other is _$InventoryEntityImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.productEntity, productEntity) ||
-                other.productEntity == productEntity) &&
-            (identical(other.cost, cost) || other.cost == cost) &&
-            (identical(other.stocks, stocks) || other.stocks == stocks) &&
+            (identical(other.currentCost, currentCost) ||
+                other.currentCost == currentCost) &&
+            (identical(other.wac, wac) || other.wac == wac) &&
+            (identical(other.stockLevel, stockLevel) ||
+                other.stockLevel == stockLevel) &&
+            (identical(other.reorderLevel, reorderLevel) ||
+                other.reorderLevel == reorderLevel) &&
+            (identical(other.lastStockUpdate, lastStockUpdate) ||
+                other.lastStockUpdate == lastStockUpdate) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt));
+                other.updatedAt == updatedAt) &&
+            (identical(other.productEntity, productEntity) ||
+                other.productEntity == productEntity) &&
+            const DeepCollectionEquality()
+                .equals(other._transactions, _transactions));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, productEntity, cost, stocks, createdAt, updatedAt);
+      runtimeType,
+      id,
+      currentCost,
+      wac,
+      stockLevel,
+      reorderLevel,
+      lastStockUpdate,
+      createdAt,
+      updatedAt,
+      productEntity,
+      const DeepCollectionEquality().hash(_transactions));
 
   /// Create a copy of InventoryEntity
   /// with the given fields replaced by the non-null parameter values.
@@ -266,12 +360,17 @@ class _$InventoryEntityImpl implements _InventoryEntity {
 
 abstract class _InventoryEntity implements InventoryEntity {
   const factory _InventoryEntity(
-      {final int? id,
-      final ProductEntity? productEntity,
-      final double? cost,
-      final double? stocks,
-      final DateTime? createdAt,
-      final DateTime? updatedAt}) = _$InventoryEntityImpl;
+          {final int? id,
+          final double currentCost,
+          final double wac,
+          final double stockLevel,
+          final double reorderLevel,
+          final DateTime? lastStockUpdate,
+          final DateTime? createdAt,
+          final DateTime? updatedAt,
+          final ProductEntity? productEntity,
+          final List<InventoryTransactionEntity> transactions}) =
+      _$InventoryEntityImpl;
 
   factory _InventoryEntity.fromJson(Map<String, dynamic> json) =
       _$InventoryEntityImpl.fromJson;
@@ -279,15 +378,23 @@ abstract class _InventoryEntity implements InventoryEntity {
   @override
   int? get id;
   @override
-  ProductEntity? get productEntity;
+  double get currentCost;
   @override
-  double? get cost;
+  double get wac;
   @override
-  double? get stocks;
+  double get stockLevel;
+  @override
+  double get reorderLevel;
+  @override
+  DateTime? get lastStockUpdate;
   @override
   DateTime? get createdAt;
   @override
   DateTime? get updatedAt;
+  @override
+  ProductEntity? get productEntity;
+  @override
+  List<InventoryTransactionEntity> get transactions;
 
   /// Create a copy of InventoryEntity
   /// with the given fields replaced by the non-null parameter values.

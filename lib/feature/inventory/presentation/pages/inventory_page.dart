@@ -1,8 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
 import 'package:tienda_pos/core/constant/enums.dart';
 import 'package:tienda_pos/core/router/routes.dart';
+import 'package:tienda_pos/core/state/data_state.dart';
+import 'package:tienda_pos/core/widgets/dialog.dart';
 import 'package:tienda_pos/core/widgets/tienda_app.dart';
 import 'package:tienda_pos/feature/inventory/presentation/view_models/inventory/inventory_notifier.dart';
 import 'package:tienda_pos/feature/inventory/presentation/widgets/product_item.dart';
@@ -15,6 +20,18 @@ class InventoryPage extends ConsumerStatefulWidget {
 }
 
 class _InventoryPageState extends ConsumerState<InventoryPage> {
+  @override
+  void initState() {
+    super.initState();
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      DataState result =
+          await ref.read(inventoryNotifierProvider.notifier).setProductList();
+      if (result.isError) {
+        showMessageDialog(context: context, message: result.error!);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(inventoryNotifierProvider);
@@ -117,7 +134,15 @@ class _InventoryPageState extends ConsumerState<InventoryPage> {
                         return Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
                           child: ProductItem(
-                              productEntity: state.productList[index]),
+                            productEntity: state.productList[index],
+                            onUpdate: (dynamic result) {
+                              if (result != null) {
+                                ref
+                                    .watch(inventoryNotifierProvider.notifier)
+                                    .setProductList();
+                              }
+                            },
+                          ),
                         );
                       },
                       childCount: state.productList.length,

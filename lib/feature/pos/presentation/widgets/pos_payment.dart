@@ -43,7 +43,7 @@ class _PosPaymentState extends ConsumerState<PosPayment> {
             ),
           ),
           Text(
-            '₱${widget.amountPayable}',
+            '₱${widget.amountPayable.toStringAsFixed(2)}',
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 40,

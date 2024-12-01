@@ -28,6 +28,11 @@ class ProductEntry extends ConsumerStatefulWidget {
 
 class _ProductEntryState extends ConsumerState<ProductEntry> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _costController = TextEditingController();
+  final TextEditingController _stocksController = TextEditingController();
+  final TextEditingController _lowStockController = TextEditingController();
 
   @override
   void initState() {
@@ -37,6 +42,14 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
         ref
             .watch(productEntryProvider.notifier)
             .setProduct(widget.productEntity!);
+        _nameController.text = widget.productEntity!.name!;
+        _priceController.text = widget.productEntity!.price!.toString();
+        _costController.text =
+            widget.productEntity!.inventory!.currentCost.toString();
+        _stocksController.text =
+            widget.productEntity!.inventory!.stockLevel.toString();
+        _lowStockController.text =
+            widget.productEntity!.inventory!.reorderLevel.toString();
       }
     });
   }
@@ -80,7 +93,7 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
                             context: context,
                             color: AppColors.success,
                             message: 'Product saved successfully!');
-                        Navigator.of(context).pop(true);
+                        // Navigator.of(context).pop(true);
                       } else {
                         showTopSnackbar(
                             context: context,
@@ -226,6 +239,7 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
       SizedBox(
         height: 75,
         child: TextFormField(
+          controller: _nameController,
           decoration: TextFieldStyles.decoration(
             TextFormFieldDecoration(labelText: 'Product name'),
           ),
@@ -305,6 +319,7 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
               child: SizedBox(
                 height: UI.need_validation_field_height,
                 child: TextFormField(
+                  controller: _priceController,
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
                   decoration: TextFieldStyles.decoration(
@@ -326,6 +341,7 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
               child: SizedBox(
                 height: UI.need_validation_field_height,
                 child: TextFormField(
+                  controller: _costController,
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
                   decoration: TextFieldStyles.decoration(
@@ -356,6 +372,7 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
               child: SizedBox(
                 height: UI.need_validation_field_height,
                 child: TextFormField(
+                  controller: _stocksController,
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
                   decoration: TextFieldStyles.decoration(
@@ -377,6 +394,7 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
               child: SizedBox(
                 height: UI.need_validation_field_height,
                 child: TextFormField(
+                  controller: _lowStockController,
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
                   decoration: TextFieldStyles.decoration(
@@ -414,10 +432,10 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
           ),
           child: CategoryForm(
             categoryEntity: categoryEntity,
-            onSuccess: (CategoryEntity? categoryEntity) {
-              productNotifier.setCategories();
+            onSuccess: (CategoryEntity? categoryEntity) async {
+              await productNotifier.setCategories();
               if (categoryEntity != null) {
-                productNotifier.setProductCategory(categoryEntity);
+                productNotifier.setProductCategoryByName(categoryEntity.name!);
               }
             },
             onDelete: () {
@@ -443,12 +461,10 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
           ),
           child: OumForm(
             uomEntity: uomEntity,
-            onSuccess: (UomEntity? uomEntity) {
-              productNotifier.setUomList();
+            onSuccess: (UomEntity? uomEntity) async {
+              await productNotifier.setUomList();
               if (uomEntity != null) {
-                setState(() {
-                  productNotifier.setProductUom(uomEntity);
-                });
+                productNotifier.setProductUomByName(uomEntity.name!);
               }
             },
             onDelete: () {
