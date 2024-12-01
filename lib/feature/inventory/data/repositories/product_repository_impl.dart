@@ -36,8 +36,6 @@ class ProductRepositoryImpl extends ProductRepository {
   @override
   Future<DataState<bool>> insert(ProductEntity entity) async {
     try {
-      Log.info('entity insert ->>> ${entity}');
-
       Inventory inventory = Inventory(
         _inventoryDao.getNextId(),
         entity.inventory!.currentCost,
@@ -90,7 +88,7 @@ class ProductRepositoryImpl extends ProductRepository {
       return DataState.success(true);
     } catch (e, stackTrace) {
       Log.error(e.toString(), stackTrace: stackTrace);
-      return DataState.error(e.toString());
+      return DataState.error(Strings.error_generic_message);
     }
   }
 
@@ -111,7 +109,7 @@ class ProductRepositoryImpl extends ProductRepository {
       return DataState.success(true);
     } catch (e, stackTrace) {
       Log.error(e.toString(), stackTrace: stackTrace);
-      return DataState.error(e.toString());
+      return DataState.error(Strings.error_generic_message);
     }
   }
 

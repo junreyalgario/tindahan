@@ -125,7 +125,8 @@ class ProductEntryNotifier extends StateNotifier<ProductEntryState> {
 
   // Sets the product's low stock level by updating the product entity.
   void setProductLowStockLevel(double lowStockLevel) {
-    _updateInventory((inventory) => inventory.copyWith());
+    _updateInventory(
+        (inventory) => inventory.copyWith(reorderLevel: lowStockLevel));
   }
 
   // Sets the product cost by updating the inventory entity.

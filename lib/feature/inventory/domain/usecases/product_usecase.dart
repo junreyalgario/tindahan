@@ -22,8 +22,28 @@ class ProductUsecase extends EntityUsecase<ProductEntity> {
   }
 
   @override
-  Future<DataState<List<ProductEntity>>> getList() {
-    return _productRepository.getList();
+  Future<DataState<List<ProductEntity>>> getList() async {
+    DataState<List<ProductEntity>> result = await _productRepository.getList();
+
+    if (result.isSuccess) {
+      List<ProductEntity> updatedProducts = result.data!.map((product) {
+        if (product.inventory!.transactions.isNotEmpty) {
+          return product.copyWith(
+            inventory: product.inventory!.copyWith(
+              currentCost: product
+                  .inventory!
+                  .transactions[product.inventory!.transactions.length - 1]
+                  .costPerUnit,
+            ),
+          );
+        }
+        return product;
+      }).toList();
+
+      return DataState.success(updatedProducts);
+    }
+
+    return result;
   }
 
   @override
