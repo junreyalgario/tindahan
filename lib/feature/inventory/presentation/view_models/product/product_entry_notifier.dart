@@ -2,8 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tienda_pos/core/state/data_state.dart';
 import 'package:tienda_pos/core/utils/logger.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/category/category_entity.dart';
-import 'package:tienda_pos/feature/inventory/domain/entities/inventory/inventory_entity.dart';
-import 'package:tienda_pos/feature/inventory/domain/entities/inventory_transaction/inventory_transaction_entity.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/product/product_entity.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/uom/uom_entity.dart';
 import 'package:tienda_pos/feature/inventory/domain/usecases/category_usecase.dart';
@@ -52,12 +50,7 @@ class ProductEntryNotifier extends StateNotifier<ProductEntryState> {
 
   // Sets the product in the state with the provided ProductEntity.
   void setProduct(ProductEntity productEntity) {
-    state = state.copyWith(
-        product: productEntity,
-        inventory: productEntity.inventory ?? const InventoryEntity(),
-        transaction: productEntity.inventory != null
-            ? productEntity.inventory!.transactions.last
-            : const InventoryTransactionEntity());
+    state = state.copyWith(product: productEntity);
   }
 
   // Generic method for updating product data in the state.
@@ -65,22 +58,9 @@ class ProductEntryNotifier extends StateNotifier<ProductEntryState> {
     state = state.copyWith(product: updater(state.product));
   }
 
-  // Generic method for updating inventory data in the state.
-  void _updateInventory(
-      InventoryEntity Function(InventoryEntity inventory) updater) {
-    state = state.copyWith(inventory: updater(state.inventory));
-  }
-
   // Sets the product category by updating the product entity.
   void setProductCategory(CategoryEntity? categoryEntity) {
     _updateProduct((product) => product.copyWith(category: categoryEntity));
-  }
-
-  void _updateTransaction(
-      InventoryTransactionEntity Function(
-              InventoryTransactionEntity transaction)
-          updater) {
-    state = state.copyWith(transaction: updater(state.transaction));
   }
 
   void setProductCategoryByName(String categoryName) {
@@ -125,36 +105,32 @@ class ProductEntryNotifier extends StateNotifier<ProductEntryState> {
 
   // Sets the product's low stock level by updating the product entity.
   void setProductLowStockLevel(double lowStockLevel) {
-    _updateInventory(
-        (inventory) => inventory.copyWith(reorderLevel: lowStockLevel));
+    _updateProduct((product) => product.copyWith(
+        inventory: product.inventory!.copyWith(reorderLevel: lowStockLevel)));
   }
 
   // Sets the product cost by updating the inventory entity.
   void setProductCost(double cost) {
-    _updateTransaction(
-        (transaction) => transaction.copyWith(costPerUnit: cost));
+    _updateProduct((product) => product.copyWith(
+        inventory: product.inventory!.copyWith(currentCost: cost)));
   }
 
   // Sets the product stock quantity by updating the inventory entity.
   void setProductStocks(double quantity) {
-    _updateTransaction(
-        (transaction) => transaction.copyWith(quantity: quantity));
+    _updateProduct((product) => product.copyWith(
+        inventory: product.inventory!.copyWith(stockLevel: quantity)));
   }
 
   // Saves the product and its inventory data to the repository.
   Future<DataState<bool>> save() async {
     DataState<bool> result;
 
-    state = state.copyWith(
-        product: state.product.copyWith(
-            inventory:
-                state.inventory.copyWith(transactions: [state.transaction])));
-
     if (state.product.id != null) {
       result = await _productUsecase.update(state.product);
     } else {
       result = await _productUsecase.insert(state.product);
     }
+
     return result;
   }
 }

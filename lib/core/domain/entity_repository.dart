@@ -60,7 +60,7 @@ abstract class EntityRepository<Entity> {
   /// if the entity does not exist or the operation fails.
   ///
   /// - [id]: The unique identifier of the entity to retrieve.
-  Future<DataState<Entity>> getById(int id) {
+  Future<DataState<Entity?>> getById(int id) {
     return Future.value(DataState.error('Repository getById not implemented'));
   }
 

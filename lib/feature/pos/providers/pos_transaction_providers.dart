@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tienda_pos/feature/inventory/data/local/dao/inventory_dao.dart';
+import 'package:tienda_pos/feature/inventory/data/local/dao/inventory_transaction_dao.dart';
 import 'package:tienda_pos/feature/inventory/data/local/dao/product_dao.dart';
 import 'package:tienda_pos/feature/pos/data/local/dao/pos_order_dao.dart';
 import 'package:tienda_pos/feature/pos/data/local/dao/pos_transaction_dao.dart';
@@ -11,6 +13,8 @@ final posTransactionRepositoryImplProvider =
     orderDao: ref.read(posOrderDaoProvider),
     transactionDao: ref.read(posTransactionDaoProvider),
     productDao: ref.read(productDaoProvider),
+    invetoryTransactioDao: ref.read(inventoryTransactionDaoProvider),
+    inventoryDao: ref.read(inventoryDaoProvider),
   );
 });
 

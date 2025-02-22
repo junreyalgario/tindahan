@@ -1,4 +1,5 @@
 import 'package:tienda_pos/core/domain/entity_usecase.dart';
+import 'package:tienda_pos/core/exceptions/not_found.dart';
 import 'package:tienda_pos/core/state/data_state.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/uom/uom_entity.dart';
 import 'package:tienda_pos/feature/inventory/domain/repositories/uom_repository.dart';
@@ -15,8 +16,14 @@ class UomUsecase implements EntityUsecase<UomEntity> {
   }
 
   @override
-  Future<DataState<UomEntity>> getById(int id) {
-    return _uomRepository.getById(id);
+  Future<DataState<UomEntity>> getById(int id) async {
+    DataState<UomEntity?> getUomResult = await _uomRepository.getById(id);
+
+    if (getUomResult.isSuccess) {
+      return DataState.success(getUomResult.data!);
+    } else {
+      throw NotFoundException('UOM not found. No item exists with ID $id.');
+    }
   }
 
   @override

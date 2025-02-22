@@ -39,10 +39,10 @@ class ProductDao extends Dao<Product> {
     if (product != null) {
       _realm.write(() {
         product.name = model.name;
+        product.photo = model.photo;
         product.price = model.price;
         product.category = model.category;
         product.uom = model.uom;
-        product.inventory = model.inventory;
       });
     } else {
       Log.error('Failed to update product: ID not found (${model.id})');

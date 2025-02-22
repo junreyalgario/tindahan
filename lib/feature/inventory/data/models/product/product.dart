@@ -58,10 +58,12 @@ class $Product {
           : null,
       inventory:
           $Inventory.fromJson((json['inventory'] as InventoryEntity).toJson()),
-      orders: (json['orders'] as List)
-          .map(
-              (order) => $PosOrder.fromJson((order as PosOrderEntity).toJson()))
-          .toList(),
+      orders: json['orders'] != null
+          ? (json['orders'] as List)
+              .map((order) =>
+                  $PosOrder.fromJson((order as PosOrderEntity).toJson()))
+              .toList()
+          : [],
     );
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tienda_pos/core/constant/app_colors.dart';
 import 'package:tienda_pos/core/router/routes.dart';
-import 'package:tienda_pos/core/utils/logger.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/product/product_entity.dart';
 
 class ProductItem extends StatefulWidget {
@@ -17,8 +16,6 @@ class ProductItem extends StatefulWidget {
 class _ProductItemState extends State<ProductItem> {
   @override
   Widget build(BuildContext context) {
-    Log.info('WIDGET ->>> ${widget.productEntity}');
-
     return Card(
       elevation: 0.0,
       color: AppColors.card_background,

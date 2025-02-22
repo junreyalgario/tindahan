@@ -22,19 +22,14 @@ class UomRepositoryImpl extends UomRepository {
   }
 
   @override
-  Future<DataState<UomEntity>> getById(int id) async {
-    try {
-      final Uom? uom = _uomDao.getById(id);
+  Future<DataState<UomEntity?>> getById(int id) async {
+    final Uom? uom = _uomDao.getById(id);
 
-      if (uom == null) {
-        return DataState.error('Uom not found.');
-      }
-
+    if (uom != null) {
       return DataState.success(UomEntity.fromJson(uom.toJson()));
-    } catch (e, stackTrace) {
-      Log.error(e.toString(), stackTrace: stackTrace);
-      return DataState.error(e.toString());
     }
+
+    return DataState.success(null);
   }
 
   @override

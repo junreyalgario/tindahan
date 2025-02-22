@@ -8,9 +8,11 @@ import 'package:tienda_pos/core/constant/ui.dart';
 import 'package:tienda_pos/core/state/data_state.dart';
 import 'package:tienda_pos/core/styles/button_custom_styles.dart';
 import 'package:tienda_pos/core/styles/text_field_styles.dart';
+import 'package:tienda_pos/core/utils/logger.dart';
 import 'package:tienda_pos/core/widgets/snackbar.dart';
 import 'package:tienda_pos/core/widgets/tienda_app.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/category/category_entity.dart';
+import 'package:tienda_pos/feature/inventory/domain/entities/inventory/inventory_entity.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/product/product_entity.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/uom/uom_entity.dart';
 import 'package:tienda_pos/feature/inventory/presentation/view_models/product/product_entry_notifier.dart';
@@ -50,6 +52,10 @@ class _ProductEntryState extends ConsumerState<ProductEntry> {
             widget.productEntity!.inventory!.stockLevel.toString();
         _lowStockController.text =
             widget.productEntity!.inventory!.reorderLevel.toString();
+      } else {
+        ref
+            .watch(productEntryProvider.notifier)
+            .setProduct(const ProductEntity(inventory: InventoryEntity()));
       }
     });
   }

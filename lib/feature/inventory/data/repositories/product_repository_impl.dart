@@ -99,12 +99,14 @@ class ProductRepositoryImpl extends ProductRepository {
       product.category = _categoryDao.getById(product.category!.id);
       product.uom = _uomDao.getById(product.uom!.id);
 
-      // for (InventoryEntity inventoryEntity in entity.inventoryList) {
-      //   inventoryEntity = inventoryEntity.copyWith(updatedAt: DateTime.now());
-      //   _inventoryDao.update($Inventory.fromJson(inventoryEntity.toJson()));
-      // }
+      _inventoryDao.update(product.inventory!);
 
-      // _productDao.update(product);
+      InventoryTransaction transaction = product.inventory!.transactions[0];
+      transaction.id = _inventoryTransactionDao.getNextId();
+      transaction.inventory = _inventoryDao.getById(product.inventory!.id);
+      _inventoryTransactionDao.save(transaction);
+
+      _productDao.update(product);
 
       return DataState.success(true);
     } catch (e, stackTrace) {

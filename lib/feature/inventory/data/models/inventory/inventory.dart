@@ -1,6 +1,7 @@
 // ignore_for_file: unused_element
 
 import 'package:realm/realm.dart';
+import 'package:tienda_pos/core/utils/logger.dart';
 import 'package:tienda_pos/feature/inventory/data/models/inventory_transaction/inventory_transaction.dart';
 import 'package:tienda_pos/feature/inventory/data/models/product/product.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/inventory_transaction/inventory_transaction_entity.dart';

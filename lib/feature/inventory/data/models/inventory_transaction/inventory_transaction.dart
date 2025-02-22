@@ -3,7 +3,6 @@
 import 'package:realm/realm.dart';
 import 'package:tienda_pos/feature/inventory/data/models/inventory/inventory.dart';
 import 'package:tienda_pos/feature/inventory/domain/entities/inventory/inventory_entity.dart';
-import 'package:tienda_pos/feature/inventory/domain/entities/inventory_transaction/inventory_transaction_entity.dart';
 
 part 'inventory_transaction.realm.dart';
 
@@ -39,14 +38,18 @@ class $InventoryTransaction {
 
   static InventoryTransaction fromJson(Map<String, dynamic> json) {
     return InventoryTransaction(
-      json['id'],
+      json['id'] ?? 0,
       json['trsansactionType'],
       json['quantity'],
       json['costPerUnit'],
       DateTime.parse(json['trsansactionDate']),
-      DateTime.parse(json['createdAt']),
-      DateTime.parse(json['updatedAt']),
-      vendorName: json['vendorName'],
+      json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'])
+          : DateTime.now(),
+      json['createdAt'] != null
+          ? DateTime.parse(json['updatedAt'])
+          : DateTime.now(),
+      vendorName: json['vendorName'] ?? '',
       inventory: json['inventory'] != null
           ? $Inventory.fromJson((json['inventory'] as InventoryEntity).toJson())
           : null,

@@ -13,11 +13,6 @@ class InventoryDao extends Dao<Inventory> {
         super(realm);
 
   @override
-  void delete(int id) {
-    // TODO: implement delete
-  }
-
-  @override
   int getNextId() {
     final Inventory? inventory = getLastInserted();
     return inventory != null ? (inventory.id + 1) : 1;

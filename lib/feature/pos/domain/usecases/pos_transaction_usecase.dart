@@ -18,6 +18,7 @@ class PosTransactionUsecase {
       }
       return order;
     }).toList());
+
     return _posTransactionRepository.insert(posTransaction);
   }
 }

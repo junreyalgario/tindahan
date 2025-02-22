@@ -4,7 +4,7 @@ import 'package:tienda_pos/feature/inventory/data/repositories/uom_repository_im
 import 'package:tienda_pos/feature/inventory/domain/usecases/uom_usecase.dart';
 
 // Provider for creating an instance of UomRepositoryImpl, which interacts with the UomDao
-final uomRepositoryImpProvider = Provider<UomRepositoryImpl>((ref) {
+final uomRepositoryProvider = Provider<UomRepositoryImpl>((ref) {
   return UomRepositoryImpl(
     // Injecting UomDao into the repository implementation
     uomDao: ref.read(uomDaoProvider),
@@ -15,6 +15,6 @@ final uomRepositoryImpProvider = Provider<UomRepositoryImpl>((ref) {
 final uomUsecaseProvider = Provider<UomUsecase>((ref) {
   return UomUsecase(
     // Injecting UomRepositoryImpl into the usecase
-    uomRepository: ref.read(uomRepositoryImpProvider),
+    uomRepository: ref.read(uomRepositoryProvider),
   );
 });
